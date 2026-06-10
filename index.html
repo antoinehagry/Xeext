@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Xeext — Le conseil immobilier d'entreprise, repensé à 5%</title>
+<meta name="description" content="Conseil en immobilier d'entreprise : bureaux, commerces, logistique, terrains. Honoraires uniques de 5% du loyer annuel." />
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <nav class="nav__inner" aria-label="Navigation principale">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+    <ul class="nav__links">
+      <li><a href="#catalogue">Biens</a></li>
+      <li><a href="#simulateur">Honoraires</a></li>
+      <li><a href="#methode">Méthode</a></li>
+      <li><a href="#bareme">Barème</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav__cta" href="#catalogue">Voir les biens</a>
+    <button class="nav__burger" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7h16M3 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ===================== 1. HERO ===================== -->
+  <section class="hero bg-white section-pad" style="padding-bottom: clamp(48px,7vw,96px)" data-screen-label="Hero">
+    <div class="wrap wrap--narrow center">
+      <h1 class="display reveal">Le conseil immobilier<br>d'entreprise. Repensé à&nbsp;5%.</h1>
+      <p class="lead mt-24 mx-auto reveal" data-delay="1" style="max-width: 30ch">Bureaux, commerces, logistique, terrains. Le même accompagnement qu'un grand réseau — pour des honoraires divisés par trois.</p>
+      <div class="mt-40 reveal" data-delay="2" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+        <a class="btn btn--primary" href="#catalogue">Voir les biens</a>
+        <a class="link-chevron" href="#simulateur">Estimer mes honoraires <span class="chev">›</span></a>
+      </div>
+    </div>
+    <div class="wrap mt-64 reveal" data-delay="2">
+      <div class="ph ph--wide">
+        <span class="ph__label">Visuel large — architecture tertiaire européenne, façade sobre, lumière naturelle de fin de journée</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. LE CHIFFRE ===================== -->
+  <section class="bg-dark section-pad" data-screen-label="Le chiffre 5%">
+    <div class="wrap chiffre">
+      <p class="eyebrow reveal">Le barème Xeext</p>
+      <p class="chiffre__num reveal" data-delay="1" id="chiffre-num" aria-label="5 pour cent">5%</p>
+      <p class="chiffre__sub reveal" data-delay="2">au lieu de 15 à 30% chez les conseils classiques.</p>
+      <p class="chiffre__note reveal" data-delay="2">Un taux unique, annoncé avant le mandat. Calculé sur le loyer annuel.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3. SIMULATEUR ===================== -->
+  <section class="bg-gray section-pad" id="simulateur" data-screen-label="Simulateur">
+    <div class="wrap wrap--narrow center" style="margin-bottom: clamp(40px,6vw,72px)">
+      <h2 class="h-section reveal">Ce que vous économisez.</h2>
+      <p class="lead mt-16 mx-auto reveal" data-delay="1" style="max-width: 28ch">Réglez le loyer annuel. Comparez en direct.</p>
+    </div>
+
+    <div class="sim reveal" data-delay="1">
+      <div class="sim__loyer-wrap">
+        <span class="sim__loyer-label">Loyer annuel du bien</span>
+        <span class="sim__loyer tnum" id="sim-loyer">100 000 €</span>
+      </div>
+      <input type="range" class="sim-range" id="sim-slider" min="0" max="1000" value="500"
+             aria-label="Loyer annuel" role="slider" aria-valuetext="100 000 € de loyer annuel" />
+      <div class="sim__bounds"><span>20 000 €</span><span>2 000 000 €</span></div>
+
+      <div class="sim__taux">
+        <span>Honoraires d'un conseil classique :</span>
+        <button class="rate-btn" data-rate="15" aria-pressed="false">15 %</button>
+        <button class="rate-btn is-active" data-rate="20" aria-pressed="true">20 %</button>
+        <button class="rate-btn" data-rate="30" aria-pressed="false">30 %</button>
+      </div>
+
+      <div class="sim__compare">
+        <div class="sim__cell">
+          <dt>Conseil classique (<span id="sim-taux-label">20 %</span>)</dt>
+          <dd class="tnum" id="sim-classique">20 000 €</dd>
+        </div>
+        <div class="sim__cell sim__cell--xeext">
+          <dt>Xeext — 5%</dt>
+          <dd class="tnum" id="sim-xeext">5 000 €</dd>
+        </div>
+      </div>
+
+      <div class="sim__eco">
+        <span class="sim__eco-label">Votre économie</span>
+        <span class="sim__eco-num tnum" id="sim-economie">15 000 €</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4. CATALOGUE ===================== -->
+  <section class="bg-white section-pad" id="catalogue" data-screen-label="Catalogue">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom: 36px">
+        <p class="eyebrow">Biens à disposition</p>
+        <h2 class="h-section">Trouvez votre prochain espace.</h2>
+      </div>
+
+      <div class="filters reveal" data-delay="1" role="group" aria-label="Filtres des biens">
+        <div class="chips" role="group" aria-label="Segment">
+          <button class="chip is-active" data-seg="Tous" aria-pressed="true">Tous</button>
+          <button class="chip" data-seg="Bureaux" aria-pressed="false">Bureaux</button>
+          <button class="chip" data-seg="Commerces" aria-pressed="false">Commerces</button>
+          <button class="chip" data-seg="Logistique" aria-pressed="false">Logistique</button>
+          <button class="chip" data-seg="Terrains" aria-pressed="false">Terrains</button>
+        </div>
+        <div class="selects">
+          <span class="select"><select id="f-ville" aria-label="Localisation"><option value="Toutes">Toutes les villes</option></select></span>
+          <span class="select"><select id="f-surface" aria-label="Surface">
+            <option value="all">Toutes surfaces</option>
+            <option value="s">Moins de 500 m²</option>
+            <option value="m">500 à 2 000 m²</option>
+            <option value="l">Plus de 2 000 m²</option>
+          </select></span>
+          <span class="select"><select id="f-loyer" aria-label="Loyer annuel">
+            <option value="all">Tous les loyers</option>
+            <option value="s">Moins de 100 000 €</option>
+            <option value="m">100 000 à 250 000 €</option>
+            <option value="l">Plus de 250 000 €</option>
+          </select></span>
+          <span class="select"><select id="f-tri" aria-label="Trier">
+            <option value="pertinence">Trier : pertinence</option>
+            <option value="loyer-asc">Loyer croissant</option>
+            <option value="loyer-desc">Loyer décroissant</option>
+            <option value="surface-asc">Surface croissante</option>
+            <option value="surface-desc">Surface décroissante</option>
+          </select></span>
+        </div>
+      </div>
+
+      <p class="cat-count" id="cat-count" aria-live="polite">9 biens disponibles</p>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. POURQUOI 5% SUFFIT ===================== -->
+  <section class="bg-gray section-pad" data-screen-label="Pourquoi 5%">
+    <div class="wrap">
+      <div class="reveal center" style="margin-bottom: clamp(40px,6vw,64px)">
+        <h2 class="h-section mx-auto" style="max-width: 16ch">Pourquoi 5% suffisent.</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why reveal">
+          <div class="dot"></div>
+          <h3>Structure légère</h3>
+          <p>Pas de réseau d'agences prestige à amortir. Vous payez le conseil, pas les vitrines.</p>
+        </div>
+        <div class="why reveal" data-delay="1">
+          <div class="dot"></div>
+          <h3>Process digitalisé</h3>
+          <p>De l'estimation à la signature, tout est outillé. Moins de friction, moins de coûts.</p>
+        </div>
+        <div class="why reveal" data-delay="2">
+          <div class="dot"></div>
+          <h3>Barème unique</h3>
+          <p>5% du loyer annuel, annoncé avant le mandat. Aucune négociation, aucune surprise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6. LA MÉTHODE ===================== -->
+  <section class="bg-white section-pad" id="methode" data-screen-label="Méthode">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom: clamp(40px,6vw,64px)">
+        <p class="eyebrow">La méthode</p>
+        <h2 class="h-section">Quatre étapes. Rien de plus.</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step__n">01</div><div class="step__line"></div>
+          <h3>Estimation</h3>
+          <p>Analyse de marché et valeur locative argumentée, sous 48 heures.</p>
+        </div>
+        <div class="step reveal" data-delay="1">
+          <div class="step__n">02</div><div class="step__line"></div>
+          <h3>Stratégie</h3>
+          <p>Positionnement, cible preneurs et plan de commercialisation sur mesure.</p>
+        </div>
+        <div class="step reveal" data-delay="2">
+          <div class="step__n">03</div><div class="step__line"></div>
+          <h3>Commercialisation</h3>
+          <p>Diffusion, visites qualifiées et reporting transparent à chaque étape.</p>
+        </div>
+        <div class="step reveal" data-delay="3">
+          <div class="step__n">04</div><div class="step__line"></div>
+          <h3>Signature</h3>
+          <p>Négociation, rédaction et accompagnement jusqu'au bail signé.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 7. BARÈME ===================== -->
+  <section class="bg-gray section-pad" id="bareme" data-screen-label="Barème">
+    <div class="wrap wrap--narrow">
+      <div class="reveal center" style="margin-bottom: clamp(36px,5vw,56px)">
+        <p class="eyebrow">Barème comparé</p>
+        <h2 class="h-section">La même prestation. Le tiers du prix.</h2>
+      </div>
+      <div class="card reveal" data-delay="1" style="padding: 8px clamp(12px,3vw,32px)">
+        <table class="bareme">
+          <thead>
+            <tr><th>Prestation</th><th class="col-num">Conseil classique</th><th class="col-num">Xeext</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Honoraires de location</td><td class="col-num">15 à 30 % du loyer annuel</td><td class="col-num col-x">5 %</td></tr>
+            <tr><td>Estimation et avis de valeur</td><td class="col-num">Variable</td><td class="col-num col-x">Inclus</td></tr>
+            <tr><td>Commercialisation multicanal</td><td class="col-num">Incluse</td><td class="col-num col-x">Incluse</td></tr>
+            <tr><td>Reporting de mandat</td><td class="col-num">Sur demande</td><td class="col-num col-x">En continu</td></tr>
+            <tr><td>Barème connu avant mandat</td><td class="col-num">Rarement</td><td class="col-num col-x">Toujours</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 8. CONTACT ===================== -->
+  <section class="bg-white section-pad" id="contact" data-screen-label="Contact">
+    <div class="wrap wrap--narrow contact-card">
+      <h2 class="h-section reveal">Parlons de votre actif.</h2>
+      <p class="lead reveal" data-delay="1">Un avis de valeur sous 48 heures, sans engagement.</p>
+      <div class="mt-40 reveal" data-delay="2" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+        <a class="btn btn--primary" href="mailto:contact@xeext.fr">Écrire à un conseiller</a>
+        <a class="link-chevron" href="#catalogue">Parcourir les biens <span class="chev">›</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="index.html" style="font-size:19px"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+        <p style="margin:10px 0 0; max-width: 32ch">Conseil en immobilier d'entreprise. Bureaux, commerces, logistique, terrains.</p>
+      </div>
+      <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
+        <div style="display:grid; gap:10px">
+          <a href="#catalogue">Biens</a>
+          <a href="#simulateur">Honoraires</a>
+          <a href="#methode">Méthode</a>
+        </div>
+        <div style="display:grid; gap:10px">
+          <a href="#bareme">Barème</a>
+          <a href="#contact">Contact</a>
+          <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__legal">
+      <p><strong>Xeext</strong> — Conseil en immobilier d'entreprise. Société exerçant l'activité de transaction sur immeubles et fonds de commerce dans le cadre de la loi n° 70-9 du 2 janvier 1970 (loi Hoguet).</p>
+      <p>Titulaire d'une carte professionnelle « Transactions sur immeubles et fonds de commerce (T) » délivrée par la CCI compétente — garantie financière et assurance de responsabilité civile professionnelle souscrites auprès d'un organisme agréé. Mentions légales complètes communiquées avant tout mandat. Données présentées à titre d'illustration.</p>
+      <p style="margin-top:14px">© 2026 Xeext. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/biens.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/favoris.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/chiffre.js"></script>
+<script src="assets/simulateur.js"></script>
+<script src="assets/catalogue.js"></script>
+</body>
+</html>

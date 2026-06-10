@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212 56" width="212" height="56">
+  <rect x="4" y="4" width="48" height="48" rx="13" fill="#1F3DF0"></rect>
+  <path d="M21 21L35 35M35 21L21 35" stroke="#ffffff" stroke-width="4.8" stroke-linecap="round"></path>
+  <text x="66" y="38.5" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="-1.2" fill="#1D1D1F">Xeext</text>
+</svg>

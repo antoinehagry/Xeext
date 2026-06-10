@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Se connecter — Xeext</title>
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body data-auth="login">
+<div class="authpage">
+  <aside class="authpage__aside">
+    <div class="authpage__glow" aria-hidden="true"></div>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+    <div class="authpage__pitch">
+      <h2>Repensé à 5%.</h2>
+      <p>Connectez-vous pour enregistrer vos biens favoris et prendre rendez-vous en quelques secondes.</p>
+    </div>
+    <p class="authpage__legal">Vos identifiants sont protégés : mot de passe haché côté serveur, jamais stocké en clair.</p>
+  </aside>
+
+  <main class="authpage__main">
+    <div class="authcard">
+      <a class="back-link" href="index.html"><span aria-hidden="true">‹</span> Retour à l'accueil</a>
+      <h1>Se connecter</h1>
+      <p class="modal__sub">Retrouvez vos favoris et vos rendez-vous.</p>
+      <form id="auth-form" novalidate>
+        <div class="field"><label for="a-mail">E-mail</label><input id="a-mail" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
+        <div class="field"><label for="a-pass">Mot de passe</label><input id="a-pass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+        <div class="form-error" id="auth-err"></div>
+        <button type="submit" class="btn btn--primary btn-block">Se connecter</button>
+      </form>
+      <p class="modal__switch">Pas encore de compte ? <a id="auth-alt" data-page="inscription.html" href="inscription.html">Créer un compte</a></p>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/biens.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/auth-page.js"></script>
+</body>
+</html>

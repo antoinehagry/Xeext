@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fiche bien — Xeext</title>
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <nav class="nav__inner" aria-label="Navigation principale">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+    <ul class="nav__links">
+      <li><a href="index.html#catalogue">Biens</a></li>
+      <li><a href="index.html#simulateur">Honoraires</a></li>
+      <li><a href="index.html#methode">Méthode</a></li>
+      <li><a href="index.html#bareme">Barème</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <a class="nav__cta" href="index.html#catalogue">Voir les biens</a>
+    <button class="nav__burger" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7h16M3 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main id="main" data-screen-label="Fiche bien">
+
+  <!-- En-tête -->
+  <section class="bg-white fiche-head">
+    <div class="wrap">
+      <a class="back-link" href="index.html#catalogue"><span aria-hidden="true">‹</span> Tous les biens</a>
+      <div class="reveal">
+        <span class="fiche-badge" id="f-badge">Bureaux</span>
+        <h1 class="fiche-title" id="f-title">—</h1>
+        <p class="fiche-ville" id="f-ville">—</p>
+        <div id="f-fav" class="mt-16"></div>
+      </div>
+
+      <!-- Galerie + panneau -->
+      <div class="fiche-layout">
+        <div class="reveal" data-delay="1">
+          <div class="gallery" id="f-gallery"></div>
+        </div>
+
+        <aside class="fiche-panel reveal" data-delay="1" aria-label="Synthèse du bien">
+          <div class="panel-loyer tnum" id="f-loyer">—</div>
+          <dl class="panel-quick" id="f-quick"></dl>
+          <div class="panel-hono">
+            <div class="label">Honoraires Xeext — 5% du loyer annuel</div>
+            <div class="num tnum" id="f-hono">—</div>
+            <div class="vs" id="f-hono-vs">—</div>
+          </div>
+          <button type="button" class="btn btn--primary" id="f-cta">Prendre rendez-vous</button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Résumé -->
+  <section class="bg-white" style="padding: clamp(40px,6vw,72px) 0">
+    <div class="wrap">
+      <p class="fiche-resume reveal" id="f-resume">—</p>
+    </div>
+  </section>
+
+  <!-- Caractéristiques -->
+  <section class="bg-gray section-pad">
+    <div class="wrap">
+      <h2 class="h-section reveal" style="margin-bottom: 36px">Caractéristiques</h2>
+      <dl class="specs-grid reveal" data-delay="1" id="f-specs"></dl>
+    </div>
+  </section>
+
+  <!-- Localisation -->
+  <section class="bg-white section-pad">
+    <div class="wrap">
+      <h2 class="h-section reveal" style="margin-bottom: 12px">Localisation</h2>
+      <p class="lead reveal" data-delay="1">Au cœur de <span id="f-map-ville">—</span>. Adresse exacte communiquée sur demande.</p>
+      <div class="map-ph reveal" data-delay="1">
+        <div class="ph ph--wide"><span class="ph__label">Carte — plan de situation et points d'intérêt (transports, axes, services)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rappel honoraires -->
+  <section class="bg-gray section-pad">
+    <div class="wrap wrap--narrow">
+      <div class="reminder-band reveal">
+        <p class="eyebrow">Honoraires Xeext</p>
+        <h2 class="h-section">5% du loyer annuel, soit <span class="num" id="f-reminder-num">—</span>.</h2>
+        <p class="lead mt-16 mx-auto" style="max-width: 34ch">Un barème unique, annoncé avant le mandat. Là où un conseil classique facturerait trois à six fois plus.</p>
+        <div class="mt-32" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+          <a class="btn btn--primary" href="mailto:contact@xeext.fr">Écrire à un conseiller</a>
+          <a class="link-chevron" href="index.html#simulateur">Simuler un autre loyer <span class="chev">›</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Autres biens -->
+  <section class="bg-white section-pad">
+    <div class="wrap">
+      <h2 class="h-section reveal" style="margin-bottom: 36px">À découvrir aussi</h2>
+      <div class="cat-grid" id="f-suggest"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="index.html" style="font-size:19px"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+        <p style="margin:10px 0 0; max-width: 32ch">Conseil en immobilier d'entreprise. Bureaux, commerces, logistique, terrains.</p>
+      </div>
+      <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
+        <div style="display:grid; gap:10px">
+          <a href="index.html#catalogue">Biens</a>
+          <a href="index.html#simulateur">Honoraires</a>
+          <a href="index.html#methode">Méthode</a>
+        </div>
+        <div style="display:grid; gap:10px">
+          <a href="index.html#bareme">Barème</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__legal">
+      <p><strong>Xeext</strong> — Conseil en immobilier d'entreprise. Société exerçant l'activité de transaction sur immeubles et fonds de commerce dans le cadre de la loi n° 70-9 du 2 janvier 1970 (loi Hoguet).</p>
+      <p>Titulaire d'une carte professionnelle « Transactions sur immeubles et fonds de commerce (T) » délivrée par la CCI compétente — garantie financière et assurance de responsabilité civile professionnelle souscrites auprès d'un organisme agréé. Mentions légales complètes communiquées avant tout mandat. Données présentées à titre d'illustration.</p>
+      <p style="margin-top:14px">© 2026 Xeext. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/biens.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/favoris.js"></script>
+<script src="assets/rdv.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/fiche.js"></script>
+</body>
+</html>
