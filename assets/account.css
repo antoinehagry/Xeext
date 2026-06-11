@@ -53,6 +53,17 @@
 
 .nav__inner { position: relative; }
 
+/* ---- Mobile : le compte s'intègre au menu déroulant ---- */
+@media (max-width: 860px) {
+  .nav__account { width: 100%; margin-top: 8px; }
+  .btn-signin {
+    display: block; width: 100%; text-align: center;
+    background: rgba(0,0,0,0.05); border-radius: var(--r-pill);
+    padding: 12px 16px; font-size: 16px; opacity: 1;
+  }
+  .acct-menu { left: 0; right: auto; width: 100%; }
+}
+
 /* ---------- Modale ---------- */
 .overlay {
   position: fixed; inset: 0; z-index: 300;
