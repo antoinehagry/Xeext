@@ -28,11 +28,13 @@
     function close() {
       nav.classList.remove("menu-open");
       burger.setAttribute("aria-expanded", "false");
+      burger.setAttribute("aria-label", "Menu");
     }
     function toggle(e) {
       e.stopPropagation();
       var open = nav.classList.toggle("menu-open");
       burger.setAttribute("aria-expanded", open ? "true" : "false");
+      burger.setAttribute("aria-label", open ? "Fermer le menu" : "Menu");
     }
 
     burger.setAttribute("aria-expanded", "false");
