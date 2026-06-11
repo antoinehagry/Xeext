@@ -52,7 +52,7 @@
         '<div class="bien__media">' +
           '<span class="badge">' + b.segment + '</span>' +
           (window.XEEXT.fav ? window.XEEXT.fav.favBtnHTML(b.id, "card") : "") +
-          '<div class="ph ph--4x3"><span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div>' +
+          '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div>' +
         '</div>' +
         '<div class="bien__body">' +
           '<h3 class="bien__title">' + b.titre + '</h3>' +

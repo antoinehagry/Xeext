@@ -276,3 +276,37 @@ window.XEEXT = {
   },
   find(id) { return window.XEEXT_BIENS.find(b => b.id === id); }
 };
+
+/* Photos libres de droits (Unsplash, hotlink autorisé par leur licence).
+   La première de chaque liste sert de couverture (cards). ----------- */
+window.XEEXT_IMAGES = {
+  "bureaux-nancy":       ["photo-1464082354059-27db6ce50048", "photo-1497366811353-6870744d04b2", "photo-1497366754035-f200968a6e72"],
+  "bureaux-lyon":        ["photo-1486406146926-c627a92ad1ab", "photo-1531973576160-7125cd663d86", "photo-1497215728101-856f4ea42174"],
+  "bureaux-paris9":      ["photo-1524758631624-e2822e304c36", "photo-1604328698692-f76ea9498e76", "photo-1497366811353-6870744d04b2"],
+  "bureaux-nantes":      ["photo-1497366811353-6870744d04b2", "photo-1497366754035-f200968a6e72", "photo-1531973576160-7125cd663d86"],
+  "commerce-bordeaux":   ["photo-1441986300917-64674bd600d8", "photo-1604719312566-8912e9227c6a", "photo-1555529669-e69e7aa0ba9a"],
+  "commerce-lille":      ["photo-1567401893414-76b7b1e5a7a5", "photo-1555529669-e69e7aa0ba9a", "photo-1441986300917-64674bd600d8"],
+  "logistique-marne":    ["photo-1565891741441-64926e441838", "photo-1586528116311-ad8dd3c8310d", "photo-1553413077-190dd305871c"],
+  "logistique-toulouse": ["photo-1586528116311-ad8dd3c8310d", "photo-1553413077-190dd305871c", "photo-1565891741441-64926e441838"],
+  "terrain-rennes":      ["photo-1500382017468-9049fed747ef"]
+};
+window.XEEXT_HERO = "photo-1431576901776-e539bd916ba2";
+
+window.XEEXT.imgUrl = function (id, w) {
+  return "https://images.unsplash.com/" + id + "?auto=format&fit=crop&q=80&w=" + (w || 1100);
+};
+window.XEEXT.cover = function (b, w) {
+  var a = window.XEEXT_IMAGES[b.id];
+  return a && a.length ? window.XEEXT.imgUrl(a[0], w || 800) : null;
+};
+window.XEEXT.galleryUrls = function (b) {
+  return (window.XEEXT_IMAGES[b.id] || []).map(function (id) { return window.XEEXT.imgUrl(id, 1100); });
+};
+// <img> de couverture posé dans un placeholder .ph ; en cas d'échec réseau,
+// il se retire et le placeholder rayé (avec légende) réapparaît.
+window.XEEXT.imgTag = function (url, alt, eager) {
+  if (!url) return "";
+  alt = (alt || "").replace(/"/g, "&quot;");
+  return '<img class="ph__img" src="' + url + '" alt="' + alt + '" ' +
+    'loading="' + (eager ? "eager" : "lazy") + '" onerror="this.remove()">';
+};

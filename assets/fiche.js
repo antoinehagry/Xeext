@@ -20,12 +20,18 @@
     setText("f-ville", b.ville + " (" + b.dept + ")");
     setText("f-resume", b.resume);
 
-    // Galerie
+    // Galerie : photos réelles si disponibles, sinon placeholders rayés
     var gal = document.getElementById("f-gallery");
-    gal.innerHTML = b.photos.map(function (p, i) {
-      var ratio = i === 0 ? "ph--16x9" : "ph--4x3";
-      return '<div class="ph ' + ratio + '"><span class="ph__label">PHOTO — ' + p + '</span></div>';
-    }).join("");
+    var urls = X.galleryUrls(b);
+    var slots = Math.max(urls.length, urls.length ? 0 : b.photos.length);
+    var items = [];
+    for (var gi = 0; gi < slots; gi++) {
+      var ratio = gi === 0 ? "ph--16x9" : "ph--4x3";
+      var desc = b.photos[gi] || b.titre;
+      items.push('<div class="ph ' + ratio + '">' + X.imgTag(urls[gi], desc, gi === 0) +
+        '<span class="ph__label">PHOTO — ' + desc + '</span></div>');
+    }
+    gal.innerHTML = items.join("");
 
     // Panneau loyer
     document.getElementById("f-loyer").innerHTML =
@@ -87,7 +93,7 @@
       a.href = "fiche.html?id=" + b.id;
       a.innerHTML =
         '<div class="bien__media"><span class="badge">' + b.segment + '</span>' +
-        '<div class="ph ph--4x3"><span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
+        '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
         '<div class="bien__body"><h3 class="bien__title">' + b.titre + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
         '<dl class="bien__data"><div><dt>Surface</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +

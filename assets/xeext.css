@@ -213,6 +213,15 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
 }
 .ph--dark .ph__label { color: #6b6b70; }
 
+/* Photo réelle posée par-dessus le placeholder rayé (qui sert de repli) */
+.ph__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+}
+
 /* ---- Cards ---- */
 .card {
   background: var(--white);

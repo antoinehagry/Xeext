@@ -13,7 +13,7 @@
     return '<a class="bien" href="fiche.html?id=' + b.id + '">' +
       '<div class="bien__media"><span class="badge">' + b.segment + '</span>' +
       X.fav.favBtnHTML(b.id, "card") +
-      '<div class="ph ph--4x3"><span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
+      '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
       '<div class="bien__body"><h3 class="bien__title">' + b.titre + '</h3>' +
       '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
       '<dl class="bien__data">' +
