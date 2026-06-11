@@ -368,3 +368,41 @@ input[type="range"].sim-range::-moz-range-thumb {
 
 /* Filet de sécurité : si le tableau dépasse, il défile au lieu d'être coupé */
 .card--scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ============================================================
+   QUESTIONNAIRE BESOINS
+   ============================================================ */
+.wizard {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  padding: clamp(28px, 4vw, 52px);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.wizard__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
+.wizard__count { font-size: 14px; font-weight: 500; color: var(--text-2); }
+.wizard__back { background: none; border: none; font: inherit; font-size: 15px; color: var(--text-2); cursor: pointer; padding: 4px 0; }
+.wizard__back:hover { color: var(--text); }
+.wizard__bar { height: 4px; background: rgba(0, 0, 0, 0.08); border-radius: 999px; overflow: hidden; margin-bottom: 32px; }
+.wizard__bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .35s ease; }
+.wizard__q { font-size: clamp(25px, 3.2vw, 38px); letter-spacing: -0.025em; line-height: 1.1; }
+
+.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+.opt {
+  display: flex; flex-direction: column; gap: 5px;
+  text-align: left; font: inherit; color: var(--text);
+  background: var(--white); border: 1px solid var(--hairline);
+  border-radius: var(--r-md); padding: 17px 18px; cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.opt:hover { border-color: rgba(31, 61, 240, 0.45); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+.opt.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.opt__t { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.opt__h { font-size: 13px; color: var(--text-2); }
+
+/* compatibilité affichée sur les cards de résultats */
+.match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.match-pct { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.match-track { flex: 1; height: 5px; background: rgba(31, 61, 240, 0.14); border-radius: 999px; overflow: hidden; }
+.match-track i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }

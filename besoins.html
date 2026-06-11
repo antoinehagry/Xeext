@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trouver mon bien — Xeext</title>
+<meta name="description" content="Répondez à 5 questions et recevez les biens d'entreprise qui correspondent à vos besoins : bureaux, commerces, logistique, terrains." />
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <nav class="nav__inner" aria-label="Navigation principale">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+    <ul class="nav__links">
+      <li><a href="index.html#catalogue">Biens</a></li>
+      <li><a href="besoins.html" aria-current="page">Trouver mon bien</a></li>
+      <li><a href="index.html#simulateur">Honoraires</a></li>
+      <li><a href="index.html#methode">Méthode</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <a class="nav__cta" href="index.html#catalogue">Voir les biens</a>
+    <button class="nav__burger" aria-label="Menu">
+      <span class="burger-ico" aria-hidden="true"></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="bg-gray section-pad" data-screen-label="Trouver mon bien">
+  <div class="wrap wrap--narrow">
+    <div id="besoins-root"><!-- questionnaire / résultats injectés par besoins.js --></div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="index.html" style="font-size:19px"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+        <p style="margin:10px 0 0; max-width: 32ch">Conseil en immobilier d'entreprise. Bureaux, commerces, logistique, terrains.</p>
+      </div>
+      <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
+        <div style="display:grid; gap:10px">
+          <a href="index.html#catalogue">Biens</a>
+          <a href="besoins.html">Trouver mon bien</a>
+          <a href="index.html#simulateur">Honoraires</a>
+        </div>
+        <div style="display:grid; gap:10px">
+          <a href="index.html#bareme">Barème</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__legal">
+      <p><strong>Xeext</strong> — Conseil en immobilier d'entreprise. Recommandations établies à titre indicatif à partir de vos réponses. Données présentées à titre d'illustration.</p>
+      <p style="margin-top:14px">© 2026 Xeext. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/biens.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/favoris.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/besoins.js"></script>
+</body>
+</html>
