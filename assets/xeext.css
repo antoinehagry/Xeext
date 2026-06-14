@@ -552,7 +552,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   color: var(--text-2); background: var(--fill);
   transition: background .2s ease, color .2s ease, transform .2s ease;
 }
-.footer__social a:hover { color: var(--text); background: var(--fill-hover); transform: translateY(-2px); }
+.footer__social a:hover { color: #fff; background: var(--accent); transform: translateY(-2px); }
 .footer__social svg { width: 18px; height: 18px; }
 .footer a { color: var(--text-2); }
 .footer a:hover { color: var(--text); }
