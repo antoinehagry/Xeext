@@ -212,7 +212,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   position: absolute;
   left: var(--fx); top: var(--fy);
   width: var(--fd); height: var(--fd);
-  background: #fff;
+  background: var(--white); /* couleur de surface : « vide » le bouton en clair comme en sombre */
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   transition: transform .5s cubic-bezier(.22,.61,.36,1);
