@@ -12,6 +12,21 @@
   if (!root || !store) return;
 
   var SEGMENTS = ["Bureaux", "Commerces", "Logistique", "Terrains"];
+  // Disponibilités proposées + rang de tri associé (calculé automatiquement)
+  var DISPOS = [
+    { t: "Immédiate", r: 0 },
+    { t: "Sous 3 mois", r: 1 },
+    { t: "Sous 6 mois", r: 2 },
+    { t: "3ᵉ trimestre 2026", r: 3 },
+    { t: "4ᵉ trimestre 2026", r: 4 },
+    { t: "1ᵉʳ trimestre 2027", r: 5 },
+    { t: "2ᵉ trimestre 2027", r: 6 },
+    { t: "À définir", r: 9 }
+  ];
+  function rankFor(dispo, fallback) {
+    for (var i = 0; i < DISPOS.length; i++) if (DISPOS[i].t === dispo) return DISPOS[i].r;
+    return (typeof fallback === "number" ? fallback : 0);
+  }
 
   function esc(s) { return (s == null ? "" : String(s)).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
   function v(r, sel) { var el = r.querySelector(sel); return el ? el.value.trim() : ""; }
@@ -108,6 +123,14 @@
       '</select></span></div>';
   }
   function row2(a, b) { return '<div class="form-row2">' + a + b + '</div>'; }
+  function selDispo(val) {
+    var opts = DISPOS.slice();
+    // conserve une valeur existante hors liste (biens importés / personnalisés)
+    if (val && !DISPOS.some(function (d) { return d.t === val; })) opts = [{ t: val }].concat(opts);
+    return '<div class="field"><label for="f-dispo">Disponibilité</label><span class="select"><select id="f-dispo">' +
+      opts.map(function (d) { return '<option' + (d.t === val ? ' selected' : '') + '>' + esc(d.t) + '</option>'; }).join("") +
+      '</select></span></div>';
+  }
 
   function openForm(b) {
     b = b || {};
@@ -119,7 +142,7 @@
         selSeg(b.segment || "Bureaux") +
         row2(fld("Ville", "f-ville", b.ville), fld("Département", "f-dept", b.dept)) +
         row2(fld("Surface (m²)", "f-surface", b.surface, "number"), fld("Loyer €/an", "f-loyer", b.loyer, "number")) +
-        row2(fld("Disponibilité", "f-dispo", b.dispo), fld("Rang dispo (0 = immédiate)", "f-rank", b.dispo_rank, "number")) +
+        selDispo(b.dispo) +
         area("Résumé", "f-resume", b.resume) +
         area("Caractéristiques — une par ligne au format « Clé : Valeur »", "f-specs", specsToText(b.specs)) +
         area("Légendes des photos — une par ligne", "f-photos", (b.photos || []).join("\n")) +
@@ -131,7 +154,7 @@
 
     var m = ui.openModal(html, { wide: true });
     var r = m.root;
-    if (X.autocompleteVille) X.autocompleteVille(r.querySelector("#f-ville"));
+    if (X.autocompleteVille) X.autocompleteVille(r.querySelector("#f-ville"), { deptInput: r.querySelector("#f-dept") });
     var err = r.querySelector("#bf-err");
 
     r.querySelector("#bf").addEventListener("submit", function (e) {
@@ -151,7 +174,7 @@
         surface: int(v(r, "#f-surface")),
         loyer: int(v(r, "#f-loyer")),
         dispo: v(r, "#f-dispo") || null,
-        dispo_rank: int(v(r, "#f-rank")) || 0,
+        dispo_rank: rankFor(v(r, "#f-dispo"), b.dispo_rank),
         resume: v(r, "#f-resume") || null,
         specs: textToSpecs(v(r, "#f-specs")),
         photos: linesToArr(v(r, "#f-photos")),

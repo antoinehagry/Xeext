@@ -1,8 +1,11 @@
 /* ============================================================
    Xeext — autocomplétion de ville (API officielle geo.api.gouv.fr).
-   window.XEEXT.autocompleteVille(input) : suggère les communes
-   françaises au fil de la saisie. Sans clé, dégradation propre si
-   l'API est injoignable (le champ reste un texte libre normal).
+   window.XEEXT.autocompleteVille(input, opts) : suggère les communes
+   françaises au fil de la saisie.
+   - opts.deptInput : si fourni, la ville sélectionnée remplit ce champ
+     avec le code du département, et le champ ville ne garde que le nom.
+   - sinon, le champ ville reçoit « Nom (code) ».
+   Sans clé ; dégradation propre si l'API est injoignable.
    ============================================================ */
 (function () {
   window.XEEXT = window.XEEXT || {};
@@ -13,14 +16,14 @@
     return function () { var a = arguments, c = this; clearTimeout(t); t = setTimeout(function () { fn.apply(c, a); }, ms); };
   }
 
-  window.XEEXT.autocompleteVille = function (input) {
+  window.XEEXT.autocompleteVille = function (input, opts) {
+    opts = opts || {};
     if (!input || input.dataset.acReady) return;
     input.dataset.acReady = "1";
     input.setAttribute("autocomplete", "off");
     input.setAttribute("role", "combobox");
     input.setAttribute("aria-expanded", "false");
 
-    // conteneur positionné autour de l'input (la liste se place dessous)
     var wrap = document.createElement("div");
     wrap.className = "ac";
     input.parentNode.insertBefore(wrap, input);
@@ -36,15 +39,20 @@
       list.classList.remove("open"); list.innerHTML = "";
       items = []; active = -1; input.setAttribute("aria-expanded", "false");
     }
-    function choose(i) { if (items[i]) { input.value = items[i]; close(); } }
+    function choose(i) {
+      var it = items[i]; if (!it) return;
+      if (opts.deptInput) { input.value = it.nom; opts.deptInput.value = it.code; }
+      else { input.value = it.label; }
+      close();
+    }
     function highlight() {
       list.querySelectorAll(".ac-item").forEach(function (el, i) { el.classList.toggle("active", i === active); });
     }
-    function renderList(names) {
-      items = names; active = -1;
-      if (!names.length) { close(); return; }
-      list.innerHTML = names.map(function (n, i) {
-        return '<li class="ac-item" role="option" data-i="' + i + '">' + n + '</li>';
+    function renderList(arr) {
+      items = arr; active = -1;
+      if (!arr.length) { close(); return; }
+      list.innerHTML = arr.map(function (it, i) {
+        return '<li class="ac-item" role="option" data-i="' + i + '">' + it.label + "</li>";
       }).join("");
       list.classList.add("open");
       input.setAttribute("aria-expanded", "true");
@@ -56,8 +64,11 @@
       fetch(API + encodeURIComponent(q))
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          if (input.value.trim() !== q) return; // réponse périmée (saisie continue)
-          renderList(data.map(function (c) { return c.nom + " (" + c.departement.code + ")"; }));
+          if (input.value.trim() !== q) return; // réponse périmée
+          renderList(data.map(function (c) {
+            var code = (c.departement && c.departement.code) || "";
+            return { nom: c.nom, code: code, label: c.nom + (code ? " (" + code + ")" : "") };
+          }));
         })
         .catch(function () { close(); });
     }, 200);
@@ -70,7 +81,6 @@
       else if (e.key === "Enter") { if (active >= 0) { e.preventDefault(); choose(active); } }
       else if (e.key === "Escape") { close(); }
     });
-    // mousedown (et non click) pour devancer le blur du champ
     list.addEventListener("mousedown", function (e) {
       var li = e.target.closest(".ac-item");
       if (li) { e.preventDefault(); choose(+li.getAttribute("data-i")); }
