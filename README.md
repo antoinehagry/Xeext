@@ -39,6 +39,28 @@ Pour la mise en ligne : déposez le dossier tel quel sur un hébergeur statique
 2. **Authentication → Sign In / Up → Email** : pour tester sans étape de validation,
    désactiver « Confirm email ». Le réactiver avant la mise en production.
 
+## E-mails & mot de passe oublié
+
+La page de connexion propose « Mot de passe oublié ? » → Supabase envoie un e-mail
+contenant un lien vers `reinitialisation.html`, où l'utilisateur choisit un nouveau
+mot de passe. Pour que ça fonctionne **en production** :
+
+1. **Authentication → URL Configuration** :
+   - *Site URL* : `https://antoinehagry.github.io/Xeext/index.html`
+   - *Redirect URLs* : ajouter `https://antoinehagry.github.io/Xeext/reinitialisation.html`
+     (et l'équivalent local, ex. `http://localhost:8000/reinitialisation.html`, pour tester).
+2. **Authentication → Emails / SMTP** : l'envoi par défaut de Supabase est très limité et
+   finit souvent en spam. Configurer un **SMTP perso** (Brevo, Resend, Mailgun…) pour des
+   e-mails fiables — c'est requis aussi bien pour le reset que pour la confirmation d'inscription.
+3. **Confirm email** : à réactiver avant l'ouverture publique (Authentication → Email).
+
+## Pages légales
+
+`mentions-legales.html` et `confidentialite.html` (liées dans le pied de page).
+⚠️ Elles contiennent des champs **[à compléter]** (forme juridique, SIREN, n° de carte
+professionnelle, garantie financière, adresse) — à renseigner avec les vraies informations
+de la société avant la mise en ligne.
+
 ## Analytics (optionnel)
 
 Les pages contiennent un script **Plausible** en commentaire (`<head>`). Pour l'activer :

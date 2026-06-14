@@ -201,6 +201,29 @@
           return { ok: true };
         })
         .catch(function () { return OFFLINE; });
+    },
+
+    /* ----- Mot de passe oublié ----- */
+    requestPasswordReset: function (email) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      email = (email || "").trim().toLowerCase();
+      if (!EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: "Adresse e-mail invalide." });
+      var redirectTo = location.origin + location.pathname.replace(/[^/]*$/, "") + "reinitialisation.html";
+      return sb.auth.resetPasswordForEmail(email, { redirectTo: redirectTo })
+        .then(function (res) { return res.error ? { ok: false, error: frError(res.error.message) } : { ok: true }; })
+        .catch(function () { return OFFLINE; });
+    },
+    updatePassword: function (pwd) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      if (!pwd || pwd.length < 6) return Promise.resolve({ ok: false, error: "Le mot de passe doit contenir au moins 6 caractères." });
+      return sb.auth.updateUser({ password: pwd })
+        .then(function (res) {
+          if (res.error) return { ok: false, error: frError(res.error.message) };
+          setUserFromSession({ user: res.data.user });
+          emit();
+          return { ok: true };
+        })
+        .catch(function () { return OFFLINE; });
     }
   };
 

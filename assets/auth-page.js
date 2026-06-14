@@ -59,4 +59,31 @@
       }
     });
   });
+
+  // Mot de passe oublié (présent uniquement sur la page connexion)
+  var forgot = document.getElementById("forgot-link");
+  var info = document.getElementById("auth-info");
+  if (forgot) {
+    forgot.addEventListener("click", function (e) {
+      e.preventDefault();
+      err.classList.remove("show");
+      if (info) info.classList.remove("show");
+      var email = val("a-mail");
+      if (!email) {
+        err.textContent = "Saisissez d'abord votre e-mail ci-dessus, puis recliquez sur « Mot de passe oublié ? ».";
+        err.classList.add("show");
+        var mailEl = document.getElementById("a-mail"); if (mailEl) mailEl.focus();
+        return;
+      }
+      forgot.textContent = "Envoi…";
+      store.requestPasswordReset(email).then(function (res) {
+        forgot.textContent = "Mot de passe oublié ?";
+        if (!res.ok) { err.textContent = res.error; err.classList.add("show"); return; }
+        if (info) {
+          info.textContent = "Si un compte existe pour " + email + ", un e-mail de réinitialisation vient d'être envoyé. Pensez à vérifier vos spams.";
+          info.classList.add("show");
+        }
+      });
+    });
+  }
 })();

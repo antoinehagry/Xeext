@@ -125,6 +125,14 @@
   padding: 10px 14px; margin-top: 16px; display: none;
 }
 .form-error.show { display: block; }
+.form-info {
+  font-size: 14px; color: #1a7f4b;
+  background: rgba(26, 127, 75, 0.09); border-radius: 10px;
+  padding: 10px 14px; margin-top: 16px; display: none; line-height: 1.45;
+}
+.form-info.show { display: block; }
+.auth-forgot { text-align: right; margin: 8px 2px 0; font-size: 14px; }
+.auth-forgot a { color: var(--accent); }
 .btn-block { width: 100%; justify-content: center; margin-top: 22px; }
 .btn[disabled] { opacity: .6; pointer-events: none; }
 

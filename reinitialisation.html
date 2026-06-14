@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Réinitialiser le mot de passe — Xeext</title>
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body>
+<div class="authpage">
+  <aside class="authpage__aside">
+    <div class="authpage__glow" aria-hidden="true"></div>
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Xeext</a>
+    <div class="authpage__pitch">
+      <h2>Nouveau mot de passe.</h2>
+      <p>Choisissez un nouveau mot de passe pour sécuriser votre espace.</p>
+    </div>
+    <p class="authpage__legal">Lien valable un court instant. S'il a expiré, redemandez un e-mail depuis la page de connexion.</p>
+  </aside>
+
+  <main class="authpage__main">
+    <div class="authcard">
+      <a class="back-link" href="connexion.html"><span aria-hidden="true">‹</span> Retour à la connexion</a>
+      <h1>Réinitialiser</h1>
+      <p class="modal__sub">Saisissez votre nouveau mot de passe.</p>
+      <form id="reinit-form" novalidate>
+        <div class="field"><label for="r-pass">Nouveau mot de passe</label><input id="r-pass" type="password" autocomplete="new-password" placeholder="Au moins 6 caractères"></div>
+        <div class="field"><label for="r-pass2">Confirmer</label><input id="r-pass2" type="password" autocomplete="new-password" placeholder="Répétez le mot de passe"></div>
+        <div class="form-error" id="reinit-err"></div>
+        <div class="form-info" id="reinit-info"></div>
+        <button type="submit" class="btn btn--primary btn-block">Mettre à jour</button>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/reinit.js"></script>
+</body>
+</html>

@@ -370,6 +370,17 @@ input[type="range"].sim-range::-moz-range-thumb {
 /* Filet de sécurité : si le tableau dépasse, il défile au lieu d'être coupé */
 .card--scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+/* ---------- Pages légales (confidentialité, mentions) ---------- */
+.legal { max-width: 760px; }
+.legal .back-link { margin-bottom: 28px; }
+.legal h1 { font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.025em; line-height: 1.1; }
+.legal p.updated { color: var(--text-3); font-size: 14px; margin: 8px 0 32px; }
+.legal h2 { font-size: 21px; letter-spacing: -0.01em; margin: 34px 0 10px; }
+.legal p, .legal li { font-size: 16px; color: var(--text); line-height: 1.65; }
+.legal ul { padding-left: 20px; margin: 10px 0; }
+.legal li { margin: 4px 0; }
+.legal a { color: var(--accent); }
+
 /* ============================================================
    QUESTIONNAIRE BESOINS
    ============================================================ */
