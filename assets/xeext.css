@@ -16,6 +16,13 @@
   --accent-hover: #1733d4;
   --hairline: rgba(0, 0, 0, 0.08);
   --hairline-dark: rgba(255, 255, 255, 0.12);
+  /* surfaces / remplissages tokenisés (adaptés en thème sombre) */
+  --fill: rgba(0, 0, 0, 0.05);
+  --fill-hover: rgba(0, 0, 0, 0.09);
+  --track: rgba(0, 0, 0, 0.10);
+  --nav-bg: rgba(255, 255, 255, 0.72);
+  --panel-bg: rgba(255, 255, 255, 0.86);
+  color-scheme: light;
 
   /* Ombres très douces et diffuses, jamais de bordures dures */
   --shadow-sm: 0 2px 14px rgba(0, 0, 0, 0.05);
@@ -35,6 +42,30 @@
 
   --nav-h: 52px;
   --maxw: 1320px;
+}
+
+/* ============================================================
+   THÈME SOMBRE — surcharge des jetons de couleur
+   ============================================================ */
+[data-theme="dark"] {
+  --white: #1c1c1e;          /* surface principale (cards, sections claires) */
+  --gray-bg: #111113;        /* surface alternée + fond de page */
+  --dark: #08080a;           /* la section « moment sombre » */
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --text-3: #8a8a90;
+  --accent: #6f8cff;         /* cobalt éclairci pour contraste sur fond sombre */
+  --accent-hover: #8ba1ff;
+  --hairline: rgba(255, 255, 255, 0.14);
+  --fill: rgba(255, 255, 255, 0.09);
+  --fill-hover: rgba(255, 255, 255, 0.16);
+  --track: rgba(255, 255, 255, 0.16);
+  --nav-bg: rgba(22, 22, 24, 0.72);
+  --panel-bg: rgba(28, 28, 30, 0.92);
+  --shadow-sm: 0 2px 14px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 30px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 18px 60px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -159,8 +190,8 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
 @media (prefers-reduced-motion: reduce) {
   .btn--primary::after, .nav__cta::after { transition: none; }
 }
-.btn--ghost { background: rgba(0,0,0,0.05); color: var(--text); }
-.btn--ghost:hover { background: rgba(0,0,0,0.09); }
+.btn--ghost { background: var(--fill); color: var(--text); }
+.btn--ghost:hover { background: var(--fill-hover); }
 .bg-dark .btn--ghost { background: rgba(255,255,255,0.12); color: #fff; }
 .bg-dark .btn--ghost:hover { background: rgba(255,255,255,0.2); }
 
@@ -266,7 +297,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
 }
 .skip-link {
   position: absolute; left: -9999px; top: 8px; z-index: 200;
-  background: #fff; color: var(--accent); padding: 10px 16px; border-radius: 8px;
+  background: var(--white); color: var(--accent); padding: 10px 16px; border-radius: 8px;
   box-shadow: var(--shadow-md);
 }
 .skip-link:focus { left: 16px; }
@@ -285,7 +316,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   top: 0;
   z-index: 100;
   height: var(--nav-h);
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--nav-bg);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--hairline);

@@ -24,7 +24,7 @@
 .acct-menu {
   position: absolute; top: calc(100% + 10px); right: 0;
   width: 248px;
-  background: rgba(255,255,255,0.86);
+  background: var(--panel-bg);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   border: 1px solid var(--hairline);
@@ -46,7 +46,7 @@
   padding: 10px 12px; border: none; background: none; border-radius: 10px;
   transition: background .15s ease;
 }
-.acct-menu a:hover, .acct-menu button:hover { background: rgba(0,0,0,0.05); }
+.acct-menu a:hover, .acct-menu button:hover { background: var(--fill); }
 .acct-menu .count { font-size: 12px; font-weight: 600; color: var(--accent); }
 .acct-menu .sep { height: 1px; background: var(--hairline); margin: 8px 0; }
 .acct-menu .danger { color: #c4342b; }
@@ -58,7 +58,7 @@
   .nav__account { width: 100%; margin-top: 8px; }
   .btn-signin {
     display: block; width: 100%; text-align: center;
-    background: rgba(0,0,0,0.05); border-radius: var(--r-pill);
+    background: var(--fill); border-radius: var(--r-pill);
     padding: 12px 16px; font-size: 16px; opacity: 1;
   }
   .acct-menu { left: 0; right: auto; width: 100%; }
@@ -92,11 +92,11 @@
 .modal__close {
   position: absolute; top: 16px; right: 16px;
   width: 34px; height: 34px; border-radius: 50%;
-  border: none; background: rgba(0,0,0,0.05); color: var(--text-2);
+  border: none; background: var(--fill); color: var(--text-2);
   display: inline-flex; align-items: center; justify-content: center;
   transition: background .15s ease;
 }
-.modal__close:hover { background: rgba(0,0,0,0.1); }
+.modal__close:hover { background: var(--fill-hover); }
 .modal { position: relative; }
 .modal__title { font-size: 28px; letter-spacing: -0.02em; }
 .modal__sub { font-size: 15px; color: var(--text-2); margin: 8px 0 0; }
@@ -113,7 +113,7 @@
 }
 .field textarea { resize: vertical; min-height: 84px; }
 .field input:focus, .field textarea:focus, .field select:focus {
-  outline: none; background: #fff; border-color: var(--accent);
+  outline: none; background: var(--white); border-color: var(--accent);
 }
 .field .select { display: block; }
 .field .select::after { right: 16px; }
@@ -146,20 +146,20 @@
 .ac-list {
   position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 10;
   list-style: none; margin: 0; padding: 6px;
-  background: #fff; border: 1px solid var(--hairline);
+  background: var(--white); border: 1px solid var(--hairline);
   border-radius: 12px; box-shadow: var(--shadow-md);
   max-height: 220px; overflow: auto; display: none;
 }
 .ac-list.open { display: block; }
 .ac-item { padding: 9px 12px; border-radius: 8px; font-size: 15px; cursor: pointer; }
-.ac-item:hover, .ac-item.active { background: rgba(0, 0, 0, 0.05); }
+.ac-item:hover, .ac-item.active { background: var(--fill); }
 
 /* ---------- Back-office (admin.html) ---------- */
 .admin-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
 .admin-list { display: grid; gap: 10px; }
 .admin-row {
   display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  background: #fff; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 14px 18px;
+  background: var(--white); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 14px 18px;
 }
 .admin-row__t { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
 .admin-row__m { font-size: 13px; color: var(--text-2); margin-top: 2px; }
@@ -204,12 +204,12 @@
 /* cœur dans la fiche (ligne de titre) */
 .fav-inline {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--hairline); background: #fff;
+  border: 1px solid var(--hairline); background: var(--white);
   border-radius: var(--r-pill); padding: 9px 16px;
   font-size: 15px; font-weight: 500; color: var(--text);
   transition: border-color .2s ease, color .2s ease;
 }
-.fav-inline:hover { border-color: rgba(0,0,0,0.2); }
+.fav-inline:hover { border-color: var(--text-3); }
 .fav-inline svg { width: 18px; height: 18px; }
 .fav-inline .fill { fill: none; stroke: currentColor; stroke-width: 1.8; }
 .fav-inline.is-fav { color: var(--accent); border-color: rgba(31,61,240,0.4); }
@@ -218,13 +218,13 @@
 /* ---------- Rendez-vous : créneaux ---------- */
 .rdv-dates, .rdv-slots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
 .rdv-chip {
-  border: 1px solid var(--hairline); background: #fff;
+  border: 1px solid var(--hairline); background: var(--white);
   border-radius: 12px; padding: 9px 12px; cursor: pointer;
   font-size: 14px; color: var(--text); text-align: center; min-width: 58px;
   transition: border-color .15s ease, background .15s ease, color .15s ease;
 }
 .rdv-chip small { display: block; font-size: 11px; color: var(--text-3); margin-top: 2px; }
-.rdv-chip:hover { border-color: rgba(0,0,0,0.25); }
+.rdv-chip:hover { border-color: var(--text-3); }
 .rdv-chip.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
 .rdv-chip.sel small { color: rgba(255,255,255,0.8); }
 
@@ -278,7 +278,7 @@
 .rdv-list { display: grid; gap: 14px; }
 .rdv-row {
   display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center;
-  background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 18px 20px;
+  background: var(--white); border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 18px 20px;
 }
 .rdv-row .date-box {
   width: 58px; text-align: center; background: var(--gray-bg); border-radius: 10px; padding: 8px 0;
@@ -290,7 +290,7 @@
 .rdv-row .cancel { border: none; background: none; color: var(--text-3); font-size: 14px; cursor: pointer; padding: 6px; }
 .rdv-row .cancel:hover { color: #c4342b; }
 
-.profil-card { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 32px; max-width: 460px; }
+.profil-card { background: var(--white); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 32px; max-width: 460px; }
 .profil-card .row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
 .profil-card .row:last-of-type { border-bottom: none; }
 .profil-card .row .k { color: var(--text-2); }
