@@ -132,6 +132,19 @@
    dans une carte centrée */
 .lead-form { max-width: 460px; margin: 32px auto 0; text-align: left; }
 .lead-form .field:first-child { margin-top: 0; }
+
+/* Autocomplétion de ville (geo.api.gouv.fr) */
+.ac { position: relative; }
+.ac-list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 10;
+  list-style: none; margin: 0; padding: 6px;
+  background: #fff; border: 1px solid var(--hairline);
+  border-radius: 12px; box-shadow: var(--shadow-md);
+  max-height: 220px; overflow: auto; display: none;
+}
+.ac-list.open { display: block; }
+.ac-item { padding: 9px 12px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+.ac-item:hover, .ac-item.active { background: rgba(0, 0, 0, 0.05); }
 .modal__switch { font-size: 14px; color: var(--text-2); text-align: center; margin-top: 18px; }
 .modal__switch button { background: none; border: none; color: var(--accent); font: inherit; font-weight: 500; cursor: pointer; }
 .modal__note { font-size: 12px; color: var(--text-3); text-align: center; margin-top: 16px; line-height: 1.5; }

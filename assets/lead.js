@@ -56,6 +56,9 @@
     var err = root.querySelector("#est-err");
     var btn = root.querySelector('button[type="submit"]');
 
+    // autocomplétion de ville sur le champ Localisation
+    if (window.XEEXT.autocompleteVille) window.XEEXT.autocompleteVille(root.querySelector("#e-ville"));
+
     root.querySelector("#est-form").addEventListener("submit", function (e) {
       e.preventDefault();
       err.classList.remove("show");
