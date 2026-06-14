@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var t=p||localStorage.getItem('xeext.theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>(function(){try{if(sessionStorage.getItem('xeext.intro')||matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('intro-done');}catch(e){document.documentElement.classList.add('intro-done');}})();</script>
 <title>Xeext — Le conseil immobilier d'entreprise, repensé à 5%</title>
 <meta name="description" content="Conseil en immobilier d'entreprise : bureaux, commerces, logistique, terrains. Honoraires uniques de 5% du loyer annuel." />
 <link rel="canonical" href="https://antoinehagry.github.io/Xeext/index.html" />
@@ -22,6 +23,9 @@
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
 </head>
 <body>
+<div class="intro" id="intro" aria-hidden="true">
+  <span class="intro__logo"><span class="brand-mark intro__mark" aria-hidden="true"></span><span class="intro__word">Xeext</span></span>
+</div>
 <a class="skip-link" href="#main">Aller au contenu</a>
 
 <!-- ===================== NAV ===================== -->
@@ -314,6 +318,7 @@
 <script src="assets/app.js"></script>
 <script src="assets/nav.js"></script>
 <script src="assets/theme.js"></script>
+<script src="assets/intro.js"></script>
 <script src="assets/fill.js"></script>
 <script src="assets/autocomplete.js"></script>
 <script src="assets/lead.js"></script>
