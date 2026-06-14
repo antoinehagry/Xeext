@@ -319,7 +319,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
 .nav__links {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 24px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -341,9 +341,25 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   padding: 7px 16px;
   border-radius: var(--r-pill);
   transition: background .2s ease;
-  margin-left: auto; /* regroupe le CTA et le compte à droite */
 }
 .nav__cta:hover { background: var(--accent-hover); }
+
+/* Bouton « Estimer mon bien » (côté propriétaire) : pilule ghost à contour
+   bleu, distincte du CTA plein. Démarre le groupe d'actions aligné à droite. */
+.nav__est {
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid rgba(31, 61, 240, 0.35);
+  padding: 6px 15px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.nav__est:hover { background: rgba(31, 61, 240, 0.07); border-color: var(--accent); }
 .nav__burger { display: none; align-items: center; justify-content: center; background: none; border: none; padding: 6px; color: var(--text); }
 
 /* Icône burger ↔ croix : deux barres qui se replient en X à l'ouverture */
@@ -366,7 +382,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
    sur mobile. */
 .nav__menu { display: contents; }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   /* la barre s'étend vers le bas pour accueillir le menu déroulant */
   .nav { height: auto; }
   .nav__inner {
@@ -414,9 +430,16 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
     border-bottom: 1px solid var(--hairline);
   }
 
-  /* CTA « Voir les biens » en pleine largeur dans le menu */
-  .nav__cta {
+  /* Boutons d'action en pleine largeur dans le menu */
+  .nav__est {
     margin: 14px 0 0;
+    width: 100%;
+    text-align: center;
+    padding: 11px 18px;
+    font-size: 16px;
+  }
+  .nav__cta {
+    margin: 10px 0 0;
     width: 100%;
     text-align: center;
     padding: 12px 18px;

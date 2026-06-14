@@ -19,7 +19,7 @@
       menu.id = "nav-menu";
       var links = inner.querySelector(".nav__links");
       inner.insertBefore(menu, links || burger);
-      ["nav__links", "nav__cta", "nav__account"].forEach(function (cls) {
+      ["nav__links", "nav__est", "nav__cta", "nav__account"].forEach(function (cls) {
         var el = inner.querySelector("." + cls);
         if (el) menu.appendChild(el);
       });
@@ -49,7 +49,7 @@
       if (nav.classList.contains("menu-open") && !inner.contains(e.target)) close();
     });
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 860) close();
+      if (window.innerWidth > 1024) close();
     });
   }
 

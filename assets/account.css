@@ -54,7 +54,7 @@
 .nav__inner { position: relative; }
 
 /* ---- Mobile : le compte s'intègre au menu déroulant ---- */
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .nav__account { width: 100%; margin-top: 8px; }
   .btn-signin {
     display: block; width: 100%; text-align: center;
