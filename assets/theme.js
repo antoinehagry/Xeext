@@ -26,8 +26,7 @@
     // filet de sécurité si le script inline du <head> n'a pas tourné
     if (!document.documentElement.getAttribute("data-theme")) {
       var saved; try { saved = localStorage.getItem(KEY); } catch (e) {}
-      document.documentElement.setAttribute("data-theme",
-        saved || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+      document.documentElement.setAttribute("data-theme", saved || "light");
     }
 
     var inner = document.querySelector(".nav__inner");
