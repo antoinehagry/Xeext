@@ -10,10 +10,27 @@
   var ret = params.get("return") || "index.html";
   var favIntent = params.get("fav");
 
-  // déjà connecté (session confirmée par le serveur) → on file vers la destination
+  // déjà connecté, ou retour d'une connexion Google (session détectée dans l'URL)
+  // → on applique l'éventuel favori en attente puis on file vers la destination
   store.ready.then(function () {
-    if (store.currentUser()) location.replace(ret);
+    if (store.currentUser()) completeAuth(true);
   });
+
+  // applique l'intention favori (?fav=) si présente, puis redirige vers ?return=
+  function completeAuth(useReplace) {
+    var nav = useReplace
+      ? function () { location.replace(ret); }
+      : function () { location.href = ret; };
+    if (favIntent) {
+      // attendre l'enregistrement du favori avant de quitter la page,
+      // sinon la navigation annule la requête en cours
+      var t = store.toggleFav(favIntent);
+      if (t && t.done && typeof t.done.then === "function") t.done.then(nav, nav);
+      else nav();
+    } else {
+      nav();
+    }
+  }
 
   function val(id) { var el = document.getElementById(id); return el ? el.value : ""; }
 
@@ -47,18 +64,28 @@
         err.classList.add("show");
         return;
       }
-      function go() { location.href = ret; }
-      if (favIntent) {
-        // attendre l'enregistrement du favori avant de quitter la page,
-        // sinon la navigation annule la requête en cours
-        var t = store.toggleFav(favIntent);
-        if (t && t.done && typeof t.done.then === "function") t.done.then(go, go);
-        else go();
-      } else {
-        go();
-      }
+      completeAuth(false);
     });
   });
+
+  // Connexion Google (option supplémentaire). On revient sur cette même page
+  // (return/fav préservés dans l'URL) ; au retour, store.ready détecte la
+  // session et completeAuth() prend le relais.
+  var gBtn = document.getElementById("g-signin");
+  if (gBtn) {
+    gBtn.addEventListener("click", function () {
+      err.classList.remove("show");
+      gBtn.disabled = true;
+      store.loginWithGoogle(location.href).then(function (res) {
+        if (res && !res.ok) {
+          gBtn.disabled = false;
+          err.textContent = res.error;
+          err.classList.add("show");
+        }
+        // succès : le navigateur est redirigé vers Google, rien à faire ici.
+      });
+    });
+  }
 
   // Mot de passe oublié (présent uniquement sur la page connexion)
   var forgot = document.getElementById("forgot-link");

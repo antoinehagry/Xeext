@@ -134,6 +134,22 @@
       if (sb) sb.auth.signOut().catch(function () {});
     },
 
+    // Connexion via Google (OAuth) — option en plus de l'e-mail / mot de passe.
+    // En cas de succès, le navigateur est redirigé vers Google puis revient sur
+    // `returnUrl` ; supabase-js détecte alors la session dans l'URL et émet le
+    // changement (onAuthStateChange / getSession). On ne renvoie ici que les
+    // erreurs de démarrage du flux.
+    loginWithGoogle: function (returnUrl) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      return sb.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: returnUrl || location.href }
+      }).then(function (res) {
+        if (res.error) return { ok: false, error: frError(res.error.message) };
+        return { ok: true };
+      }).catch(function () { return OFFLINE; });
+    },
+
     /* ----- Favoris ----- */
     favs: function () { return cachedFavs.slice(); },
     isFav: function (id) { return cachedFavs.indexOf(id) !== -1; },
