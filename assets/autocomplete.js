@@ -35,6 +35,32 @@
 
     var items = [], active = -1;
 
+    function norm(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim(); }
+
+    // Déduit le département depuis la ville saisie (sans forcément choisir une
+    // suggestion). overwrite = remplacer un département déjà présent.
+    function resolveDept(name, overwrite) {
+      var dept = opts.deptInput;
+      if (!dept) return;
+      name = (name || "").trim();
+      if (!name) return;
+      // déjà au format « Nom (dd) » → on extrait directement
+      var m = name.match(/^(.*?)\s*\((\d{2,3}[AB]?)\)\s*$/);
+      if (m) { input.value = m[1].trim(); if (overwrite || !dept.value) dept.value = m[2]; return; }
+      fetch(API + encodeURIComponent(name))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || !data.length) return;
+          var exact = null;
+          for (var i = 0; i < data.length; i++) { if (norm(data[i].nom) === norm(name)) { exact = data[i]; break; } }
+          var best = exact || data[0];
+          if (exact) input.value = best.nom; // normalise casse/accents
+          var code = (best.departement && best.departement.code) || "";
+          if (code && (overwrite || !dept.value)) dept.value = code;
+        })
+        .catch(function () {});
+    }
+
     function close() {
       list.classList.remove("open"); list.innerHTML = "";
       items = []; active = -1; input.setAttribute("aria-expanded", "false");
@@ -85,6 +111,13 @@
       var li = e.target.closest(".ac-item");
       if (li) { e.preventDefault(); choose(+li.getAttribute("data-i")); }
     });
-    input.addEventListener("blur", function () { setTimeout(close, 120); });
+    input.addEventListener("blur", function () {
+      setTimeout(close, 120);
+      // après saisie libre, déduire le département de la ville quittée
+      if (opts.deptInput) setTimeout(function () { resolveDept(input.value, true); }, 130);
+    });
+
+    // ville déjà présente à l'ouverture (édition d'un bien) : compléter le dépt si vide
+    if (opts.deptInput && input.value.trim()) resolveDept(input.value, false);
   };
 })();
