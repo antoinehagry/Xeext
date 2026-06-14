@@ -54,8 +54,7 @@
   --text: #f5f5f7;
   --text-2: #a1a1a6;
   --text-3: #8a8a90;
-  --accent: #6f8cff;         /* cobalt éclairci pour contraste sur fond sombre */
-  --accent-hover: #8ba1ff;
+  /* même bleu cobalt qu'en thème clair (hérité de :root) */
   --hairline: rgba(255, 255, 255, 0.14);
   --fill: rgba(255, 255, 255, 0.09);
   --fill-hover: rgba(255, 255, 255, 0.16);
