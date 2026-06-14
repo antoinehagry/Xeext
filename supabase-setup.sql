@@ -57,3 +57,30 @@ create policy "rdv : ajouter les siens"
 create policy "rdv : annuler les siens"
   on public.rendez_vous for delete
   using (auth.uid() = user_id);
+
+-- ---------- Leads (estimations, contacts, alertes) ----------
+-- Captés depuis les formulaires publics : tout le monde peut SOUMETTRE,
+-- mais PERSONNE ne peut lire via l'API (aucune policy SELECT).
+-- Le propriétaire consulte les leads dans Supabase → Table editor → leads.
+create table public.leads (
+  id          uuid primary key default gen_random_uuid(),
+  type        text not null,            -- 'estimation' | 'contact' | 'alerte'
+  nom         text,
+  email       text not null,
+  telephone   text,
+  message     text,
+  segment     text,                     -- bien concerné (estimation/alerte)
+  ville       text,
+  surface     integer,
+  loyer       integer,
+  criteres    jsonb,                    -- critères du questionnaire (alerte)
+  user_id     uuid references auth.users (id) on delete set null,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.leads enable row level security;
+
+-- Soumission ouverte (visiteur anonyme ou connecté), sans lecture possible.
+create policy "leads : soumettre"
+  on public.leads for insert
+  with check (true);

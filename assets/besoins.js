@@ -186,13 +186,66 @@
         '<div style="margin-top:24px"><button type="button" class="btn btn--primary" id="b-restart">Recommencer</button></div>' +
       '</div>' +
       (top.length ? '<div class="cat-grid" style="margin-top:48px">' + cards + '</div>' : '') +
+      alerteHtml() +
       '<p class="center muted" style="margin-top:40px">Vous préférez chercher vous-même ? ' +
-        '<a class="link-chevron" href="index.html#catalogue">Voir tous les biens <span class="chev">›</span></a></p>';
+        '<a class="link-chevron" href="' + catalogueUrl() + '">Voir tous les biens correspondants <span class="chev">›</span></a></p>';
 
     root.querySelector("#b-restart").addEventListener("click", function () { answers = {}; setStep(0); });
+    wireAlerte();
     if (X.fav) X.fav.syncAll();
     reveal();
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // lien vers le catalogue pré-filtré (segment, ville, fourchette de loyer)
+  function catalogueUrl() {
+    var p = new URLSearchParams();
+    if (answers.segment) p.set("seg", answers.segment);
+    if (answers.ville) p.set("ville", answers.ville);
+    if (answers.budget) {
+      var r = answers.budget;
+      p.set("loyer", r.max === 100000 ? "s" : (r.min === 100000 ? "m" : "l"));
+    }
+    var qs = p.toString();
+    return "index.html" + (qs ? "?" + qs : "") + "#catalogue";
+  }
+
+  // bloc « être alerté » → enregistre un lead (type alerte) avec les critères
+  function alerteHtml() {
+    return '<div class="reveal alerte-box">' +
+      '<form id="alerte-form" novalidate>' +
+        '<h3>Être alerté des nouveaux biens</h3>' +
+        '<p>Recevez un e-mail dès qu\'un bien correspond à ces critères.</p>' +
+        '<div class="alerte-row">' +
+          '<input id="al-mail" type="email" autocomplete="email" placeholder="vous@entreprise.fr">' +
+          '<button class="btn btn--primary" type="submit">M\'alerter</button>' +
+        '</div>' +
+        '<div class="form-error" id="al-err"></div>' +
+      '</form></div>';
+  }
+  function wireAlerte() {
+    var form = root.querySelector("#alerte-form");
+    if (!form || !X.store) return;
+    var err = root.querySelector("#al-err");
+    var btn = form.querySelector('button[type="submit"]');
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      err.classList.remove("show");
+      btn.disabled = true;
+      X.store.submitLead({
+        type: "alerte",
+        email: root.querySelector("#al-mail").value.trim(),
+        segment: answers.segment || null,
+        ville: answers.ville || null,
+        criteres: answers
+      }).then(function (res) {
+        if (!res.ok) { btn.disabled = false; err.textContent = res.error; err.classList.add("show"); return; }
+        form.innerHTML = '<div class="rdv-done"><div class="check">' +
+          (X.ui ? X.ui.ICON.check : "✓") + '</div><h3 style="font-size:20px">Alerte créée</h3>' +
+          '<p class="muted" style="margin-top:8px">Vous serez prévenu par e-mail dès qu\'un bien correspond.</p></div>';
+        if (X.ui) X.ui.toast("Alerte enregistrée.");
+      });
+    });
   }
 
   function reveal() {

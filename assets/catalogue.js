@@ -109,6 +109,39 @@
       }
     }
 
+    // --- Filtres partageables via l'URL (?seg=&ville=&surface=&loyer=&tri=) ---
+    function setSel(id, v) { var el = document.getElementById(id); if (el) el.value = v; }
+    function applyFromUrl() {
+      var p = new URLSearchParams(location.search);
+      if (p.get("seg")) state.segment = p.get("seg");
+      if (p.get("ville")) state.ville = p.get("ville");
+      if (p.get("surface")) state.surface = p.get("surface");
+      if (p.get("loyer")) state.loyer = p.get("loyer");
+      if (p.get("tri")) state.tri = p.get("tri");
+    }
+    function reflectUI() {
+      document.querySelectorAll("[data-seg]").forEach(function (c) {
+        var on = c.getAttribute("data-seg") === state.segment;
+        c.classList.toggle("is-active", on);
+        c.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      setSel("f-ville", state.ville);
+      setSel("f-surface", state.surface);
+      setSel("f-loyer", state.loyer);
+      setSel("f-tri", state.tri);
+    }
+    function writeUrl() {
+      var p = new URLSearchParams();
+      if (state.segment !== "Tous") p.set("seg", state.segment);
+      if (state.ville !== "Toutes") p.set("ville", state.ville);
+      if (state.surface !== "all") p.set("surface", state.surface);
+      if (state.loyer !== "all") p.set("loyer", state.loyer);
+      if (state.tri !== "pertinence") p.set("tri", state.tri);
+      var qs = p.toString();
+      history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#catalogue");
+    }
+    function update() { render(); writeUrl(); }
+
     // --- Chips segment ---
     document.querySelectorAll("[data-seg]").forEach(function (chip) {
       chip.addEventListener("click", function () {
@@ -119,17 +152,19 @@
         chip.classList.add("is-active");
         chip.setAttribute("aria-pressed", "true");
         state.segment = chip.getAttribute("data-seg");
-        render();
+        update();
       });
     });
 
     // --- Selects ---
-    villeSel.addEventListener("change", function () { state.ville = this.value; render(); });
-    document.getElementById("f-surface").addEventListener("change", function () { state.surface = this.value; render(); });
-    document.getElementById("f-loyer").addEventListener("change", function () { state.loyer = this.value; render(); });
-    document.getElementById("f-tri").addEventListener("change", function () { state.tri = this.value; render(); });
+    villeSel.addEventListener("change", function () { state.ville = this.value; update(); });
+    document.getElementById("f-surface").addEventListener("change", function () { state.surface = this.value; update(); });
+    document.getElementById("f-loyer").addEventListener("change", function () { state.loyer = this.value; update(); });
+    document.getElementById("f-tri").addEventListener("change", function () { state.tri = this.value; update(); });
 
-    // pré-sélection éventuelle via #catalogue?seg=
+    // état initial depuis l'URL (lien partagé / questionnaire)
+    applyFromUrl();
+    reflectUI();
     render();
   }
 

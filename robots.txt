@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://antoinehagry.github.io/Xeext/sitemap.xml

@@ -331,6 +331,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 .specs-grid dd { margin: 0; font-weight: 500; font-size: 16px; text-align: right; }
 
 .map-ph { margin-top: 24px; }
+.map-ph iframe { display: block; width: 100%; aspect-ratio: 21 / 9; border: 0; border-radius: var(--r-lg); }
 .reminder-band {
   background: var(--gray-bg);
   border-radius: var(--r-lg);
@@ -400,6 +401,15 @@ input[type="range"].sim-range::-moz-range-thumb {
 .opt.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .opt__t { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
 .opt__h { font-size: 13px; color: var(--text-2); }
+
+/* bloc « être alerté » sous les résultats */
+.alerte-box { max-width: 520px; margin: 44px auto 0; background: var(--white); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 28px 28px 30px; text-align: center; }
+.alerte-box h3 { font-size: 21px; letter-spacing: -0.02em; }
+.alerte-box p { color: var(--text-2); font-size: 15px; margin: 8px 0 18px; }
+.alerte-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.alerte-row input { flex: 1; min-width: 180px; font: inherit; font-size: 16px; color: var(--text); background: var(--gray-bg); border: 1px solid transparent; border-radius: 12px; padding: 13px 15px; }
+.alerte-row input:focus { outline: none; background: #fff; border-color: var(--accent); }
+.alerte-row .btn { white-space: nowrap; }
 
 /* compatibilité affichée sur les cards de résultats */
 .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }

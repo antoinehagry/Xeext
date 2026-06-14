@@ -14,6 +14,14 @@
 
     document.title = b.titre + " — Xeext";
 
+    // Métadonnées de partage (Open Graph) propres au bien
+    var ogDesc = b.resume + " Honoraires Xeext : 5% du loyer annuel.";
+    setMeta('meta[name="description"]', ogDesc);
+    setMeta('meta[property="og:title"]', b.titre + " — Xeext");
+    setMeta('meta[property="og:description"]', ogDesc);
+    setMeta('meta[property="og:image"]', X.cover(b, 1200) || "");
+    setMeta('meta[property="og:url"]', location.href);
+
     // En-tête
     setText("f-badge", b.segment);
     setText("f-title", b.titre);
@@ -56,8 +64,9 @@
       return '<div><dt>' + k + '</dt><dd>' + b.specs[k] + '</dd></div>';
     }).join("");
 
-    // Localisation (carte placeholder)
+    // Localisation : carte OpenStreetMap (sans clé) centrée sur la ville
     setText("f-map-ville", b.ville);
+    renderMap(b);
 
     // Rappel honoraires (bandeau bas)
     document.getElementById("f-reminder-num").textContent = X.euros(hono);
@@ -104,6 +113,20 @@
 
   function row(dt, dd) { return '<div><dt>' + dt + '</dt><dd>' + dd + '</dd></div>'; }
   function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
+  function setMeta(sel, content) { var el = document.head.querySelector(sel); if (el) el.setAttribute("content", content); }
+
+  // Carte OpenStreetMap (iframe embed, sans clé). Repli sur le placeholder
+  // rayé si la ville n'a pas de coordonnées connues.
+  function renderMap(b) {
+    var holder = document.querySelector(".map-ph");
+    var c = window.XEEXT_VILLES_COORDS && window.XEEXT_VILLES_COORDS[b.ville];
+    if (!holder || !c) return;
+    var lat = c[0], lon = c[1], dLat = 0.03, dLon = 0.05;
+    var bbox = [lon - dLon, lat - dLat, lon + dLon, lat + dLat].join("%2C");
+    var src = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox +
+      "&layer=mapnik&marker=" + lat + "%2C" + lon;
+    holder.innerHTML = '<iframe title="Carte — ' + b.ville + '" loading="lazy" src="' + src + '"></iframe>';
+  }
 
   if (document.readyState !== "loading") init();
   else document.addEventListener("DOMContentLoaded", init);

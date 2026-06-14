@@ -175,6 +175,32 @@
       emit();
       if (sb) sb.from("rendez_vous").delete().eq("id", id)
         .then(function (res) { if (res.error) return loadData(); });
+    },
+
+    /* ----- Leads (estimation / contact / alerte) — sans compte requis ----- */
+    submitLead: function (data) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      var email = (data.email || "").trim().toLowerCase();
+      if (!email || !EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: "Adresse e-mail invalide." });
+      var row = {
+        type: data.type || "contact",
+        nom: (data.nom || (cachedUser && cachedUser.name) || "").trim() || null,
+        email: email,
+        telephone: (data.telephone || "").trim() || null,
+        message: (data.message || "").trim() || null,
+        segment: data.segment || null,
+        ville: data.ville || null,
+        surface: data.surface != null ? data.surface : null,
+        loyer: data.loyer != null ? data.loyer : null,
+        criteres: data.criteres || null,
+        user_id: cachedUser ? cachedUser.id : null
+      };
+      return sb.from("leads").insert(row)
+        .then(function (res) {
+          if (res.error) return { ok: false, error: frError(res.error.message) };
+          return { ok: true };
+        })
+        .catch(function () { return OFFLINE; });
     }
   };
 

@@ -292,6 +292,19 @@ window.XEEXT_IMAGES = {
 };
 window.XEEXT_HERO = "photo-1431576901776-e539bd916ba2";
 
+/* Coordonnées approximatives des villes (centre) pour la carte OSM. */
+window.XEEXT_VILLES_COORDS = {
+  "Nancy": [48.6921, 6.1844],
+  "Lyon": [45.7640, 4.8357],
+  "Paris": [48.8722, 2.3387],
+  "Nantes": [47.2110, -1.5530],
+  "Bordeaux": [44.8412, -0.5800],
+  "Lille": [50.6365, 3.0635],
+  "Marne-la-Vallée": [48.8406, 2.6210],
+  "Toulouse": [43.6045, 1.4440],
+  "Rennes": [48.1119, -1.6800]
+};
+
 window.XEEXT.imgUrl = function (id, w) {
   return "https://images.unsplash.com/" + id + "?auto=format&fit=crop&q=80&w=" + (w || 1100);
 };

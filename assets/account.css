@@ -127,6 +127,11 @@
 .form-error.show { display: block; }
 .btn-block { width: 100%; justify-content: center; margin-top: 22px; }
 .btn[disabled] { opacity: .6; pointer-events: none; }
+
+/* Formulaire de lead inline (section Contact) : champs alignés à gauche
+   dans une carte centrée */
+.lead-form { max-width: 460px; margin: 32px auto 0; text-align: left; }
+.lead-form .field:first-child { margin-top: 0; }
 .modal__switch { font-size: 14px; color: var(--text-2); text-align: center; margin-top: 18px; }
 .modal__switch button { background: none; border: none; color: var(--accent); font: inherit; font-weight: 500; cursor: pointer; }
 .modal__note { font-size: 12px; color: var(--text-3); text-align: center; margin-top: 16px; line-height: 1.5; }

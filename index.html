@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Xeext — Le conseil immobilier d'entreprise, repensé à 5%</title>
 <meta name="description" content="Conseil en immobilier d'entreprise : bureaux, commerces, logistique, terrains. Honoraires uniques de 5% du loyer annuel." />
+<link rel="canonical" href="https://antoinehagry.github.io/Xeext/index.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Xeext" />
+<meta property="og:title" content="Xeext — Le conseil immobilier d'entreprise, repensé à 5%" />
+<meta property="og:description" content="Bureaux, commerces, logistique, terrains. Honoraires uniques de 5% du loyer annuel." />
+<meta property="og:url" content="https://antoinehagry.github.io/Xeext/index.html" />
+<meta property="og:image" content="https://images.unsplash.com/photo-1431576901776-e539bd916ba2?auto=format&fit=crop&q=80&w=1200&h=630" />
+<meta name="twitter:card" content="summary_large_image" />
+<!-- Analytics (à activer) : créez un site sur plausible.io puis décommentez la ligne suivante —
+<script defer data-domain="VOTRE-DOMAINE" src="https://plausible.io/js/script.js"></script> -->
 <link rel="stylesheet" href="assets/xeext.css" />
 <link rel="stylesheet" href="assets/components.css" />
 <link rel="stylesheet" href="assets/account.css" />
@@ -231,15 +241,33 @@
     </div>
   </section>
 
+  <!-- ===================== PROPRIÉTAIRES ===================== -->
+  <section class="bg-gray section-pad" id="proprietaires" data-screen-label="Propriétaires">
+    <div class="wrap wrap--narrow center">
+      <p class="eyebrow reveal">Vous êtes propriétaire ?</p>
+      <h2 class="h-section reveal" data-delay="1">Confiez-nous votre bien.</h2>
+      <p class="lead mt-16 mx-auto reveal" data-delay="1" style="max-width: 34ch">Avis de valeur sous 48 heures, commercialisation multicanal — et des honoraires de 5% au lieu de 15 à 30%.</p>
+      <div class="mt-40 reveal" data-delay="2" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+        <button type="button" class="btn btn--primary" data-estimation>Estimer mon bien gratuitement</button>
+        <a class="link-chevron" href="#bareme">Voir le barème <span class="chev">›</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== 8. CONTACT ===================== -->
   <section class="bg-white section-pad" id="contact" data-screen-label="Contact">
     <div class="wrap wrap--narrow contact-card">
       <h2 class="h-section reveal">Parlons de votre actif.</h2>
-      <p class="lead reveal" data-delay="1">Un avis de valeur sous 48 heures, sans engagement.</p>
-      <div class="mt-40 reveal" data-delay="2" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
-        <a class="btn btn--primary" href="mailto:contact@xeext.fr">Écrire à un conseiller</a>
-        <a class="link-chevron" href="#catalogue">Parcourir les biens <span class="chev">›</span></a>
-      </div>
+      <p class="lead reveal" data-delay="1">Une réponse rapide d'un conseiller, sans engagement.</p>
+      <form id="contact-form" class="lead-form reveal" data-delay="2" novalidate>
+        <div class="field"><label for="c-nom">Nom</label><input id="c-nom" type="text" autocomplete="name" placeholder="Votre nom"></div>
+        <div class="field"><label for="c-mail">E-mail</label><input id="c-mail" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
+        <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" placeholder="Votre projet, le bien qui vous intéresse…"></textarea></div>
+        <div class="form-error" id="contact-err"></div>
+        <button type="submit" class="btn btn--primary btn-block">Envoyer</button>
+        <p class="modal__note">En envoyant, vous acceptez d'être recontacté par Xeext.</p>
+      </form>
+      <p class="muted reveal" data-delay="2" style="margin-top:18px; font-size:14px">Ou par e-mail : <a href="mailto:contact@xeext.fr">contact@xeext.fr</a></p>
     </div>
   </section>
 
@@ -256,11 +284,13 @@
       <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
         <div style="display:grid; gap:10px">
           <a href="#catalogue">Biens</a>
+          <a href="besoins.html">Trouver mon bien</a>
           <a href="#simulateur">Honoraires</a>
           <a href="#methode">Méthode</a>
         </div>
         <div style="display:grid; gap:10px">
           <a href="#bareme">Barème</a>
+          <a href="#proprietaires" data-estimation>Estimer mon bien</a>
           <a href="#contact">Contact</a>
           <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
         </div>
@@ -283,6 +313,7 @@
 <script src="assets/app.js"></script>
 <script src="assets/nav.js"></script>
 <script src="assets/fill.js"></script>
+<script src="assets/lead.js"></script>
 <script src="assets/chiffre.js"></script>
 <script src="assets/simulateur.js"></script>
 <script src="assets/catalogue.js"></script>
