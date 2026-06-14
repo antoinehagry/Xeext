@@ -290,7 +290,7 @@ window.XEEXT_IMAGES = {
   "logistique-toulouse": ["photo-1586528116311-ad8dd3c8310d", "photo-1553413077-190dd305871c", "photo-1565891741441-64926e441838"],
   "terrain-rennes":      ["photo-1500382017468-9049fed747ef"]
 };
-window.XEEXT_HERO = "photo-1431576901776-e539bd916ba2";
+window.XEEXT_HERO = "assets/hero.webp";
 
 /* Coordonnées approximatives des villes (centre) pour la carte OSM. */
 window.XEEXT_VILLES_COORDS = {
