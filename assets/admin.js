@@ -76,7 +76,7 @@
       '</div>' +
       '<div id="a-list"><p class="muted">Chargement…</p></div>';
 
-    root.querySelector("#a-add").addEventListener("click", function () { openForm(null); });
+    root.querySelector("#a-add").addEventListener("click", function () { renderForm(null); });
     root.querySelector("#a-import").addEventListener("click", importDefaults);
 
     store.adminListBiens().then(function (list) {
@@ -88,7 +88,7 @@
       host.innerHTML = '<div class="admin-list">' + list.map(rowItem).join("") + '</div>';
       host.querySelectorAll("[data-edit]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          openForm(list.filter(function (x) { return x.id === btn.getAttribute("data-edit"); })[0]);
+          renderForm(list.filter(function (x) { return x.id === btn.getAttribute("data-edit"); })[0]);
         });
       });
       host.querySelectorAll("[data-del]").forEach(function (btn) {
@@ -132,29 +132,36 @@
       '</select></span></div>';
   }
 
-  function openForm(b) {
+  // Formulaire en pleine page (remplace la liste) — meilleure visibilité
+  function renderForm(b) {
     b = b || {};
     var isNew = !b.id;
-    var html =
-      '<h2 class="modal__title">' + (isNew ? "Nouveau bien" : "Modifier le bien") + '</h2>' +
-      '<form id="bf" novalidate>' +
+    root.innerHTML =
+      '<a class="back-link" href="#" id="f-back"><span aria-hidden="true">‹</span> Retour à la liste</a>' +
+      '<h1 class="h-section" style="margin:6px 0 26px">' + (isNew ? "Nouveau bien" : "Modifier le bien") + '</h1>' +
+      '<form id="bf" class="admin-form" novalidate>' +
         fld("Titre", "f-titre", b.titre) +
         selSeg(b.segment || "Bureaux") +
         row2(fld("Ville", "f-ville", b.ville), fld("Département", "f-dept", b.dept)) +
         row2(fld("Surface (m²)", "f-surface", b.surface, "number"), fld("Loyer €/an", "f-loyer", b.loyer, "number")) +
         selDispo(b.dispo) +
-        area("Résumé", "f-resume", b.resume) +
+        area("Description du bien", "f-resume", b.resume) +
         area("Caractéristiques — une par ligne au format « Clé : Valeur »", "f-specs", specsToText(b.specs)) +
         area("Légendes des photos — une par ligne", "f-photos", (b.photos || []).join("\n")) +
         area("Images — un identifiant Unsplash (photo-…) ou une URL par ligne", "f-images", (b.images || []).join("\n")) +
         fld("Ordre d'affichage", "f-ordre", b.ordre, "number") +
         '<div class="form-error" id="bf-err"></div>' +
-        '<button type="submit" class="btn btn--primary btn-block">Enregistrer</button>' +
+        '<div class="admin-form__actions">' +
+          '<button type="submit" class="btn btn--primary">Enregistrer</button>' +
+          '<button type="button" class="btn btn--ghost" id="f-cancel">Annuler</button>' +
+        '</div>' +
       '</form>';
 
-    var m = ui.openModal(html, { wide: true });
-    var r = m.root;
+    var r = root;
+    window.scrollTo({ top: 0, behavior: "auto" });
     if (X.autocompleteVille) X.autocompleteVille(r.querySelector("#f-ville"), { deptInput: r.querySelector("#f-dept") });
+    r.querySelector("#f-back").addEventListener("click", function (e) { e.preventDefault(); renderList(); });
+    r.querySelector("#f-cancel").addEventListener("click", function () { renderList(); });
     var err = r.querySelector("#bf-err");
 
     r.querySelector("#bf").addEventListener("submit", function (e) {
@@ -185,7 +192,6 @@
       btn.disabled = true;
       store.adminSaveBien(row).then(function (res) {
         if (!res.ok) { btn.disabled = false; return fail(err, res.error || "Erreur lors de l'enregistrement."); }
-        ui.closeModal();
         ui.toast("Bien enregistré.");
         renderList();
       });

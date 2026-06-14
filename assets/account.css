@@ -169,6 +169,13 @@
 .btn-link:hover { text-decoration: underline; }
 .form-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media (max-width: 560px) { .form-row2 { grid-template-columns: 1fr; } }
+
+/* Formulaire d'édition d'un bien en pleine page */
+.admin-form { max-width: 820px; }
+.admin-form textarea { min-height: 130px; }
+.admin-form textarea#f-resume { min-height: 240px; }
+.admin-form__actions { display: flex; gap: 12px; margin-top: 26px; }
+.admin-form__actions .btn { width: auto; }
 .modal__switch { font-size: 14px; color: var(--text-2); text-align: center; margin-top: 18px; }
 .modal__switch button { background: none; border: none; color: var(--accent); font: inherit; font-weight: 500; cursor: pointer; }
 .modal__note { font-size: 12px; color: var(--text-3); text-align: center; margin-top: 16px; line-height: 1.5; }
