@@ -172,8 +172,9 @@
 
 /* Formulaire d'édition d'un bien en pleine page */
 .admin-form { max-width: 820px; }
-.admin-form textarea { min-height: 130px; }
-.admin-form textarea#f-resume { min-height: 240px; }
+.admin-form textarea { min-height: 150px; line-height: 1.55; }
+.admin-form textarea#f-resume { min-height: 420px; }
+.admin-form textarea#f-specs { min-height: 320px; }
 .admin-form__actions { display: flex; gap: 12px; margin-top: 26px; }
 .admin-form__actions .btn { width: auto; }
 .modal__switch { font-size: 14px; color: var(--text-2); text-align: center; margin-top: 18px; }
