@@ -8,57 +8,61 @@
   var root = document.getElementById("besoins-root");
   if (!root) return;
 
-  var villes = Array.from(new Set(window.XEEXT_BIENS.map(function (b) { return b.ville; }))).sort();
-
-  var STEPS = [
-    {
-      key: "segment",
-      q: "Quel type de bien recherchez-vous ?",
-      opts: [
-        { t: "Bureaux", v: "Bureaux" },
-        { t: "Commerces", v: "Commerces" },
-        { t: "Logistique", v: "Logistique" },
-        { t: "Terrains", v: "Terrains" },
-        { t: "Peu importe", v: null, h: "Tous les types" }
-      ]
-    },
-    {
-      key: "ville",
-      q: "Une localisation en particulier ?",
-      opts: villes.map(function (v) { return { t: v, v: v }; }).concat([{ t: "Indifférent", v: null }])
-    },
-    {
-      key: "surface",
-      q: "Quelle surface vous faut-il ?",
-      opts: [
-        { t: "Moins de 300 m²", v: { max: 300 } },
-        { t: "300 à 1 000 m²", v: { min: 300, max: 1000 } },
-        { t: "1 000 à 3 000 m²", v: { min: 1000, max: 3000 } },
-        { t: "Plus de 3 000 m²", v: { min: 3000 } },
-        { t: "Peu importe", v: null }
-      ]
-    },
-    {
-      key: "budget",
-      q: "Votre budget de loyer annuel ?",
-      opts: [
-        { t: "Moins de 100 000 €", v: { max: 100000 } },
-        { t: "100 000 à 250 000 €", v: { min: 100000, max: 250000 } },
-        { t: "250 000 à 400 000 €", v: { min: 250000, max: 400000 } },
-        { t: "Plus de 400 000 €", v: { min: 400000 } },
-        { t: "Peu importe", v: null }
-      ]
-    },
-    {
-      key: "dispo",
-      q: "Pour quand ?",
-      opts: [
-        { t: "Disponibilité immédiate", v: "immediate" },
-        { t: "Dans les 6 mois", v: "six" },
-        { t: "Peu importe", v: null }
-      ]
-    }
-  ];
+  var villes = [];
+  var STEPS = [];
+  // construit les étapes à partir des biens chargés (villes dynamiques)
+  function buildSteps() {
+    villes = Array.from(new Set(window.XEEXT_BIENS.map(function (b) { return b.ville; }))).sort();
+    STEPS = [
+      {
+        key: "segment",
+        q: "Quel type de bien recherchez-vous ?",
+        opts: [
+          { t: "Bureaux", v: "Bureaux" },
+          { t: "Commerces", v: "Commerces" },
+          { t: "Logistique", v: "Logistique" },
+          { t: "Terrains", v: "Terrains" },
+          { t: "Peu importe", v: null, h: "Tous les types" }
+        ]
+      },
+      {
+        key: "ville",
+        q: "Une localisation en particulier ?",
+        opts: villes.map(function (v) { return { t: v, v: v }; }).concat([{ t: "Indifférent", v: null }])
+      },
+      {
+        key: "surface",
+        q: "Quelle surface vous faut-il ?",
+        opts: [
+          { t: "Moins de 300 m²", v: { max: 300 } },
+          { t: "300 à 1 000 m²", v: { min: 300, max: 1000 } },
+          { t: "1 000 à 3 000 m²", v: { min: 1000, max: 3000 } },
+          { t: "Plus de 3 000 m²", v: { min: 3000 } },
+          { t: "Peu importe", v: null }
+        ]
+      },
+      {
+        key: "budget",
+        q: "Votre budget de loyer annuel ?",
+        opts: [
+          { t: "Moins de 100 000 €", v: { max: 100000 } },
+          { t: "100 000 à 250 000 €", v: { min: 100000, max: 250000 } },
+          { t: "250 000 à 400 000 €", v: { min: 250000, max: 400000 } },
+          { t: "Plus de 400 000 €", v: { min: 400000 } },
+          { t: "Peu importe", v: null }
+        ]
+      },
+      {
+        key: "dispo",
+        q: "Pour quand ?",
+        opts: [
+          { t: "Disponibilité immédiate", v: "immediate" },
+          { t: "Dans les 6 mois", v: "six" },
+          { t: "Peu importe", v: null }
+        ]
+      }
+    ];
+  }
 
   var answers = {};
   var step = 0;
@@ -253,5 +257,9 @@
     else root.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
   }
 
-  render();
+  // démarrage : on attend les biens (Supabase) puis on construit les étapes
+  (window.XEEXT.biensReady || Promise.resolve()).then(function () {
+    buildSteps();
+    render();
+  });
 })();

@@ -224,6 +224,30 @@
           return { ok: true };
         })
         .catch(function () { return OFFLINE; });
+    },
+
+    /* ----- Back-office (admin) : gestion des biens ----- */
+    isAdmin: function () {
+      var cfg = window.XEEXT_CONFIG || {};
+      return !!(cachedUser && cfg.ADMIN_EMAIL && cachedUser.email === cfg.ADMIN_EMAIL.toLowerCase());
+    },
+    adminListBiens: function () {
+      if (!sb) return Promise.resolve([]);
+      return sb.from("biens").select("*").order("ordre", { ascending: true }).order("created_at", { ascending: true })
+        .then(function (r) { return r.data || []; })
+        .catch(function () { return []; });
+    },
+    adminSaveBien: function (row) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      return sb.from("biens").upsert(row, { onConflict: "id" })
+        .then(function (r) { return r.error ? { ok: false, error: r.error.message } : { ok: true }; })
+        .catch(function () { return OFFLINE; });
+    },
+    adminDeleteBien: function (id) {
+      if (!sb) return Promise.resolve(NO_CONFIG);
+      return sb.from("biens").delete().eq("id", id)
+        .then(function (r) { return r.error ? { ok: false, error: r.error.message } : { ok: true }; })
+        .catch(function () { return OFFLINE; });
     }
   };
 

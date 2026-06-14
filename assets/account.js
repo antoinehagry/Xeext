@@ -111,6 +111,7 @@
         '<a href="compte.html#favoris" role="menuitem">Mes favoris <span class="count">' + nFav + '</span></a>' +
         '<a href="compte.html#rdv" role="menuitem">Mes rendez-vous <span class="count">' + nRdv + '</span></a>' +
         '<a href="compte.html#profil" role="menuitem">Mon profil</a>' +
+        (store.isAdmin && store.isAdmin() ? '<a href="admin.html" role="menuitem">Administration</a>' : '') +
         '<div class="sep"></div>' +
         '<button class="danger" id="acct-logout" role="menuitem">Se déconnecter</button>' +
       '</div>';

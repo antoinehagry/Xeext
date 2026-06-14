@@ -128,6 +128,9 @@
     holder.innerHTML = '<iframe title="Carte — ' + b.ville + '" loading="lazy" src="' + src + '"></iframe>';
   }
 
-  if (document.readyState !== "loading") init();
-  else document.addEventListener("DOMContentLoaded", init);
+  // attendre le chargement des biens (Supabase) avant de rendre la fiche
+  (window.XEEXT.biensReady || Promise.resolve()).then(function () {
+    if (document.readyState !== "loading") init();
+    else document.addEventListener("DOMContentLoaded", init);
+  });
 })();

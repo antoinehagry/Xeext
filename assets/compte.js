@@ -126,6 +126,6 @@
 
   function render() { if (store.currentUser()) loggedIn(); else loggedOut(); }
 
-  render();
+  (window.XEEXT.biensReady || Promise.resolve()).then(render);
   window.addEventListener("xeext:change", render);
 })();

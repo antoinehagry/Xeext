@@ -306,14 +306,18 @@ window.XEEXT_VILLES_COORDS = {
 };
 
 window.XEEXT.imgUrl = function (id, w) {
+  if (!id) return "";
+  if (/^https?:\/\//.test(id)) return id; // URL complète fournie telle quelle
   return "https://images.unsplash.com/" + id + "?auto=format&fit=crop&q=80&w=" + (w || 1100);
 };
+// images portées par le bien (back-office) sinon repli sur la table par défaut
 window.XEEXT.cover = function (b, w) {
-  var a = window.XEEXT_IMAGES[b.id];
+  var a = (b.images && b.images.length) ? b.images : window.XEEXT_IMAGES[b.id];
   return a && a.length ? window.XEEXT.imgUrl(a[0], w || 800) : null;
 };
 window.XEEXT.galleryUrls = function (b) {
-  return (window.XEEXT_IMAGES[b.id] || []).map(function (id) { return window.XEEXT.imgUrl(id, 1100); });
+  var a = (b.images && b.images.length) ? b.images : (window.XEEXT_IMAGES[b.id] || []);
+  return a.map(function (id) { return window.XEEXT.imgUrl(id, 1100); });
 };
 // <img> de couverture posé dans un placeholder .ph ; en cas d'échec réseau,
 // il se retire et le placeholder rayé (avec légende) réapparaît.
@@ -323,3 +327,31 @@ window.XEEXT.imgTag = function (url, alt, eager) {
   return '<img class="ph__img" src="' + url + '" alt="' + alt + '" ' +
     'loading="' + (eager ? "eager" : "lazy") + '" onerror="this.remove()">';
 };
+
+/* Chargement dynamique des biens depuis Supabase (back-office).
+   Si la table `biens` existe et contient des lignes, elles remplacent la liste
+   de démonstration ci-dessus ; sinon on garde ces 9 biens par défaut.
+   window.XEEXT.biensReady : promesse résolue à la fin du chargement. */
+window.XEEXT.biensReady = (function () {
+  var cfg = window.XEEXT_CONFIG || {};
+  if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) return Promise.resolve();
+  function mapRow(r) {
+    return {
+      id: r.id, segment: r.segment, titre: r.titre, ville: r.ville, dept: r.dept,
+      surface: r.surface, loyer: r.loyer, dispo: r.dispo, dispoRank: r.dispo_rank || 0,
+      resume: r.resume || "", specs: r.specs || {}, photos: r.photos || [], images: r.images || []
+    };
+  }
+  return fetch(cfg.SUPABASE_URL + "/rest/v1/biens?select=*&order=ordre.asc,created_at.asc", {
+    headers: { apikey: cfg.SUPABASE_ANON_KEY }
+  })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (rows) {
+      if (rows && rows.length) {
+        var mapped = rows.map(mapRow);
+        window.XEEXT_BIENS.length = 0;
+        Array.prototype.push.apply(window.XEEXT_BIENS, mapped);
+      }
+    })
+    .catch(function () { /* réseau indisponible : on garde les biens par défaut */ });
+})();

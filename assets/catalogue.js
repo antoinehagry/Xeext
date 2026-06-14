@@ -168,6 +168,9 @@
     render();
   }
 
-  if (document.readyState !== "loading") init();
-  else document.addEventListener("DOMContentLoaded", init);
+  // attendre le chargement des biens (Supabase) avant de rendre la grille
+  (window.XEEXT.biensReady || Promise.resolve()).then(function () {
+    if (document.readyState !== "loading") init();
+    else document.addEventListener("DOMContentLoaded", init);
+  });
 })();

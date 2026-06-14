@@ -84,3 +84,36 @@ alter table public.leads enable row level security;
 create policy "leads : soumettre"
   on public.leads for insert
   with check (true);
+
+-- ---------- Biens (catalogue géré depuis le back-office /admin.html) ----------
+-- Lecture publique (le catalogue est visible par tous) ; écriture réservée à
+-- l'administrateur, identifié par son e-mail. Remplacez l'e-mail ci-dessous
+-- si vous changez de compte admin.
+create table public.biens (
+  id          text primary key,
+  segment     text not null,
+  titre       text not null,
+  ville       text not null,
+  dept        text,
+  surface     integer,
+  loyer       integer,
+  dispo       text,
+  dispo_rank  integer default 0,
+  resume      text,
+  specs       jsonb default '{}'::jsonb,
+  photos      text[] default '{}',
+  images      text[] default '{}',
+  ordre       integer default 0,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.biens enable row level security;
+
+create policy "biens : lecture publique"
+  on public.biens for select
+  using (true);
+
+create policy "biens : admin écrit"
+  on public.biens for all
+  using ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com')
+  with check ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com');

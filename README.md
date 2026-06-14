@@ -28,14 +28,32 @@ Pour la mise en ligne : déposez le dossier tel quel sur un hébergeur statique
 - **Leads** (estimations propriétaires, contacts, alertes) : table `leads`.
   Tout le monde peut **soumettre** (formulaires publics), mais **personne ne peut
   lire** via l'API ; consultez les leads dans **Supabase → Table editor → leads**.
+- **Biens** : table `biens` (lecture publique, écriture réservée à l'admin). Voir
+  le back-office ci-dessous. Si la table est vide ou absente, le site affiche les
+  9 biens de démonstration codés dans [`assets/biens.js`](assets/biens.js).
+
+## Back-office des biens (`/admin.html`)
+
+Page d'administration pour gérer le catalogue **sans toucher au code** :
+ajout / modification / suppression de biens, et bouton « Importer les biens de
+démonstration » pour initialiser la base.
+
+- Accès réservé au compte dont l'e-mail = `ADMIN_EMAIL` dans
+  [`assets/config.js`](assets/config.js) **et** dans la policy RLS
+  « biens : admin écrit » (`supabase-setup.sql`). Les deux doivent correspondre.
+- Connectez-vous avec ce compte, puis ouvrez **/admin.html** (lien « Administration »
+  aussi présent dans le menu du compte).
+- Première utilisation : cliquez **« Importer les biens de démonstration »** pour
+  peupler la table à partir des 9 biens d'exemple.
 - Toute la logique d'accès est isolée dans [`assets/store.js`](assets/store.js) ;
   le reste de l'interface lit un cache synchrone et se resynchronise via
   l'évènement `xeext:change`.
 
 ## Réglages Supabase requis
 
-1. **SQL Editor** → exécuter `supabase-setup.sql` (tables favoris / rendez-vous **et leads**).
-   À relancer après cette mise à jour pour créer la table `leads`.
+1. **SQL Editor** → exécuter `supabase-setup.sql` (tables favoris / rendez-vous, leads **et biens**).
+   À chaque mise à jour, n'exécutez que le **nouveau bloc** (les `create table` existants
+   échoueraient en « already exists »). Ici : le bloc `-- Biens`.
 2. **Authentication → Sign In / Up → Email** : pour tester sans étape de validation,
    désactiver « Confirm email ». Le réactiver avant la mise en production.
 
