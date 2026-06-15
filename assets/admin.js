@@ -28,6 +28,60 @@
     return (typeof fallback === "number" ? fallback : 0);
   }
 
+  // Caractéristiques guidées par segment. "opts" => menu déroulant ; sinon champ texte
+  // (valeurs trop variables pour une liste : dimensions, nombres…). Le stockage reste
+  // un objet { "Clé": "Valeur" } ; la zone « Autres caractéristiques » complète librement.
+  var DPE = ["A", "B", "C", "D", "E", "F", "G", "Non soumis", "Vierge"];
+  var ETAT = ["Neuf", "Rénové", "Bon état", "À rafraîchir", "À rénover", "Brut / à aménager"];
+  var CHAUFFAGE = ["Pompe à chaleur réversible", "Gaz", "Électrique", "Réseau de chaleur urbain", "GTB centralisée", "Aucun"];
+  var SPEC_SCHEMA = {
+    Bureaux: [
+      { k: "Configuration", opts: ["Plateau ouvert", "Plateaux divisibles", "Bureaux cloisonnés", "Mixte open space / cloisonné"] },
+      { k: "Étage", ph: "ex. 3ᵉ étage / R+5" },
+      { k: "Hauteur sous plafond", ph: "ex. 2,70 m" },
+      { k: "Stationnement", ph: "ex. 8 places en sous-sol" },
+      { k: "DPE", opts: DPE },
+      { k: "État", opts: ETAT },
+      { k: "Chauffage", opts: CHAUFFAGE },
+      { k: "Climatisation", opts: ["Oui", "Réversible", "Plafond rayonnant", "Non"] },
+      { k: "Fibre", opts: ["Très haut débit raccordé", "Éligible fibre", "Non"] },
+      { k: "Restauration", opts: ["RIE sur place", "RIE à proximité", "Non"] },
+      { k: "Sécurité", opts: ["Gardiennage 24/7", "Contrôle d'accès", "Vidéosurveillance", "Aucune"] },
+      { k: "Certification", opts: ["BREEAM", "HQE", "LEED", "Aucune"] }
+    ],
+    Commerces: [
+      { k: "Linéaire de vitrine", ph: "ex. 8 m" },
+      { k: "Réserve", ph: "ex. Sous-sol 45 m²" },
+      { k: "Emplacement", opts: ["N°1", "N°1 bis", "Zone piétonne", "Centre commercial", "Axe passant", "Périphérie"] },
+      { k: "DPE", opts: DPE },
+      { k: "État", opts: ETAT },
+      { k: "Devanture", opts: ["Moderne", "Classée à conserver", "À rénover"] },
+      { k: "Activités", ph: "ex. Tous commerces hors nuisances" },
+      { k: "Climatisation", opts: ["Oui", "Non"] }
+    ],
+    Logistique: [
+      { k: "Classe", opts: ["Classe A", "Classe B", "Classe C"] },
+      { k: "Hauteur libre", ph: "ex. 11,5 m" },
+      { k: "Quais", ph: "ex. 12 quais à niveau + 2 plain-pied" },
+      { k: "Résistance au sol", ph: "ex. 5 T/m²" },
+      { k: "Sprinklage", opts: ["ESFR conforme ICPE", "Sprinklage standard", "Non sprinklé"] },
+      { k: "Bureaux / mezzanine", ph: "ex. 350 m² de mezzanine" },
+      { k: "Stationnement", ph: "ex. 40 places poids lourds" },
+      { k: "DPE", opts: DPE },
+      { k: "Chauffage", opts: CHAUFFAGE },
+      { k: "Site", opts: ["Clôturé et gardienné", "Clôturé", "Parc d'activité", "Accès libre"] }
+    ],
+    Terrains: [
+      { k: "Zonage PLU", opts: ["UE — zone d'activité", "UI — zone industrielle", "UA — centre", "AU — à urbaniser", "Autre"] },
+      { k: "Viabilisation", opts: ["Viabilisé", "Partiellement viabilisé", "Non viabilisé"] },
+      { k: "Constructibilité", ph: "ex. Emprise jusqu'à 60 %" },
+      { k: "Nature du terrain", opts: ["Plat", "En pente", "Mixte"] },
+      { k: "Accès poids lourds", opts: ["Voirie PL existante", "À créer"] },
+      { k: "Disposition", opts: ["Location", "Bail à construction", "Vente"] },
+      { k: "Pollution", opts: ["Aucune connue", "Étude en cours", "À dépolluer"] }
+    ]
+  };
+
   function esc(s) { return (s == null ? "" : String(s)).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
   function v(r, sel) { var el = r.querySelector(sel); return el ? el.value.trim() : ""; }
   function int(s) { var n = parseInt(s, 10); return isNaN(n) ? null : n; }
@@ -40,6 +94,54 @@
       var i = line.indexOf(":");
       if (i > 0) { var k = line.slice(0, i).trim(); var val = line.slice(i + 1).trim(); if (k) o[k] = val; }
     });
+    return o;
+  }
+
+  /* ---------- caractéristiques guidées (dropdowns par segment) ---------- */
+  function specControlsHTML(segment) {
+    var fields = SPEC_SCHEMA[segment] || [];
+    if (!fields.length) return "";
+    return '<div class="spec-grid">' + fields.map(function (f) {
+      var ctrl;
+      if (f.opts) {
+        ctrl = '<span class="select"><select data-k="' + esc(f.k) + '"><option value="">—</option>' +
+          f.opts.map(function (o) { return "<option>" + esc(o) + "</option>"; }).join("") + "</select></span>";
+      } else {
+        ctrl = '<input type="text" data-k="' + esc(f.k) + '" placeholder="' + esc(f.ph || "") + '">';
+      }
+      return '<div class="field"><label>' + esc(f.k) + "</label>" + ctrl + "</div>";
+    }).join("") + "</div>";
+  }
+  // pré-remplit les champs depuis l'objet specs ; une valeur hors liste est ajoutée à la volée
+  function fillSpecControls(host, specs) {
+    specs = specs || {};
+    host.querySelectorAll("[data-k]").forEach(function (el) {
+      var val = specs[el.getAttribute("data-k")];
+      if (val == null || val === "") return;
+      if (el.tagName === "SELECT" && !Array.prototype.some.call(el.options, function (o) { return o.text === val; })) {
+        var o = document.createElement("option"); o.text = val; el.appendChild(o);
+      }
+      el.value = val;
+    });
+  }
+  // clés non couvertes par le segment courant (ni par le champ Disponibilité) → zone libre
+  function specsExtras(segment, specs) {
+    specs = specs || {};
+    var known = { "Disponibilité": true };
+    (SPEC_SCHEMA[segment] || []).forEach(function (f) { known[f.k] = true; });
+    var extra = {};
+    Object.keys(specs).forEach(function (k) { if (!known[k]) extra[k] = specs[k]; });
+    return specsToText(extra);
+  }
+  // reconstruit l'objet specs : champs guidés (non vides) + zone libre
+  function collectSpecs(r) {
+    var o = {};
+    r.querySelectorAll("#f-specs-fields [data-k]").forEach(function (el) {
+      var val = (el.value || "").trim();
+      if (val) o[el.getAttribute("data-k")] = val;
+    });
+    var extra = textToSpecs(v(r, "#f-specs-extra"));
+    Object.keys(extra).forEach(function (k) { o[k] = extra[k]; });
     return o;
   }
   function slugify(s) {
@@ -146,7 +248,8 @@
         row2(fld("Surface (m²)", "f-surface", b.surface, "number"), fld("Loyer €/an", "f-loyer", b.loyer, "number")) +
         selDispo(b.dispo) +
         area("Description du bien", "f-resume", b.resume) +
-        area("Caractéristiques — une par ligne au format « Clé : Valeur »", "f-specs", specsToText(b.specs)) +
+        '<div class="field"><label>Caractéristiques</label><div id="f-specs-fields"></div></div>' +
+        area("Autres caractéristiques (optionnel — une par ligne « Clé : Valeur »)", "f-specs-extra", specsExtras(b.segment || "Bureaux", b.specs)) +
         area("Légendes des photos — une par ligne", "f-photos", (b.photos || []).join("\n")) +
         area("Images — un identifiant Unsplash (photo-…) ou une URL par ligne", "f-images", (b.images || []).join("\n")) +
         fld("Ordre d'affichage", "f-ordre", b.ordre, "number") +
@@ -163,6 +266,20 @@
     r.querySelector("#f-back").addEventListener("click", function (e) { e.preventDefault(); renderList(); });
     r.querySelector("#f-cancel").addEventListener("click", function () { renderList(); });
     var err = r.querySelector("#bf-err");
+
+    // Caractéristiques guidées : peinture initiale, puis re-rendu si le segment change
+    // (en conservant les valeurs déjà saisies, champs guidés comme zone libre).
+    var specsHost = r.querySelector("#f-specs-fields");
+    function paintSpecs(segment, specs) {
+      specsHost.innerHTML = specControlsHTML(segment);
+      fillSpecControls(specsHost, specs);
+    }
+    paintSpecs(b.segment || "Bureaux", b.specs);
+    r.querySelector("#f-seg").addEventListener("change", function () {
+      var current = collectSpecs(r);
+      paintSpecs(this.value, current);
+      r.querySelector("#f-specs-extra").value = specsExtras(this.value, current);
+    });
 
     r.querySelector("#bf").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -183,7 +300,7 @@
         dispo: v(r, "#f-dispo") || null,
         dispo_rank: rankFor(v(r, "#f-dispo"), b.dispo_rank),
         resume: v(r, "#f-resume") || null,
-        specs: textToSpecs(v(r, "#f-specs")),
+        specs: collectSpecs(r),
         photos: linesToArr(v(r, "#f-photos")),
         images: linesToArr(v(r, "#f-images")),
         ordre: int(v(r, "#f-ordre")) || 0
