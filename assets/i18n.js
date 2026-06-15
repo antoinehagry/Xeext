@@ -122,6 +122,7 @@ window.XEEXT_I18N = {
     "footer.legalLink": "Legal notice",
     "footer.privacy": "Privacy policy",
     "footer.rights": "© 2026 Xeext. All rights reserved.",
+    "footer.brainup": "A Brain Up startup",
     "footer.legalBesoins": "<strong>Xeext</strong> — Corporate real estate advisory. Recommendations provided for guidance based on your answers. Information shown for illustration only.",
     "besoins.meta.title": "Find my space — Xeext",
     "besoins.meta.desc": "Answer 5 questions and get the corporate properties that match your needs: offices, retail, logistics, land.",
