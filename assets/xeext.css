@@ -202,6 +202,17 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
 .center { text-align: center; }
 .mx-auto { margin-left: auto; margin-right: auto; }
 
+/* Écrans type MacBook 13" / petits desktops (1025–1440 px) : les grands textes
+   tapaient dans le haut de l'échelle fluide → on les réduit un cran. Navbar,
+   boutons, mobile et grands écrans (>1440) ne sont pas touchés. */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .display { font-size: clamp(52px, 5.6vw, 80px); }
+  .h-section { font-size: clamp(36px, 3.7vw, 52px); }
+  .lead { font-size: clamp(18px, 1.5vw, 21px); }
+  .chiffre__num { font-size: clamp(150px, 22vw, 300px); }
+  .chiffre__sub { font-size: clamp(20px, 2vw, 28px); }
+}
+
 /* ---- Boutons ---- */
 .btn {
   display: inline-flex;
