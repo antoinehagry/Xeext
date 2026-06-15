@@ -492,7 +492,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 .lang-toggle:hover { background: var(--fill-hover); }
 .lang-toggle span { color: var(--text-3); transition: color .2s ease; }
 .lang-toggle span.is-active { color: var(--text); }
-@media (max-width: 1024px) { .lang-toggle { margin-top: 14px; } }
+@media (max-width: 1024px) { .lang-toggle { margin-top: 14px; align-self: flex-start; } }
 
 /* compatibilité affichée sur les cards de résultats */
 .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
