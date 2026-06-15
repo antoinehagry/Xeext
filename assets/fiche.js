@@ -41,6 +41,12 @@
     }
     gal.innerHTML = items.join("");
 
+    // Lightbox : clic sur une photo de la galerie = agrandissement plein écran
+    var photos = urls
+      .map(function (u, i) { return { url: u, alt: b.photos[i] || b.titre }; })
+      .filter(function (p) { return p.url; });
+    setupLightbox(gal, photos);
+
     // Panneau loyer
     document.getElementById("f-loyer").innerHTML =
       X.nombre(b.loyer) + ' €<small>par an, HT-HC · ' + m2 + ' €/m²/an</small>';
@@ -109,6 +115,74 @@
         '<div><dt>Loyer</dt><dd class="tnum">' + X.nombre(b.loyer) + ' €/an</dd></div></dl></div>';
       grid.appendChild(a);
     });
+  }
+
+  // Agrandissement des photos : clic sur une image de la galerie → overlay plein
+  // écran avec navigation (‹ ›, flèches), compteur, fermeture (✕, Échap, fond).
+  function setupLightbox(gal, photos) {
+    if (!photos.length) return;
+    gal.querySelectorAll(".ph__img").forEach(function (img, i) {
+      img.classList.add("is-zoomable");
+      img.addEventListener("click", function () { open(i); });
+    });
+
+    var box, imgEl, countEl, idx = 0;
+    function build() {
+      box = document.createElement("div");
+      box.className = "lightbox";
+      box.setAttribute("role", "dialog");
+      box.setAttribute("aria-modal", "true");
+      box.setAttribute("aria-label", "Photo agrandie");
+      box.innerHTML =
+        '<button class="lightbox__close" aria-label="Fermer">✕</button>' +
+        '<button class="lightbox__nav lightbox__prev" aria-label="Photo précédente">‹</button>' +
+        '<img class="lightbox__img" alt="">' +
+        '<button class="lightbox__nav lightbox__next" aria-label="Photo suivante">›</button>' +
+        '<div class="lightbox__count"></div>';
+      document.body.appendChild(box);
+      imgEl = box.querySelector(".lightbox__img");
+      countEl = box.querySelector(".lightbox__count");
+      box.querySelector(".lightbox__close").addEventListener("click", close);
+      box.querySelector(".lightbox__prev").addEventListener("click", function (e) { e.stopPropagation(); go(-1); });
+      box.querySelector(".lightbox__next").addEventListener("click", function (e) { e.stopPropagation(); go(1); });
+      box.addEventListener("click", function (e) { if (e.target === box) close(); });
+      // navigation au balayage (swipe) sur mobile
+      var tx = 0;
+      box.addEventListener("touchstart", function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+      box.addEventListener("touchend", function (e) {
+        var dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 40 && photos.length > 1) go(dx < 0 ? 1 : -1);
+      }, { passive: true });
+    }
+    function show() {
+      imgEl.src = photos[idx].url;
+      imgEl.alt = photos[idx].alt;
+      countEl.textContent = (idx + 1) + " / " + photos.length;
+      var multi = photos.length > 1;
+      box.querySelector(".lightbox__prev").style.display = multi ? "" : "none";
+      box.querySelector(".lightbox__next").style.display = multi ? "" : "none";
+      countEl.style.display = multi ? "" : "none";
+    }
+    function go(d) { idx = (idx + d + photos.length) % photos.length; show(); }
+    function open(i) {
+      if (!box) build();
+      idx = i; show();
+      document.body.style.overflow = "hidden";
+      box.classList.add("open");
+      document.addEventListener("keydown", onKey);
+      box.querySelector(".lightbox__close").focus();
+    }
+    function close() {
+      if (!box) return;
+      box.classList.remove("open");
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") go(-1);
+      else if (e.key === "ArrowRight") go(1);
+    }
   }
 
   function row(dt, dd) { return '<div><dt>' + dt + '</dt><dd>' + dd + '</dd></div>'; }
