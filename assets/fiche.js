@@ -3,6 +3,7 @@
    Lit l'id dans l'URL (?id=), rend la fiche depuis la base.
    ============================================================ */
 (function () {
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
   function init() {
     var X = window.XEEXT;
     var params = new URLSearchParams(location.search);
@@ -23,7 +24,7 @@
     setMeta('meta[property="og:url"]', location.href);
 
     // En-tête
-    setText("f-badge", b.segment);
+    setText("f-badge", t("seg." + b.segment));
     setText("f-title", b.titre);
     setText("f-ville", b.ville + " (" + b.dept + ")");
     setText("f-resume", b.resume);
@@ -53,16 +54,16 @@
 
     // Données rapides
     document.getElementById("f-quick").innerHTML =
-      row("Surface", X.nombre(b.surface) + " m²") +
-      row("Segment", b.segment) +
-      row("Localisation", b.ville + " (" + b.dept + ")") +
-      row("Disponibilité", b.dispo);
+      row(t("cat.surface"), X.nombre(b.surface) + " m²") +
+      row(t("fiche.q.segment"), t("seg." + b.segment)) +
+      row(t("fiche.q.loc"), b.ville + " (" + b.dept + ")") +
+      row(t("cat.dispo"), b.dispo);
 
     // Honoraires Xeext calculés pour ce bien
     document.getElementById("f-hono").textContent = X.euros(hono);
     var classique = Math.round(b.loyer * 0.20);
     document.getElementById("f-hono-vs").textContent =
-      "soit " + X.euros(classique - hono) + " d'économie face à un conseil à 20 %";
+      t("fiche.savePre") + " " + X.euros(classique - hono) + " " + t("fiche.saveSuf");
 
     // Caractéristiques détaillées
     var specs = document.getElementById("f-specs");
@@ -107,12 +108,12 @@
       a.className = "bien";
       a.href = "fiche.html?id=" + b.id;
       a.innerHTML =
-        '<div class="bien__media"><span class="badge">' + b.segment + '</span>' +
+        '<div class="bien__media"><span class="badge">' + t("seg." + b.segment) + '</span>' +
         '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
         '<div class="bien__body"><h3 class="bien__title">' + b.titre + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
-        '<dl class="bien__data"><div><dt>Surface</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
-        '<div><dt>Loyer</dt><dd class="tnum">' + X.nombre(b.loyer) + ' €/an</dd></div></dl></div>';
+        '<dl class="bien__data"><div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
+        '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.nombre(b.loyer) + ' ' + t("cat.peran") + '</dd></div></dl></div>';
       grid.appendChild(a);
     });
   }

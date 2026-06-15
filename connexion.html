@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var t=p||localStorage.getItem('xeext.theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<title>Se connecter — Xeext</title>
+<title data-i18n="auth.login.meta">Se connecter — Xeext</title>
 <meta name="robots" content="noindex" />
 <link rel="canonical" href="https://antoinehagry.github.io/Xeext/connexion.html" />
 <meta property="og:title" content="Se connecter — Xeext" />
@@ -19,31 +19,31 @@
     <div class="authpage__glow" aria-hidden="true"></div>
     <a class="brand" href="index.html"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
     <div class="authpage__pitch">
-      <h2>Repensé à 5%.</h2>
-      <p>Connectez-vous pour enregistrer vos biens favoris et prendre rendez-vous en quelques secondes.</p>
+      <h2 data-i18n="auth.login.pitchH">Repensé à 5%.</h2>
+      <p data-i18n="auth.login.pitchP">Connectez-vous pour enregistrer vos biens favoris et prendre rendez-vous en quelques secondes.</p>
     </div>
-    <p class="authpage__legal">Vos identifiants sont protégés : mot de passe haché côté serveur, jamais stocké en clair. <a href="confidentialite.html" style="color:#6f8cff">Confidentialité</a>.</p>
+    <p class="authpage__legal" data-i18n-html="auth.login.legal">Vos identifiants sont protégés : mot de passe haché côté serveur, jamais stocké en clair. <a href="confidentialite.html" style="color:#6f8cff">Confidentialité</a>.</p>
   </aside>
 
   <main class="authpage__main">
     <div class="authcard">
-      <a class="back-link" href="index.html"><span aria-hidden="true">‹</span> Retour à l'accueil</a>
-      <h1>Se connecter</h1>
-      <p class="modal__sub">Retrouvez vos favoris et vos rendez-vous.</p>
+      <a class="back-link" href="index.html"><span aria-hidden="true">‹</span> <span data-i18n="auth.back">Retour à l'accueil</span></a>
+      <h1 data-i18n="auth.login.h1">Se connecter</h1>
+      <p class="modal__sub" data-i18n="auth.login.sub">Retrouvez vos favoris et vos rendez-vous.</p>
       <form id="auth-form" novalidate>
-        <div class="field"><label for="a-mail">E-mail</label><input id="a-mail" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
-        <div class="field"><label for="a-pass">Mot de passe</label><input id="a-pass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
-        <p class="auth-forgot"><a href="#" id="forgot-link">Mot de passe oublié ?</a></p>
+        <div class="field"><label for="a-mail" data-i18n="auth.mail">E-mail</label><input id="a-mail" type="email" autocomplete="email" placeholder="vous@entreprise.fr" data-i18n-attr="placeholder:contact.ph.mail"></div>
+        <div class="field"><label for="a-pass" data-i18n="auth.pass">Mot de passe</label><input id="a-pass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+        <p class="auth-forgot"><a href="#" id="forgot-link" data-i18n="auth.forgot">Mot de passe oublié ?</a></p>
         <div class="form-error" id="auth-err"></div>
         <div class="form-info" id="auth-info"></div>
-        <button type="submit" class="btn btn--primary btn-block">Se connecter</button>
+        <button type="submit" class="btn btn--primary btn-block" data-i18n="auth.login.btn">Se connecter</button>
       </form>
-      <div class="auth-or"><span>ou</span></div>
+      <div class="auth-or"><span data-i18n="auth.or">ou</span></div>
       <button type="button" class="btn-google" id="g-signin">
         <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.47.9 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
-        Continuer avec Google
+        <span data-i18n="auth.google">Continuer avec Google</span>
       </button>
-      <p class="modal__switch">Pas encore de compte ? <a id="auth-alt" data-page="inscription.html" href="inscription.html">Créer un compte</a></p>
+      <p class="modal__switch"><span data-i18n="auth.noAccount">Pas encore de compte ?</span> <a id="auth-alt" data-page="inscription.html" href="inscription.html" data-i18n="auth.createAccount">Créer un compte</a></p>
     </div>
   </main>
 </div>
@@ -51,6 +51,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
 <script src="assets/biens.js"></script>
+<script src="assets/i18n.js"></script>
 <script src="assets/store.js"></script>
 <script src="assets/fill.js"></script>
 <script src="assets/auth-page.js"></script>

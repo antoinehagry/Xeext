@@ -6,6 +6,7 @@
    ============================================================ */
 (function () {
   var store = window.XEEXT.store;
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
   var form = document.getElementById("reinit-form");
   if (!store || !form) return;
 
@@ -18,18 +19,18 @@
     err.classList.remove("show");
     var p1 = document.getElementById("r-pass").value;
     var p2 = document.getElementById("r-pass2").value;
-    if (p1 !== p2) { err.textContent = "Les deux mots de passe ne correspondent pas."; err.classList.add("show"); return; }
+    if (p1 !== p2) { err.textContent = t("reinit.mismatch"); err.classList.add("show"); return; }
 
     btn.disabled = true;
     store.updatePassword(p1).then(function (res) {
       if (!res.ok) {
         btn.disabled = false;
-        err.textContent = res.error + " Le lien a peut-être expiré — redemandez un e-mail depuis la connexion.";
+        err.textContent = res.error + t("reinit.expired");
         err.classList.add("show");
         return;
       }
       form.style.display = "none";
-      info.textContent = "Mot de passe mis à jour. Redirection vers votre espace…";
+      info.textContent = t("reinit.done");
       info.classList.add("show");
       setTimeout(function () { location.href = "compte.html"; }, 1500);
     });

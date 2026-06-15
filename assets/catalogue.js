@@ -51,7 +51,7 @@
       a.setAttribute("aria-label", b.titre);
       a.innerHTML =
         '<div class="bien__media">' +
-          '<span class="badge">' + b.segment + '</span>' +
+          '<span class="badge">' + t("seg." + b.segment) + '</span>' +
           (window.XEEXT.fav ? window.XEEXT.fav.favBtnHTML(b.id, "card") : "") +
           '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div>' +
         '</div>' +

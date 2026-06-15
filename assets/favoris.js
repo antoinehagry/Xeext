@@ -4,15 +4,16 @@
 (function () {
   var store = window.XEEXT.store;
   var ui = window.XEEXT.ui;
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
 
   // HTML d'un bouton cœur (variant : "card" flottant, ou "inline" dans la fiche)
   function favBtnHTML(id, variant) {
     var fav = store.isFav(id);
     if (variant === "inline") {
       return '<button type="button" class="fav-inline ' + (fav ? "is-fav" : "") + '" data-fav-id="' + id + '" aria-pressed="' + fav + '">' +
-        ui.ICON.heart + '<span class="fav-label">' + (fav ? "Enregistré" : "Enregistrer") + '</span></button>';
+        ui.ICON.heart + '<span class="fav-label">' + (fav ? t("fav.saved") : t("fav.save")) + '</span></button>';
     }
-    return '<button type="button" class="fav-btn ' + (fav ? "is-fav" : "") + '" data-fav-id="' + id + '" aria-pressed="' + fav + '" aria-label="Ajouter aux favoris">' + ui.ICON.heart + '</button>';
+    return '<button type="button" class="fav-btn ' + (fav ? "is-fav" : "") + '" data-fav-id="' + id + '" aria-pressed="' + fav + '" aria-label="' + t("fav.add") + '">' + ui.ICON.heart + '</button>';
   }
 
   function syncAll() {
@@ -21,7 +22,7 @@
       btn.classList.toggle("is-fav", fav);
       btn.setAttribute("aria-pressed", fav);
       var label = btn.querySelector(".fav-label");
-      if (label) label.textContent = fav ? "Enregistré" : "Enregistrer";
+      if (label) label.textContent = fav ? t("fav.saved") : t("fav.save");
     });
   }
 
@@ -39,7 +40,7 @@
     var res = store.toggleFav(id);
     btn.classList.add("pulse");
     setTimeout(function () { btn.classList.remove("pulse"); }, 400);
-    ui.toast(res.active ? "Ajouté à vos favoris." : "Retiré de vos favoris.");
+    ui.toast(res.active ? t("fav.added") : t("fav.removed"));
     // syncAll est déclenché par l'évènement xeext:change
   });
 

@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var t=p||localStorage.getItem('xeext.theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<title>Politique de confidentialité — Xeext</title>
-<meta name="description" content="Politique de confidentialité de Xeext : données collectées, finalités, conservation et vos droits (RGPD)." />
+<title data-i18n="conf.meta.title">Politique de confidentialité — Xeext</title>
+<meta name="description" data-i18n-attr="content:conf.meta.desc" content="Politique de confidentialité de Xeext : données collectées, finalités, conservation et vos droits (RGPD)." />
 <link rel="canonical" href="https://antoinehagry.github.io/Xeext/confidentialite.html" />
 <meta property="og:title" content="Politique de confidentialité — Xeext" />
 <link rel="stylesheet" href="assets/xeext.css" />
@@ -14,19 +14,19 @@
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
 </head>
 <body>
-<a class="skip-link" href="#main">Aller au contenu</a>
+<a class="skip-link" href="#main" data-i18n="skip">Aller au contenu</a>
 
 <header class="nav">
   <nav class="nav__inner" aria-label="Navigation principale">
     <a class="brand" href="index.html"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
     <ul class="nav__links">
-      <li><a href="index.html#catalogue">Biens</a></li>
-      <li><a href="besoins.html">Trouver mon bien</a></li>
-      <li><a href="index.html#simulateur">Honoraires</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html#catalogue" data-i18n="nav.biens">Biens</a></li>
+      <li><a href="besoins.html" data-i18n="nav.besoins">Trouver mon bien</a></li>
+      <li><a href="index.html#simulateur" data-i18n="nav.honoraires">Honoraires</a></li>
+      <li><a href="index.html#contact" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <a class="nav__est" data-estimation href="index.html#proprietaires">Estimer mon bien</a>
-    <a class="nav__cta" href="index.html#catalogue">Voir les biens</a>
+    <a class="nav__est" data-estimation href="index.html#proprietaires" data-i18n="nav.estimer">Estimer mon bien</a>
+    <a class="nav__cta" href="index.html#catalogue" data-i18n="nav.voirbiens">Voir les biens</a>
     <button class="nav__burger" aria-label="Menu">
       <span class="burger-ico" aria-hidden="true"></span>
     </button>
@@ -35,75 +35,76 @@
 
 <main id="main" class="bg-white section-pad" data-screen-label="Confidentialité">
   <div class="wrap legal">
-    <a class="back-link" href="index.html"><span aria-hidden="true">‹</span> Retour à l'accueil</a>
-    <h1>Politique de confidentialité</h1>
-    <p class="updated">Dernière mise à jour : juin 2026</p>
+    <a class="back-link" href="index.html"><span aria-hidden="true">‹</span> <span data-i18n="auth.back">Retour à l'accueil</span></a>
+    <h1 data-i18n="conf.h1">Politique de confidentialité</h1>
+    <p class="updated" data-i18n="legal.updated">Dernière mise à jour : juin 2026</p>
 
-    <p>La présente politique explique quelles données personnelles Xeext collecte via ce site,
+    <p data-i18n="conf.intro">La présente politique explique quelles données personnelles Xeext collecte via ce site,
     pourquoi, combien de temps elles sont conservées et comment exercer vos droits, conformément
     au Règlement général sur la protection des données (RGPD).</p>
 
-    <h2>1. Responsable du traitement</h2>
-    <p>Xeext — [forme juridique, adresse à compléter]. Contact :
+    <h2 data-i18n="conf.s1H">1. Responsable du traitement</h2>
+    <p data-i18n-html="conf.s1P">Xeext — [forme juridique, adresse à compléter]. Contact :
     <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>.</p>
 
-    <h2>2. Données collectées</h2>
+    <h2 data-i18n="conf.s2H">2. Données collectées</h2>
     <ul>
-      <li><strong>Compte</strong> : nom et adresse e-mail, lors de l'inscription / connexion.</li>
-      <li><strong>Favoris et rendez-vous</strong> : biens enregistrés, créneaux et coordonnées que vous saisissez.</li>
-      <li><strong>Demandes</strong> (estimation, contact, alerte) : nom, e-mail, téléphone, message et critères de recherche que vous nous transmettez.</li>
+      <li data-i18n-html="conf.s2li1"><strong>Compte</strong> : nom et adresse e-mail, lors de l'inscription / connexion.</li>
+      <li data-i18n-html="conf.s2li2"><strong>Favoris et rendez-vous</strong> : biens enregistrés, créneaux et coordonnées que vous saisissez.</li>
+      <li data-i18n-html="conf.s2li3"><strong>Demandes</strong> (estimation, contact, alerte) : nom, e-mail, téléphone, message et critères de recherche que vous nous transmettez.</li>
     </ul>
-    <p>Aucune donnée n'est achetée à des tiers ni revendue.</p>
+    <p data-i18n="conf.s2P">Aucune donnée n'est achetée à des tiers ni revendue.</p>
 
-    <h2>3. Finalités</h2>
+    <h2 data-i18n="conf.s3H">3. Finalités</h2>
     <ul>
-      <li>Vous donner accès à votre espace (favoris, rendez-vous).</li>
-      <li>Traiter vos demandes d'estimation, de contact et de visite.</li>
-      <li>Vous recontacter au sujet d'un bien ou d'un mandat.</li>
+      <li data-i18n="conf.s3li1">Vous donner accès à votre espace (favoris, rendez-vous).</li>
+      <li data-i18n="conf.s3li2">Traiter vos demandes d'estimation, de contact et de visite.</li>
+      <li data-i18n="conf.s3li3">Vous recontacter au sujet d'un bien ou d'un mandat.</li>
     </ul>
 
-    <h2>4. Base légale</h2>
-    <p>Le traitement repose sur votre <strong>consentement</strong> (formulaires que vous remplissez)
+    <h2 data-i18n="conf.s4H">4. Base légale</h2>
+    <p data-i18n-html="conf.s4P">Le traitement repose sur votre <strong>consentement</strong> (formulaires que vous remplissez)
     et sur l'<strong>exécution de mesures précontractuelles</strong> prises à votre demande.</p>
 
-    <h2>5. Hébergement et sous-traitants</h2>
-    <p>Le site est hébergé par <strong>GitHub Pages</strong> (GitHub, Inc.). Les comptes et les
+    <h2 data-i18n="conf.s5H">5. Hébergement et sous-traitants</h2>
+    <p data-i18n-html="conf.s5P">Le site est hébergé par <strong>GitHub Pages</strong> (GitHub, Inc.). Les comptes et les
     données (favoris, rendez-vous, demandes) sont gérés via <strong>Supabase</strong>, sur une
     infrastructure située dans l'<strong>Union européenne</strong>. Ces prestataires agissent en
     tant que sous-traitants au sens du RGPD.</p>
 
-    <h2>6. Durée de conservation</h2>
-    <p>Les données de compte sont conservées tant que le compte est actif. Les demandes (estimation,
+    <h2 data-i18n="conf.s6H">6. Durée de conservation</h2>
+    <p data-i18n="conf.s6P">Les données de compte sont conservées tant que le compte est actif. Les demandes (estimation,
     contact) sont conservées le temps nécessaire à leur traitement et à la relation commerciale,
     puis archivées ou supprimées.</p>
 
-    <h2>7. Cookies</h2>
-    <p>Le site utilise uniquement un <strong>cookie/stockage technique de session</strong>
+    <h2 data-i18n="conf.s7H">7. Cookies</h2>
+    <p data-i18n-html="conf.s7P">Le site utilise uniquement un <strong>cookie/stockage technique de session</strong>
     (nécessaire à la connexion à votre compte) — exempté de consentement. Si une mesure d'audience
     est activée, elle l'est via une solution <strong>sans cookie de suivi</strong>. Aucun cookie
     publicitaire n'est déposé.</p>
 
-    <h2>8. Vos droits</h2>
-    <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et
+    <h2 data-i18n="conf.s8H">8. Vos droits</h2>
+    <p data-i18n-html="conf.s8P">Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et
     d'opposition. Pour les exercer, écrivez à <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>.
     Vous pouvez aussi introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
 
-    <p style="margin-top:32px"><a class="link-chevron" href="mentions-legales.html">Voir les mentions légales <span class="chev">›</span></a></p>
+    <p style="margin-top:32px"><a class="link-chevron" href="mentions-legales.html" data-i18n-html="conf.seeML">Voir les mentions légales <span class="chev">›</span></a></p>
   </div>
 </main>
 
 <footer class="footer">
   <div class="wrap">
     <div class="footer__legal" style="border-top:none;padding-top:0">
-      <p><strong>Xeext</strong> — Conseil en immobilier d'entreprise.</p>
-      <p style="margin-top:10px"><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a> · <a href="mailto:contact@xeext.fr">contact@xeext.fr</a></p>
-      <p style="margin-top:14px">© 2026 Xeext. Tous droits réservés.</p>
+      <p data-i18n-html="footer.legalShort"><strong>Xeext</strong> — Conseil en immobilier d'entreprise.</p>
+      <p style="margin-top:10px"><a href="mentions-legales.html" data-i18n="footer.legalLink">Mentions légales</a> · <a href="confidentialite.html" data-i18n="footer.privacyShort">Confidentialité</a> · <a href="mailto:contact@xeext.fr">contact@xeext.fr</a></p>
+      <p style="margin-top:14px" data-i18n="footer.rights">© 2026 Xeext. Tous droits réservés.</p>
     </div>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
+<script src="assets/i18n.js"></script>
 <script src="assets/store.js"></script>
 <script src="assets/account.js"></script>
 <script src="assets/app.js"></script>

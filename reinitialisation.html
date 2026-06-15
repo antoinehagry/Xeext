@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var t=p||localStorage.getItem('xeext.theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<title>Réinitialiser le mot de passe — Xeext</title>
+<title data-i18n="reinit.meta">Réinitialiser le mot de passe — Xeext</title>
 <meta name="robots" content="noindex" />
 <link rel="stylesheet" href="assets/xeext.css" />
 <link rel="stylesheet" href="assets/components.css" />
@@ -17,23 +17,23 @@
     <div class="authpage__glow" aria-hidden="true"></div>
     <a class="brand" href="index.html"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
     <div class="authpage__pitch">
-      <h2>Nouveau mot de passe.</h2>
-      <p>Choisissez un nouveau mot de passe pour sécuriser votre espace.</p>
+      <h2 data-i18n="reinit.pitchH">Nouveau mot de passe.</h2>
+      <p data-i18n="reinit.pitchP">Choisissez un nouveau mot de passe pour sécuriser votre espace.</p>
     </div>
-    <p class="authpage__legal">Lien valable un court instant. S'il a expiré, redemandez un e-mail depuis la page de connexion.</p>
+    <p class="authpage__legal" data-i18n="reinit.legal">Lien valable un court instant. S'il a expiré, redemandez un e-mail depuis la page de connexion.</p>
   </aside>
 
   <main class="authpage__main">
     <div class="authcard">
-      <a class="back-link" href="connexion.html"><span aria-hidden="true">‹</span> Retour à la connexion</a>
-      <h1>Réinitialiser</h1>
-      <p class="modal__sub">Saisissez votre nouveau mot de passe.</p>
+      <a class="back-link" href="connexion.html"><span aria-hidden="true">‹</span> <span data-i18n="reinit.back">Retour à la connexion</span></a>
+      <h1 data-i18n="reinit.h1">Réinitialiser</h1>
+      <p class="modal__sub" data-i18n="reinit.sub">Saisissez votre nouveau mot de passe.</p>
       <form id="reinit-form" novalidate>
-        <div class="field"><label for="r-pass">Nouveau mot de passe</label><input id="r-pass" type="password" autocomplete="new-password" placeholder="Au moins 6 caractères"></div>
-        <div class="field"><label for="r-pass2">Confirmer</label><input id="r-pass2" type="password" autocomplete="new-password" placeholder="Répétez le mot de passe"></div>
+        <div class="field"><label for="r-pass" data-i18n="reinit.newpass">Nouveau mot de passe</label><input id="r-pass" type="password" autocomplete="new-password" placeholder="Au moins 6 caractères" data-i18n-attr="placeholder:auth.ph.pass"></div>
+        <div class="field"><label for="r-pass2" data-i18n="reinit.confirm">Confirmer</label><input id="r-pass2" type="password" autocomplete="new-password" placeholder="Répétez le mot de passe" data-i18n-attr="placeholder:reinit.ph.repeat"></div>
         <div class="form-error" id="reinit-err"></div>
         <div class="form-info" id="reinit-info"></div>
-        <button type="submit" class="btn btn--primary btn-block">Mettre à jour</button>
+        <button type="submit" class="btn btn--primary btn-block" data-i18n="reinit.btn">Mettre à jour</button>
       </form>
     </div>
   </main>
@@ -41,6 +41,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
+<script src="assets/i18n.js"></script>
 <script src="assets/store.js"></script>
 <script src="assets/fill.js"></script>
 <script src="assets/reinit.js"></script>

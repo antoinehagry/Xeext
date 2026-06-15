@@ -5,6 +5,8 @@
   var store = window.XEEXT.store;
   var ui = window.XEEXT.ui;
   var X = window.XEEXT;
+  var t = function (k) { return X.t ? X.t(k) : k; };
+  var loc = (X.lang && X.lang() === "en") ? "en-GB" : "fr-FR";
 
   var SLOTS = ["09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00"];
 
@@ -20,7 +22,7 @@
   function iso(d) {
     return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   }
-  function fmt(d, opt) { return new Intl.DateTimeFormat("fr-FR", opt).format(d); }
+  function fmt(d, opt) { return new Intl.DateTimeFormat(loc, opt).format(d); }
 
   function open(b) {
     ui.requireAuth(function () {
@@ -38,19 +40,19 @@
       var thumbStripe = 'background:repeating-linear-gradient(-45deg,#e6e6ea 0 8px,#f0f0f3 8px 16px)';
 
       var html =
-        '<h2 class="modal__title">Prendre rendez-vous</h2>' +
-        '<p class="modal__sub">Choisissez un créneau pour visiter ce bien.</p>' +
+        '<h2 class="modal__title">' + t("rdv.title") + '</h2>' +
+        '<p class="modal__sub">' + t("rdv.sub") + '</p>' +
         '<div class="rdv-bien"><div class="thumb" style="' + thumbStripe + '"></div>' +
           '<div><div class="t">' + b.titre + '</div><div class="v">' + b.ville + ' (' + b.dept + ') · ' + X.nombre(b.surface) + ' m²</div></div></div>' +
         '<form id="rdv-form" novalidate>' +
-          '<div class="field"><label>Date</label><div class="rdv-dates" id="rdv-dates">' + dateChips + '</div></div>' +
-          '<div class="field"><label>Créneau</label><div class="rdv-slots" id="rdv-slots">' + slotChips + '</div></div>' +
-          '<div class="field"><label for="r-name">Nom</label><input id="r-name" type="text" value="' + esc(u.name) + '"></div>' +
-          '<div class="field"><label for="r-mail">E-mail</label><input id="r-mail" type="email" value="' + esc(u.email) + '"></div>' +
-          '<div class="field"><label for="r-tel">Téléphone</label><input id="r-tel" type="tel" placeholder="06 12 34 56 78"></div>' +
-          '<div class="field"><label for="r-msg">Message (facultatif)</label><textarea id="r-msg" placeholder="Précisez vos disponibilités, vos questions…"></textarea></div>' +
+          '<div class="field"><label>' + t("rdv.date") + '</label><div class="rdv-dates" id="rdv-dates">' + dateChips + '</div></div>' +
+          '<div class="field"><label>' + t("rdv.slot") + '</label><div class="rdv-slots" id="rdv-slots">' + slotChips + '</div></div>' +
+          '<div class="field"><label for="r-name">' + t("rdv.name") + '</label><input id="r-name" type="text" value="' + esc(u.name) + '"></div>' +
+          '<div class="field"><label for="r-mail">' + t("auth.mail") + '</label><input id="r-mail" type="email" value="' + esc(u.email) + '"></div>' +
+          '<div class="field"><label for="r-tel">' + t("rdv.tel") + '</label><input id="r-tel" type="tel" placeholder="06 12 34 56 78"></div>' +
+          '<div class="field"><label for="r-msg">' + t("rdv.msg") + '</label><textarea id="r-msg" placeholder="' + t("rdv.msgPh") + '"></textarea></div>' +
           '<div class="form-error" id="rdv-err"></div>' +
-          '<button type="submit" class="btn btn--primary btn-block">Confirmer le rendez-vous</button>' +
+          '<button type="submit" class="btn btn--primary btn-block">' + t("rdv.submit") + '</button>' +
         '</form>';
 
       var m = ui.openModal(html, { wide: true });
@@ -75,9 +77,9 @@
         e.preventDefault();
         var name = root.querySelector("#r-name").value.trim();
         var mail = root.querySelector("#r-mail").value.trim();
-        if (!sel.date) return fail("Choisissez une date.");
-        if (!sel.slot) return fail("Choisissez un créneau horaire.");
-        if (!name || !mail) return fail("Indiquez votre nom et votre e-mail.");
+        if (!sel.date) return fail(t("rdv.errDate"));
+        if (!sel.slot) return fail(t("rdv.errSlot"));
+        if (!name || !mail) return fail(t("rdv.errNameMail"));
 
         store.addRdv({
           bienId: b.id, bienTitre: b.titre, bienVille: b.ville + " (" + b.dept + ")",
@@ -97,14 +99,14 @@
       '<button class="modal__close" aria-label="Fermer">' + ui.ICON.close + '</button>' +
       '<div class="rdv-done">' +
         '<div class="check">' + ui.ICON.check + '</div>' +
-        '<h2 class="modal__title">Rendez-vous confirmé</h2>' +
-        '<p class="modal__sub" style="margin-top:12px">Visite de <strong>' + b.titre + '</strong><br>' +
-          cap(sel.dateLabel) + ' à ' + sel.slot + '.</p>' +
-        '<p class="modal__note" style="margin-top:18px">Un conseiller Xeext vous confirmera par e-mail. Retrouvez ce rendez-vous dans « Mon espace ».</p>' +
-        '<a href="compte.html#rdv" class="btn btn--primary btn-block">Voir mes rendez-vous</a>' +
+        '<h2 class="modal__title">' + t("rdv.confirmedH") + '</h2>' +
+        '<p class="modal__sub" style="margin-top:12px">' + t("rdv.confirmedPre") + '<strong>' + b.titre + '</strong><br>' +
+          cap(sel.dateLabel) + ' ' + t("rdv.at") + ' ' + sel.slot + '.</p>' +
+        '<p class="modal__note" style="margin-top:18px">' + t("rdv.note") + '</p>' +
+        '<a href="compte.html#rdv" class="btn btn--primary btn-block">' + t("rdv.seeMine") + '</a>' +
       '</div>';
     modal.querySelector(".modal__close").addEventListener("click", ui.closeModal);
-    ui.toast("Rendez-vous enregistré.");
+    ui.toast(t("rdv.toast"));
   }
 
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }

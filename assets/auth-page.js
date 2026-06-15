@@ -5,6 +5,7 @@
    ============================================================ */
 (function () {
   var store = window.XEEXT.store;
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
   var mode = document.body.getAttribute("data-auth"); // "login" | "signup"
   var params = new URLSearchParams(location.search);
   var ret = params.get("return") || "index.html";
@@ -97,17 +98,17 @@
       if (info) info.classList.remove("show");
       var email = val("a-mail");
       if (!email) {
-        err.textContent = "Saisissez d'abord votre e-mail ci-dessus, puis recliquez sur « Mot de passe oublié ? ».";
+        err.textContent = t("auth.js.needEmail");
         err.classList.add("show");
         var mailEl = document.getElementById("a-mail"); if (mailEl) mailEl.focus();
         return;
       }
-      forgot.textContent = "Envoi…";
+      forgot.textContent = t("auth.js.sending");
       store.requestPasswordReset(email).then(function (res) {
-        forgot.textContent = "Mot de passe oublié ?";
+        forgot.textContent = t("auth.forgot");
         if (!res.ok) { err.textContent = res.error; err.classList.add("show"); return; }
         if (info) {
-          info.textContent = "Si un compte existe pour " + email + ", un e-mail de réinitialisation vient d'être envoyé. Pensez à vérifier vos spams.";
+          info.textContent = t("auth.js.resetPre") + email + t("auth.js.resetPost");
           info.classList.add("show");
         }
       });

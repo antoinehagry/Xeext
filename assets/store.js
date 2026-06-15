@@ -15,22 +15,23 @@
       })
     : null;
 
-  var NO_CONFIG = { ok: false, error: "Configuration Supabase manquante (assets/config.js)." };
-  var OFFLINE = { ok: false, error: "Connexion impossible. Vérifiez votre accès internet." };
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
+  var NO_CONFIG = { ok: false, error: t("err.noconfig") };
+  var OFFLINE = { ok: false, error: t("err.offline") };
   var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
   function emit() { window.dispatchEvent(new CustomEvent("xeext:change")); }
 
-  // messages Supabase (anglais) → français
+  // messages Supabase (anglais) → libellé traduit (FR / EN)
   function frError(message) {
     var m = message || "";
-    if (/already registered|already exists/i.test(m)) return "Un compte existe déjà avec cet e-mail.";
-    if (/invalid login credentials/i.test(m)) return "E-mail ou mot de passe incorrect.";
-    if (/email not confirmed/i.test(m)) return "Confirmez d'abord votre adresse via l'e-mail reçu, puis reconnectez-vous.";
-    if (/address.*invalid|invalid.*email/i.test(m)) return "Adresse e-mail invalide ou inexistante.";
-    if (/at least 6|password should/i.test(m)) return "Le mot de passe doit contenir au moins 6 caractères.";
-    if (/rate limit|too many|security purposes/i.test(m)) return "Trop de tentatives. Patientez quelques instants.";
-    return m || "Une erreur est survenue. Réessayez.";
+    if (/already registered|already exists/i.test(m)) return t("err.exists");
+    if (/invalid login credentials/i.test(m)) return t("err.invalidLogin");
+    if (/email not confirmed/i.test(m)) return t("err.notConfirmed");
+    if (/address.*invalid|invalid.*email/i.test(m)) return t("err.invalidEmail2");
+    if (/at least 6|password should/i.test(m)) return t("err.pw6");
+    if (/rate limit|too many|security purposes/i.test(m)) return t("err.rate");
+    return m || t("err.generic");
   }
 
   function uuid() {
@@ -103,18 +104,18 @@
     signup: function (name, email, pass) {
       if (!sb) return Promise.resolve(NO_CONFIG);
       name = (name || "").trim(); email = (email || "").trim().toLowerCase();
-      if (!name || !email || !pass) return Promise.resolve({ ok: false, error: "Tous les champs sont requis." });
-      if (!EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: "Adresse e-mail invalide." });
-      if (pass.length < 6) return Promise.resolve({ ok: false, error: "Le mot de passe doit contenir au moins 6 caractères." });
+      if (!name || !email || !pass) return Promise.resolve({ ok: false, error: t("err.allRequired") });
+      if (!EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: t("err.invalidEmail") });
+      if (pass.length < 6) return Promise.resolve({ ok: false, error: t("err.pw6") });
       return sb.auth.signUp({ email: email, password: pass, options: { data: { name: name } } })
         .then(function (res) {
           if (res.error) return { ok: false, error: frError(res.error.message) };
           // e-mail déjà inscrit : Supabase renvoie un faux utilisateur sans identité
           if (res.data.user && res.data.user.identities && res.data.user.identities.length === 0)
-            return { ok: false, error: "Un compte existe déjà avec cet e-mail." };
+            return { ok: false, error: t("err.exists") };
           // confirmation d'e-mail exigée par le projet : pas de session immédiate
           if (!res.data.session)
-            return { ok: false, error: "Compte créé ! Confirmez votre adresse via l'e-mail que vous venez de recevoir, puis connectez-vous." };
+            return { ok: false, error: t("err.signupConfirm") };
           setUserFromSession(res.data.session);
           emit();
           return loadData().then(function () { return { ok: true }; });
@@ -204,7 +205,7 @@
     submitLead: function (data) {
       if (!sb) return Promise.resolve(NO_CONFIG);
       var email = (data.email || "").trim().toLowerCase();
-      if (!email || !EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: "Adresse e-mail invalide." });
+      if (!email || !EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: t("err.invalidEmail") });
       var row = {
         type: data.type || "contact",
         nom: (data.nom || (cachedUser && cachedUser.name) || "").trim() || null,
@@ -230,7 +231,7 @@
     requestPasswordReset: function (email) {
       if (!sb) return Promise.resolve(NO_CONFIG);
       email = (email || "").trim().toLowerCase();
-      if (!EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: "Adresse e-mail invalide." });
+      if (!EMAIL_RE.test(email)) return Promise.resolve({ ok: false, error: t("err.invalidEmail") });
       var redirectTo = location.origin + location.pathname.replace(/[^/]*$/, "") + "reinitialisation.html";
       return sb.auth.resetPasswordForEmail(email, { redirectTo: redirectTo })
         .then(function (res) { return res.error ? { ok: false, error: frError(res.error.message) } : { ok: true }; })
@@ -238,7 +239,7 @@
     },
     updatePassword: function (pwd) {
       if (!sb) return Promise.resolve(NO_CONFIG);
-      if (!pwd || pwd.length < 6) return Promise.resolve({ ok: false, error: "Le mot de passe doit contenir au moins 6 caractères." });
+      if (!pwd || pwd.length < 6) return Promise.resolve({ ok: false, error: t("err.pw6") });
       return sb.auth.updateUser({ password: pwd })
         .then(function (res) {
           if (res.error) return { ok: false, error: frError(res.error.message) };
