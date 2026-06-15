@@ -105,7 +105,12 @@
     }
     var nFav = store.favs().length, nRdv = store.rdvs().length;
     holder.innerHTML =
-      '<button class="avatar" id="acct-toggle" aria-haspopup="true" aria-expanded="false" aria-label="Mon compte">' + initials(u.name) + '</button>' +
+      '<button class="avatar" id="acct-toggle" aria-haspopup="true" aria-expanded="false" aria-label="Mon compte">' +
+        initials(u.name) +
+        // photo de profil (Google) par-dessus les initiales ; si elle échoue à charger,
+        // elle se retire et les initiales réapparaissent.
+        (u.avatar ? '<img class="avatar__img" src="' + u.avatar + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
+      '</button>' +
       '<div class="acct-menu" id="acct-menu" role="menu">' +
         '<div class="acct-menu__head"><div class="acct-menu__name">' + u.name + '</div><div class="acct-menu__mail">' + u.email + '</div></div>' +
         '<a href="compte.html#favoris" role="menuitem">Mes favoris <span class="count">' + nFav + '</span></a>' +

@@ -49,10 +49,12 @@
   function setUserFromSession(session) {
     if (session && session.user) {
       var u = session.user;
+      var meta = u.user_metadata || {};
       cachedUser = {
         id: u.id,
-        name: (u.user_metadata && u.user_metadata.name) || (u.email || "").split("@")[0],
-        email: u.email
+        name: meta.name || meta.full_name || (u.email || "").split("@")[0],
+        email: u.email,
+        avatar: meta.avatar_url || meta.picture || null   // photo Google le cas échéant
       };
     } else {
       cachedUser = null;
