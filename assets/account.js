@@ -3,6 +3,7 @@
    ============================================================ */
 (function () {
   var store = window.XEEXT.store;
+  function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
 
   var ICON = {
     heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 20.5l-1.6-1.45C5.4 14.5 2.5 11.9 2.5 8.6 2.5 6 4.5 4 7.1 4c1.5 0 2.9.7 3.9 1.8C12 4.7 13.4 4 14.9 4 17.5 4 19.5 6 19.5 8.6c0 3.3-2.9 5.9-7.9 10.45L12 20.5z"/></svg>',
@@ -100,7 +101,7 @@
     }
     var u = store.currentUser();
     if (!u) {
-      holder.innerHTML = '<a class="btn-signin" href="' + authHref("connexion.html") + '">Se connecter</a>';
+      holder.innerHTML = '<a class="btn-signin" href="' + authHref("connexion.html") + '">' + t("acct.signin") + '</a>';
       return;
     }
     var nFav = store.favs().length, nRdv = store.rdvs().length;
@@ -113,12 +114,12 @@
       '</button>' +
       '<div class="acct-menu" id="acct-menu" role="menu">' +
         '<div class="acct-menu__head"><div class="acct-menu__name">' + u.name + '</div><div class="acct-menu__mail">' + u.email + '</div></div>' +
-        '<a href="compte.html#favoris" role="menuitem">Mes favoris <span class="count">' + nFav + '</span></a>' +
-        '<a href="compte.html#rdv" role="menuitem">Mes rendez-vous <span class="count">' + nRdv + '</span></a>' +
-        '<a href="compte.html#profil" role="menuitem">Mon profil</a>' +
-        (store.isAdmin && store.isAdmin() ? '<a href="admin.html" role="menuitem">Administration</a>' : '') +
+        '<a href="compte.html#favoris" role="menuitem">' + t("acct.favoris") + ' <span class="count">' + nFav + '</span></a>' +
+        '<a href="compte.html#rdv" role="menuitem">' + t("acct.rdv") + ' <span class="count">' + nRdv + '</span></a>' +
+        '<a href="compte.html#profil" role="menuitem">' + t("acct.profil") + '</a>' +
+        (store.isAdmin && store.isAdmin() ? '<a href="admin.html" role="menuitem">' + t("acct.admin") + '</a>' : '') +
         '<div class="sep"></div>' +
-        '<button class="danger" id="acct-logout" role="menuitem">Se déconnecter</button>' +
+        '<button class="danger" id="acct-logout" role="menuitem">' + t("acct.logout") + '</button>' +
       '</div>';
     var menu = holder.querySelector("#acct-menu");
     var toggle = holder.querySelector("#acct-toggle");
@@ -131,7 +132,7 @@
       if (!holder.contains(e.target)) { menu.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
     });
     holder.querySelector("#acct-logout").addEventListener("click", function () {
-      store.logout(); toast("Vous êtes déconnecté.");
+      store.logout(); toast(t("acct.loggedout"));
     });
   }
 

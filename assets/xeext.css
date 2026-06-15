@@ -164,6 +164,24 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   line-height: 1.02;
 }
 
+/* « Repensé à 5%. » : dégradé animé noir ↔ bleu profond, en boucle.
+   Appliqué uniquement à ce groupe de mots (span .grad-loop dans le titre).
+   S'adapte au thème (var --text : foncé en clair, clair en sombre). */
+.grad-loop {
+  background: linear-gradient(90deg, var(--text) 0%, #16258f 50%, var(--text) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: heroGradient 7s ease-in-out infinite;
+}
+@keyframes heroGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grad-loop { animation: none; }
+}
+
 .h-section {
   font-size: clamp(34px, 4.6vw, 64px);
   letter-spacing: -0.028em;

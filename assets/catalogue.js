@@ -9,6 +9,7 @@
 
     var B = window.XEEXT_BIENS;
     var X = window.XEEXT;
+    var t = function (k) { return X.t ? X.t(k) : k; };
 
     var state = {
       segment: "Tous",
@@ -58,9 +59,9 @@
           '<h3 class="bien__title">' + b.titre + '</h3>' +
           '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
           '<dl class="bien__data">' +
-            '<div><dt>Surface</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
-            '<div><dt>Loyer</dt><dd class="tnum">' + X.nombre(b.loyer) + ' €/an<span class="bien__m2"> · ' + m2 + ' €/m²/an</span></dd></div>' +
-            '<div><dt>Disponibilité</dt><dd>' + b.dispo + '</dd></div>' +
+            '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
+            '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.nombre(b.loyer) + ' ' + t("cat.peran") + '<span class="bien__m2"> · ' + m2 + ' ' + t("cat.perm2an") + '</span></dd></div>' +
+            '<div><dt>' + t("cat.dispo") + '</dt><dd>' + b.dispo + '</dd></div>' +
           '</dl>' +
         '</div>';
       return a;
@@ -85,13 +86,13 @@
       grid.innerHTML = "";
       var count = document.getElementById("cat-count");
       if (count) {
-        count.textContent = list.length + (list.length > 1 ? " biens disponibles" : " bien disponible");
+        count.textContent = list.length + " " + (list.length > 1 ? t("cat.countPlural") : t("cat.countSingular"));
       }
 
       if (!list.length) {
         var empty = document.createElement("p");
         empty.className = "cat-empty muted";
-        empty.textContent = "Aucun bien ne correspond à ces critères. Élargissez votre recherche.";
+        empty.textContent = t("cat.empty");
         grid.appendChild(empty);
         return;
       }

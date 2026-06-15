@@ -481,6 +481,19 @@ input[type="range"].sim-range::-moz-range-thumb {
 .theme-toggle svg { width: 18px; height: 18px; }
 @media (max-width: 1024px) { .theme-toggle { margin-top: 14px; } }
 
+/* Bouton de langue FR / EN (assorti au bouton de thème) */
+.lang-toggle {
+  flex: 0 0 auto; height: 34px; border: none; cursor: pointer;
+  background: var(--fill); border-radius: var(--r-pill); padding: 0 11px;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: .02em;
+  transition: background .2s ease;
+}
+.lang-toggle:hover { background: var(--fill-hover); }
+.lang-toggle span { color: var(--text-3); transition: color .2s ease; }
+.lang-toggle span.is-active { color: var(--text); }
+@media (max-width: 1024px) { .lang-toggle { margin-top: 14px; } }
+
 /* compatibilité affichée sur les cards de résultats */
 .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .match-pct { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
