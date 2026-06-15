@@ -51,6 +51,29 @@
     window.addEventListener("resize", function () {
       if (window.innerWidth > 1024) close();
     });
+
+    // Navbar inversée (sombre) tant qu'une section sombre passe sous elle, pour
+    // rester lisible. On sonde le milieu de la navbar contre chaque .bg-dark.
+    var darks = Array.prototype.slice.call(document.querySelectorAll(".bg-dark"));
+    if (darks.length) {
+      var ticking = false;
+      function syncNavTheme() {
+        ticking = false;
+        var r = nav.getBoundingClientRect();
+        var probe = r.top + r.height / 2;
+        var onDark = darks.some(function (el) {
+          var d = el.getBoundingClientRect();
+          return d.top <= probe && d.bottom >= probe;
+        });
+        nav.classList.toggle("nav--on-dark", onDark);
+      }
+      function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(syncNavTheme); }
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      syncNavTheme();
+    }
   }
 
   if (document.readyState !== "loading") init();

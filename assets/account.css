@@ -345,6 +345,7 @@
 }
 .authpage__aside .brand { color: #fff; font-size: 22px; position: relative; z-index: 1; }
 .authpage__aside .brand sup { color: #6f8cff; }
+.authpage__aside .brand-logo { background-color: #fff; }
 .authpage__glow {
   position: absolute; width: 620px; height: 620px; border-radius: 50%;
   right: -180px; top: -120px;
