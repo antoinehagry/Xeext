@@ -6,7 +6,7 @@
   function t(k) { return (window.XEEXT && window.XEEXT.t) ? window.XEEXT.t(k) : k; }
 
   var ICON = {
-    heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 20.5l-1.6-1.45C5.4 14.5 2.5 11.9 2.5 8.6 2.5 6 4.5 4 7.1 4c1.5 0 2.9.7 3.9 1.8C12 4.7 13.4 4 14.9 4 17.5 4 19.5 6 19.5 8.6c0 3.3-2.9 5.9-7.9 10.45L12 20.5z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
   };
