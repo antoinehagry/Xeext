@@ -7,7 +7,12 @@
 (function () {
   var cfg = window.XEEXT_CONFIG || {};
   var sb = (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY)
-    ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY)
+    ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+        // Flux "implicit" : la session revient directement dans l'URL (hash),
+        // sans échange de code côté client — plus fiable qu'un PKCE sur un site
+        // statique multi-pages (le code verifier s'y perd entre les pages).
+        auth: { flowType: "implicit", detectSessionInUrl: true, persistSession: true, autoRefreshToken: true }
+      })
     : null;
 
   var NO_CONFIG = { ok: false, error: "Configuration Supabase manquante (assets/config.js)." };
@@ -90,7 +95,7 @@
           setUserFromSession(res.data.session);
           emit();
           return loadData();
-        }).catch(function () {})
+        }).catch(function (e) { try { console.warn("Xeext auth init:", e); } catch (_) {} })
       : Promise.resolve(),
 
     signup: function (name, email, pass) {
