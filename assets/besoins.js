@@ -361,7 +361,7 @@
       p.set("loyer", r.max === 100000 ? "s" : (r.min === 100000 ? "m" : "l"));
     }
     var qs = p.toString();
-    return "index.html" + (qs ? "?" + qs : "") + "#catalogue";
+    return "biens.html" + (qs ? "?" + qs : "");
   }
 
   // bloc « être alerté » → enregistre un lead (type alerte) avec tous les critères

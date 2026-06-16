@@ -339,7 +339,8 @@ window.XEEXT.biensReady = (function () {
     return {
       id: r.id, segment: r.segment, titre: r.titre, ville: r.ville, dept: r.dept,
       surface: r.surface, loyer: r.loyer, dispo: r.dispo, dispoRank: r.dispo_rank || 0,
-      resume: r.resume || "", specs: r.specs || {}, photos: r.photos || [], images: r.images || []
+      resume: r.resume || "", specs: r.specs || {}, photos: r.photos || [], images: r.images || [],
+      created_at: r.created_at
     };
   }
   return fetch(cfg.SUPABASE_URL + "/rest/v1/biens?select=*&order=ordre.asc,created_at.asc", {

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var t=p||localStorage.getItem('xeext.theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title data-i18n="biens.meta.title">Nos biens — Xeext</title>
+<meta name="description" data-i18n-attr="content:biens.meta.desc" content="Tous les biens d'entreprise Xeext à louer : bureaux, commerces, logistique, terrains. Honoraires uniques de 5%." />
+<link rel="canonical" href="https://antoinehagry.github.io/Xeext/biens.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Xeext" />
+<meta property="og:title" content="Nos biens — Xeext" />
+<meta property="og:description" content="Tous les biens d'entreprise Xeext : bureaux, commerces, logistique, terrains." />
+<meta property="og:url" content="https://antoinehagry.github.io/Xeext/biens.html" />
+<meta property="og:image" content="https://antoinehagry.github.io/Xeext/assets/hero.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="assets/xeext.css" />
+<link rel="stylesheet" href="assets/components.css" />
+<link rel="stylesheet" href="assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg" />
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Aller au contenu</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <nav class="nav__inner" aria-label="Navigation principale">
+    <a class="brand" href="index.html"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
+    <ul class="nav__links">
+      <li><a href="biens.html" aria-current="page" data-i18n="nav.biens">Biens</a></li>
+      <li><a href="besoins.html" data-i18n="nav.besoins">Trouver mon bien</a></li>
+      <li><a href="index.html#simulateur" data-i18n="nav.honoraires">Honoraires</a></li>
+      <li><a href="index.html#contact" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <a class="nav__est" data-estimation href="index.html#proprietaires" data-i18n="nav.estimer">Estimer mon bien</a>
+    <a class="nav__cta" href="besoins.html" data-i18n="nav.besoins">Trouver mon bien</a>
+    <button class="nav__burger" aria-label="Menu">
+      <span class="burger-ico" aria-hidden="true"></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="bg-white section-pad" data-screen-label="Catalogue">
+  <section id="catalogue">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom: 36px">
+        <p class="eyebrow" data-i18n="cat.eyebrow">Biens à disposition</p>
+        <h2 class="h-section" data-i18n="cat.h2">Trouvez votre prochain espace.</h2>
+        <p class="lead mt-16" style="max-width:48ch" data-i18n-html="cat.intro">Pas le temps de tout parcourir ? <a class="link-chevron" href="besoins.html">Répondez à 5 questions, on vous propose les biens faits pour vous <span class="chev">›</span></a></p>
+      </div>
+
+      <div class="filters reveal" data-delay="1" role="group" aria-label="Filtres des biens">
+        <div class="chips" role="group" aria-label="Segment">
+          <button class="chip is-active" data-seg="Tous" aria-pressed="true" data-i18n="cat.seg.tous">Tous</button>
+          <button class="chip" data-seg="Bureaux" aria-pressed="false" data-i18n="cat.seg.bureaux">Bureaux</button>
+          <button class="chip" data-seg="Commerces" aria-pressed="false" data-i18n="cat.seg.commerces">Commerces</button>
+          <button class="chip" data-seg="Logistique" aria-pressed="false" data-i18n="cat.seg.logistique">Logistique</button>
+          <button class="chip" data-seg="Terrains" aria-pressed="false" data-i18n="cat.seg.terrains">Terrains</button>
+        </div>
+        <div class="selects">
+          <span class="select"><select id="f-ville" aria-label="Localisation"><option value="Toutes" data-i18n="cat.opt.villeAll">Toutes les villes</option></select></span>
+          <span class="select"><select id="f-surface" aria-label="Surface">
+            <option value="all" data-i18n="cat.opt.surfAll">Toutes surfaces</option>
+            <option value="s" data-i18n="cat.opt.surfS">Moins de 500 m²</option>
+            <option value="m" data-i18n="cat.opt.surfM">500 à 2 000 m²</option>
+            <option value="l" data-i18n="cat.opt.surfL">Plus de 2 000 m²</option>
+          </select></span>
+          <span class="select"><select id="f-loyer" aria-label="Loyer annuel">
+            <option value="all" data-i18n="cat.opt.loyerAll">Tous les loyers</option>
+            <option value="s" data-i18n="cat.opt.loyerS">Moins de 100 000 €</option>
+            <option value="m" data-i18n="cat.opt.loyerM">100 000 à 250 000 €</option>
+            <option value="l" data-i18n="cat.opt.loyerL">Plus de 250 000 €</option>
+          </select></span>
+          <span class="select"><select id="f-tri" aria-label="Trier">
+            <option value="pertinence" data-i18n="cat.opt.triPert">Trier : pertinence</option>
+            <option value="loyer-asc" data-i18n="cat.opt.triLoyerAsc">Loyer croissant</option>
+            <option value="loyer-desc" data-i18n="cat.opt.triLoyerDesc">Loyer décroissant</option>
+            <option value="surface-asc" data-i18n="cat.opt.triSurfAsc">Surface croissante</option>
+            <option value="surface-desc" data-i18n="cat.opt.triSurfDesc">Surface décroissante</option>
+          </select></span>
+        </div>
+      </div>
+
+      <p class="cat-count" id="cat-count" aria-live="polite">9 biens disponibles</p>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="index.html" style="font-size:19px"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
+        <p style="margin:10px 0 0; max-width: 32ch" data-i18n="footer.tagline">Conseil en immobilier d'entreprise. Bureaux, commerces, logistique, terrains.</p>
+      </div>
+      <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
+        <div style="display:grid; gap:10px">
+          <a href="biens.html" data-i18n="nav.biens">Biens</a>
+          <a href="besoins.html" data-i18n="nav.besoins">Trouver mon bien</a>
+          <a href="index.html#simulateur" data-i18n="nav.honoraires">Honoraires</a>
+        </div>
+        <div style="display:grid; gap:10px">
+          <a href="index.html#bareme" data-i18n="footer.bareme">Barème</a>
+          <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+          <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__legal">
+      <p data-i18n-html="footer.legal1"><strong>Xeext</strong> — Conseil en immobilier d'entreprise. Société exerçant l'activité de transaction sur immeubles et fonds de commerce dans le cadre de la loi n° 70-9 du 2 janvier 1970 (loi Hoguet).</p>
+      <p data-i18n-html="footer.legal2">Titulaire d'une carte professionnelle « Transactions sur immeubles et fonds de commerce (T) » délivrée par la CCI compétente — garantie financière et assurance de responsabilité civile professionnelle souscrites auprès d'un organisme agréé. Mentions légales complètes communiquées avant tout mandat. Données présentées à titre d'illustration.</p>
+      <p style="margin-top:14px"><a href="mentions-legales.html" data-i18n="footer.legalLink">Mentions légales</a> · <a href="confidentialite.html" data-i18n="footer.privacy">Politique de confidentialité</a></p>
+      <p style="margin-top:14px" data-i18n="footer.rights">© 2026 Xeext. Tous droits réservés.</p>
+      <p style="margin-top:6px" data-i18n="footer.brainup">Une Startup de Brain Up</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/biens.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/favoris.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
+<script src="assets/theme.js"></script>
+<script src="assets/social.js"></script>
+<script src="assets/fill.js"></script>
+<script src="assets/autocomplete.js"></script>
+<script src="assets/lead.js"></script>
+<script src="assets/catalogue.js"></script>
+</body>
+</html>
