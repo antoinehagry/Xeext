@@ -15,6 +15,7 @@ window.XEEXT_I18N = {
     "nav.besoins": "Find my space",
     "nav.honoraires": "Fees",
     "nav.contact": "Contact",
+    "nav.apropos": "About",
     "nav.estimer": "Value my property",
     "nav.voirbiens": "View properties",
     // Hero
@@ -128,6 +129,9 @@ window.XEEXT_I18N = {
     "home.seeAll": "View all properties",
     "biens.meta.title": "Our properties — Xeext",
     "biens.meta.desc": "All Xeext corporate properties to let: offices, retail, logistics, land. A single 5% fee.",
+    "apropos.meta.title": "About — Xeext",
+    "apropos.meta.desc": "Xeext, corporate real estate advisory reinvented at 5%. Our conviction, our values, our approach.",
+    "apropos.eyebrow": "About",
     "footer.legalBesoins": "<strong>Xeext</strong> — Corporate real estate advisory. Recommendations provided for guidance based on your answers. Information shown for illustration only.",
     "besoins.meta.title": "Find my space — Xeext",
     "besoins.meta.desc": "Answer 5 questions and get the corporate properties that match your needs: offices, retail, logistics, land.",

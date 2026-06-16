@@ -1,0 +1,155 @@
+/* ============================================================
+   Xeext — page « À propos »
+   Animations soignées : titre mot à mot, compteurs, tracé du X,
+   bandeau défilant, révélations décalées. Épure Apple conservée.
+   ============================================================ */
+
+/* ---------- Hero ---------- */
+.ap-hero { padding-top: clamp(72px, 12vw, 150px); padding-bottom: clamp(40px, 7vw, 80px); }
+.ap-hero .eyebrow { margin-bottom: 22px; }
+
+/* Titre révélé mot par mot (masque qui remonte) */
+.words { font-size: clamp(40px, 6.6vw, 92px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; }
+.word-mask { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 0.02em; }
+.word-mask > span {
+  display: inline-block;
+  transform: translateY(112%);
+  transition: transform .8s cubic-bezier(.16,.84,.44,1);
+  transition-delay: calc(var(--i, 0) * 0.055s);
+}
+.words.in .word-mask > span { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .word-mask > span { transform: none; transition: none; }
+}
+
+.ap-hero__sub { max-width: 40ch; margin-top: 26px; }
+
+/* ---------- Manifeste (section sombre, X tracé) ---------- */
+.manifesto { position: relative; overflow: hidden; }
+.manifesto__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: clamp(32px, 6vw, 88px);
+  align-items: center;
+}
+.xdraw { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
+.xdraw .tile {
+  fill: none;
+  stroke: rgba(255,255,255,0.14);
+  stroke-width: 2;
+}
+.xdraw .stroke {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: var(--len, 200);
+  stroke-dashoffset: var(--len, 200);
+  transition: stroke-dashoffset 1.1s cubic-bezier(.65,0,.35,1);
+}
+.xdraw .stroke.s2 { transition-delay: .28s; }
+.manifesto.in .xdraw .stroke { stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .xdraw .stroke { stroke-dashoffset: 0; transition: none; }
+}
+.manifesto__body p { font-size: clamp(19px, 2.1vw, 26px); line-height: 1.42; color: #e6e6ea; text-wrap: pretty; margin: 0; }
+.manifesto__body p + p { margin-top: 22px; }
+.manifesto__body .hl { color: #fff; font-weight: 600; }
+
+/* ---------- Compteurs / chiffres clés ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+}
+.stat { text-align: left; }
+.stat__num {
+  font-size: clamp(46px, 6.4vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.stat__num .u { font-size: 0.5em; letter-spacing: -0.02em; margin-left: 0.04em; }
+.stat__label { font-size: clamp(15px, 1.4vw, 17px); color: var(--text-2); margin-top: 14px; max-width: 22ch; line-height: 1.4; }
+.stat__rule { height: 2px; background: var(--accent); width: 0; transition: width .9s cubic-bezier(.16,.84,.44,1); margin-bottom: 22px; }
+.stats.in .stat__rule { width: 40px; }
+.stats.in .stat:nth-child(2) .stat__rule { transition-delay: .08s; }
+.stats.in .stat:nth-child(3) .stat__rule { transition-delay: .16s; }
+.stats.in .stat:nth-child(4) .stat__rule { transition-delay: .24s; }
+@media (prefers-reduced-motion: reduce) {
+  .stat__rule { width: 40px; transition: none; }
+}
+
+/* ---------- Valeurs ---------- */
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.value {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 38px 34px 42px;
+  transition: transform .35s cubic-bezier(.16,.84,.44,1), box-shadow .35s ease;
+}
+.value:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.value__n {
+  font-family: var(--mono);
+  font-size: 13px; color: var(--accent); font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.value__icon {
+  width: 46px; height: 46px; border-radius: 13px;
+  background: rgba(31,61,240,0.08);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--accent); margin: 20px 0 22px;
+}
+.value__icon svg { width: 24px; height: 24px; }
+.value h3 { font-size: 23px; letter-spacing: -0.02em; }
+.value p { font-size: 17px; color: var(--text-2); margin: 12px 0 0; line-height: 1.45; text-wrap: pretty; }
+
+/* ---------- Bandeau de villes (défilement continu) ---------- */
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee__track {
+  display: inline-flex; align-items: center; gap: 0;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__item {
+  font-size: clamp(34px, 5vw, 68px);
+  font-weight: 600; letter-spacing: -0.03em;
+  color: var(--text);
+  padding: 0 clamp(24px, 4vw, 56px);
+}
+.marquee__item .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
+.marquee__sep { color: var(--text-3); }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+}
+
+/* ---------- Équipe ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.member__photo { border-radius: var(--r-lg); overflow: hidden; }
+.member__photo .ph { border-radius: var(--r-lg); transition: transform .5s cubic-bezier(.16,.84,.44,1); }
+.member:hover .member__photo .ph { transform: scale(1.04); }
+.member__role { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin-top: 16px; }
+.member__desc { font-size: 14px; color: var(--text-2); margin-top: 4px; line-height: 1.4; }
+
+/* ---------- CTA final ---------- */
+.ap-cta { text-align: center; }
+.ap-cta .h-section { margin: 0 auto; max-width: 18ch; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 920px) {
+  .manifesto__grid { grid-template-columns: 1fr; gap: 40px; }
+  .xdraw { max-width: 220px; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
+  .values-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .stats { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+}
