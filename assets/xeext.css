@@ -469,6 +469,8 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height:
   opacity: 0.85;
   transition: opacity .2s ease;
 }
+/* Survol d'un lien : les autres s'estompent à 30 % (le lien survolé reste plein) */
+.nav__links:hover a { opacity: 0.3; }
 .nav__links a:hover { opacity: 1; }
 .nav__cta {
   font-size: 15px;
