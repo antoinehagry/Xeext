@@ -18,7 +18,11 @@
     if (dismissed) return;
     dismissed = true;
     el.classList.add("intro--out");
-    setTimeout(function () { el.remove(); }, 650);
+    setTimeout(function () {
+      el.remove();
+      // signale aux autres modules (ex. bandeau cookies) que l'intro est finie
+      try { window.dispatchEvent(new CustomEvent("xeext:intro-done")); } catch (e) {}
+    }, 650);
   }
 
   var box = document.getElementById("intro-lottie");

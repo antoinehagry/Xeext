@@ -55,7 +55,7 @@
     "@media (max-width:560px){.ck-bar{flex-direction:column;align-items:stretch;" +
     "gap:12px;bottom:12px;}.ck-ok{width:100%;}}";
 
-  function init() {
+  function build() {
     if (document.getElementById("ck-bar")) return;
     var t = T[lang()];
 
@@ -82,6 +82,21 @@
       bar.classList.remove("ck-in");
       setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 400);
     });
+  }
+
+  // L'accueil affiche une animation d'intro : on attend qu'elle soit terminée
+  // (évènement « xeext:intro-done » émis par intro.js). Sur les pages sans
+  // intro — ou si elle est déjà passée (classe intro-done) — affichage direct.
+  function introPending() {
+    return !!document.getElementById("intro") &&
+           !document.documentElement.classList.contains("intro-done");
+  }
+  function init() {
+    if (!introPending()) { build(); return; }
+    var done = false;
+    function go() { if (done) return; done = true; build(); }
+    window.addEventListener("xeext:intro-done", go);
+    setTimeout(go, 7000); // filet de sécurité si l'évènement n'arrive jamais
   }
 
   if (document.readyState !== "loading") init();
