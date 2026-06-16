@@ -356,7 +356,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 .panel-hono .vs { font-size: 13px; color: var(--text-3); margin-top: 6px; }
 .fiche-panel .btn { width: 100%; justify-content: center; }
 
-.fiche-resume { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.5; color: var(--text); max-width: 60ch; margin: 0; text-wrap: pretty; }
+.fiche-resume { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.5; color: var(--text); max-width: 60ch; margin: 0; text-wrap: pretty; white-space: pre-line; }
 
 .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 56px; }
 .specs-grid > div { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--hairline); }
