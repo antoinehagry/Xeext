@@ -365,6 +365,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 
 .map-ph { margin-top: 24px; }
 .map-ph iframe { display: block; width: 100%; aspect-ratio: 21 / 9; border: 0; border-radius: var(--r-lg); }
+.map-gl { width: 100%; aspect-ratio: 21 / 9; border-radius: var(--r-lg); overflow: hidden; }
 .reminder-band {
   background: var(--gray-bg);
   border-radius: var(--r-lg);

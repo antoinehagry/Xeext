@@ -190,17 +190,62 @@
   function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
   function setMeta(sel, content) { var el = document.head.querySelector(sel); if (el) el.setAttribute("content", content); }
 
-  // Carte OpenStreetMap (iframe embed, sans clé). Repli sur le placeholder
-  // rayé si la ville n'a pas de coordonnées connues.
+  // Carte de localisation : Mapbox GL (interactif) si un token est configuré dans
+  // assets/config.js, sinon repli OpenStreetMap (sans clé). Centrée sur la ville
+  // (adresse exacte communiquée sur demande). Pas de coordonnées → pas de carte.
   function renderMap(b) {
     var holder = document.querySelector(".map-ph");
     var c = window.XEEXT_VILLES_COORDS && window.XEEXT_VILLES_COORDS[b.ville];
     if (!holder || !c) return;
-    var lat = c[0], lon = c[1], dLat = 0.03, dLon = 0.05;
+    var lat = c[0], lon = c[1];
+    var token = (window.XEEXT_CONFIG || {}).MAPBOX_TOKEN;
+    if (token) mapbox(holder, lon, lat, b.ville, token);
+    else osm(holder, lon, lat, b.ville);
+  }
+
+  function osm(holder, lon, lat, ville) {
+    var dLat = 0.03, dLon = 0.05;
     var bbox = [lon - dLon, lat - dLat, lon + dLon, lat + dLat].join("%2C");
     var src = "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox +
       "&layer=mapnik&marker=" + lat + "%2C" + lon;
-    holder.innerHTML = '<iframe title="Carte — ' + b.ville + '" loading="lazy" src="' + src + '"></iframe>';
+    holder.innerHTML = '<iframe title="Carte — ' + ville + '" loading="lazy" src="' + src + '"></iframe>';
+  }
+
+  // charge la librairie Mapbox GL (CSS + JS) une seule fois, en différé
+  var mapboxQueue;
+  function loadMapbox(cb) {
+    if (window.mapboxgl) { cb(true); return; }
+    if (mapboxQueue) { mapboxQueue.push(cb); return; }
+    mapboxQueue = [cb];
+    var base = "https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl";
+    var css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = base + ".css";
+    document.head.appendChild(css);
+    var js = document.createElement("script");
+    js.src = base + ".js";
+    js.onload = function () { mapboxQueue.forEach(function (f) { f(true); }); mapboxQueue = null; };
+    js.onerror = function () { mapboxQueue.forEach(function (f) { f(false); }); mapboxQueue = null; };
+    document.head.appendChild(js);
+  }
+
+  function mapbox(holder, lon, lat, ville, token) {
+    holder.innerHTML = '<div class="map-gl" id="fiche-map"></div>';
+    loadMapbox(function (ok) {
+      if (!ok || !window.mapboxgl) { osm(holder, lon, lat, ville); return; } // repli si échec
+      try {
+        window.mapboxgl.accessToken = token;
+        var dark = document.documentElement.getAttribute("data-theme") === "dark";
+        var map = new window.mapboxgl.Map({
+          container: "fiche-map",
+          style: "mapbox://styles/mapbox/standard",
+          center: [lon, lat], zoom: 13, pitch: 45, cooperativeGestures: true,
+          config: { basemap: { lightPreset: dark ? "night" : "day" } } // jour/nuit selon le thème
+        });
+        map.addControl(new window.mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+        var accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#1f3df0";
+        new window.mapboxgl.Marker({ color: accent }).setLngLat([lon, lat]).addTo(map);
+      } catch (e) { osm(holder, lon, lat, ville); }
+    });
   }
 
   // attendre le chargement des biens (Supabase) avant de rendre la fiche
