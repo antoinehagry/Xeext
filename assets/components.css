@@ -436,6 +436,10 @@ input[type="range"].sim-range::-moz-range-thumb {
   .gallery--mosaic .g-cell:not(:first-child) { display: none; }
   .gallery--mosaic .g-cell:first-child { grid-row: auto !important; grid-column: auto !important; }
 
+  /* Mobile : carte (fiche) et photo hero (accueil) en format carré 1/1 */
+  .hero .ph--wide { aspect-ratio: 1 / 1; }
+  .map-ph iframe, .map-gl, .map-ph .ph--wide { aspect-ratio: 1 / 1; }
+
   /* Barème : cellules resserrées pour tenir sur l'écran */
   .bareme th, .bareme td { padding: 13px 9px; }
   .bareme thead th { font-size: 12px; }
