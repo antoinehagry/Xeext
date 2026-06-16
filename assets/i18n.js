@@ -177,6 +177,7 @@ window.XEEXT_I18N = {
     "fiche.writeAdvisor": "Write to an advisor",
     "fiche.simOther": "Simulate another rent <span class=\"chev\">›</span>",
     "fiche.alsoSee": "Also worth a look",
+    "fiche.allPhotos": "Show all {n} photos",
     // Trouver mon bien (questionnaire)
     "b.act.bureaux": "Offices & services",       "b.acth.bureaux": "Consulting, agency, tech, finance…",
     "b.act.sante": "Health & professions",       "b.acth.sante": "Medical, legal, advisory practice",
@@ -449,6 +450,7 @@ window.XEEXT_I18N = {
     "fiche.q.loc": "Localisation",
     "fiche.savePre": "soit",
     "fiche.saveSuf": "d'économie face à un conseil à 20 %",
+    "fiche.allPhotos": "Voir les {n} photos",
     "b.act.bureaux": "Bureaux & services",       "b.acth.bureaux": "Conseil, agence, tech, finance…",
     "b.act.sante": "Santé & professions libérales", "b.acth.sante": "Cabinet médical, juridique, expertise",
     "b.act.commerce": "Commerce & boutique",     "b.acth.commerce": "Vente au détail, showroom",

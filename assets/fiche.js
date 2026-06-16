@@ -29,24 +29,13 @@
     setText("f-ville", b.ville + " (" + b.dept + ")");
     setText("f-resume", b.resume);
 
-    // Galerie : photos réelles si disponibles, sinon placeholders rayés
+    // Galerie : grande photo + miniatures (ou placeholder rayé si aucune photo)
     var gal = document.getElementById("f-gallery");
     var urls = X.galleryUrls(b);
-    var slots = Math.max(urls.length, urls.length ? 0 : b.photos.length);
-    var items = [];
-    for (var gi = 0; gi < slots; gi++) {
-      var ratio = gi === 0 ? "ph--16x9" : "ph--4x3";
-      var desc = b.photos[gi] || b.titre;
-      items.push('<div class="ph ' + ratio + '">' + X.imgTag(urls[gi], desc, gi === 0) +
-        '<span class="ph__label">PHOTO — ' + desc + '</span></div>');
-    }
-    gal.innerHTML = items.join("");
-
-    // Lightbox : clic sur une photo de la galerie = agrandissement plein écran
     var photos = urls
       .map(function (u, i) { return { url: u, alt: b.photos[i] || b.titre }; })
       .filter(function (p) { return p.url; });
-    setupLightbox(gal, photos);
+    buildGallery(gal, photos, b);
 
     // Panneau loyer
     document.getElementById("f-loyer").innerHTML =
@@ -118,15 +107,47 @@
     });
   }
 
-  // Agrandissement des photos : clic sur une image de la galerie → overlay plein
-  // écran avec navigation (‹ ›, flèches), compteur, fermeture (✕, Échap, fond).
-  function setupLightbox(gal, photos) {
-    if (!photos.length) return;
-    gal.querySelectorAll(".ph__img").forEach(function (img, i) {
-      img.classList.add("is-zoomable");
-      img.addEventListener("click", function () { open(i); });
-    });
+  // Galerie « mosaïque » façon Airbnb : 1 grande photo + jusqu'à 4 vignettes,
+  // coins arrondis, disposition adaptée au nombre de photos. Un clic sur une
+  // photo (ou « Voir toutes les photos ») ouvre la lightbox plein écran.
+  // Placeholder rayé si aucune vraie photo.
+  function buildGallery(gal, photos, b) {
+    if (!photos.length) {
+      gal.className = "gallery gallery--empty";
+      gal.innerHTML = '<div class="ph ph--16x9"><span class="ph__label">PHOTO — ' + (b.photos[0] || b.titre) + '</span></div>';
+      return;
+    }
+    var shown = Math.min(photos.length, 5);  // au plus 1 grande + 4 vignettes
+    gal.className = "gallery gallery--mosaic g-" + shown;
 
+    var cells = "";
+    for (var i = 0; i < shown; i++) {
+      var alt = (photos[i].alt || b.titre).replace(/"/g, "&quot;");
+      cells += '<figure class="g-cell"><img src="' + photos[i].url + '" alt="' + alt + '" ' +
+        'data-i="' + i + '" loading="' + (i === 0 ? "eager" : "lazy") + '" ' +
+        'onerror="this.style.visibility=\'hidden\'"></figure>';
+    }
+    // bouton « voir toutes les photos » (coin bas-droit), comme sur Airbnb
+    var allBtn = photos.length > 1
+      ? '<button type="button" class="gallery__all">' +
+          '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor">' +
+            '<rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/>' +
+            '<rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>' +
+          '<span>' + t("fiche.allPhotos").replace("{n}", photos.length) + '</span>' +
+        '</button>'
+      : "";
+    gal.innerHTML = cells + allBtn;
+
+    var lb = makeLightbox(photos);
+    gal.querySelectorAll(".g-cell img").forEach(function (img) {
+      img.addEventListener("click", function () { lb.open(+img.getAttribute("data-i")); });
+    });
+    var all = gal.querySelector(".gallery__all");
+    if (all) all.addEventListener("click", function () { lb.open(0); });
+  }
+
+  // Lightbox plein écran : navigation (‹ ›, flèches, swipe), compteur, fermeture.
+  function makeLightbox(photos) {
     var box, imgEl, countEl, idx = 0;
     function build() {
       box = document.createElement("div");
@@ -184,6 +205,7 @@
       else if (e.key === "ArrowLeft") go(-1);
       else if (e.key === "ArrowRight") go(1);
     }
+    return { open: open };
   }
 
   function row(dt, dd) { return '<div><dt>' + dt + '</dt><dd>' + dd + '</dd></div>'; }
