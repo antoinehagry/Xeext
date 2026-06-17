@@ -39,11 +39,11 @@
 
     // Panneau loyer
     document.getElementById("f-loyer").innerHTML =
-      X.nombre(b.loyer) + ' €<small>par an, HT-HC · ' + m2 + ' €/m²/an</small>';
+      X.money(b.loyer) + '<small>par an, HT-HC · ' + X.rentPerArea(b) + '</small>';
 
     // Données rapides
     document.getElementById("f-quick").innerHTML =
-      row(t("cat.surface"), X.nombre(b.surface) + " m²") +
+      row(t("cat.surface"), X.surface(b.surface)) +
       row(t("fiche.q.segment"), t("seg." + b.segment)) +
       row(t("fiche.q.loc"), b.ville + " (" + b.dept + ")") +
       row(t("cat.dispo"), b.dispo);
@@ -57,7 +57,7 @@
     // Caractéristiques détaillées
     var specs = document.getElementById("f-specs");
     specs.innerHTML = Object.keys(b.specs).map(function (k) {
-      return '<div><dt>' + k + '</dt><dd>' + b.specs[k] + '</dd></div>';
+      return '<div><dt>' + k + '</dt><dd>' + X.convSurf(b.specs[k]) + '</dd></div>';
     }).join("");
 
     // Localisation : carte OpenStreetMap (sans clé) centrée sur la ville
@@ -101,8 +101,8 @@
         '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div></div>' +
         '<div class="bien__body"><h3 class="bien__title">' + b.titre + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
-        '<dl class="bien__data"><div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
-        '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.nombre(b.loyer) + ' ' + t("cat.peran") + '</dd></div></dl></div>';
+        '<dl class="bien__data"><div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.surface(b.surface) + '</dd></div>' +
+        '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.rent(b) + '</dd></div></dl></div>';
       grid.appendChild(a);
     });
   }

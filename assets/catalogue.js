@@ -24,8 +24,8 @@
         '<h3 class="bien__title">' + b.titre + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
         '<dl class="bien__data">' +
-          '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.nombre(b.surface) + ' m²</dd></div>' +
-          '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.nombre(b.loyer) + ' ' + t("cat.peran") + '<span class="bien__m2"> · ' + m2 + ' ' + t("cat.perm2an") + '</span></dd></div>' +
+          '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.surface(b.surface) + '</dd></div>' +
+          '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.rent(b) + '<span class="bien__m2"> · ' + X.rentPerArea(b) + '</span></dd></div>' +
           '<div><dt>' + t("cat.dispo") + '</dt><dd>' + b.dispo + '</dd></div>' +
         '</dl>' +
       '</div>';
@@ -162,6 +162,32 @@
     document.getElementById("f-surface").addEventListener("change", function () { state.surface = this.value; update(); });
     document.getElementById("f-loyer").addEventListener("change", function () { state.loyer = this.value; update(); });
     document.getElementById("f-tri").addEventListener("change", function () { state.tri = this.value; update(); });
+
+    // Libellés du filtre « surface » dans l'unité active (la logique reste en m²)
+    if (X.unit() === "sqft") {
+      var sel = document.getElementById("f-surface");
+      var nf = X._nfSurf();
+      var lab = {
+        s: "< " + X.surface(500),
+        m: nf.format(Math.round(500 * X.SQFT_PER_M2)) + " – " + X.surface(2000),
+        l: "> " + X.surface(2000)
+      };
+      if (sel) Array.prototype.forEach.call(sel.options, function (o) {
+        if (lab[o.value]) o.textContent = lab[o.value];
+      });
+    }
+    // Libellés du filtre « loyer » dans la devise active (la logique reste en EUR)
+    if (X.currency() !== "EUR") {
+      var selL = document.getElementById("f-loyer");
+      var labL = {
+        s: "< " + X.money(100000),
+        m: X.money(100000) + " – " + X.money(250000),
+        l: "> " + X.money(250000)
+      };
+      if (selL) Array.prototype.forEach.call(selL.options, function (o) {
+        if (labL[o.value]) o.textContent = labL[o.value];
+      });
+    }
 
     applyFromUrl();
     reflectUI();

@@ -260,16 +260,74 @@ window.XEEXT_BIENS = [
 
 /* Helpers partagés ----------------------------------------- */
 window.XEEXT = {
-  euros(n) {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency", currency: "EUR", maximumFractionDigits: 0
-    }).format(n);
-  },
   nombre(n) {
     return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(n);
   },
+
+  /* ----- Devises : conversion depuis l'EUR (base) vers la devise active ----- */
+  CUR: {
+    EUR: { sym: "€", loc: "fr-FR" }, USD: { sym: "$", loc: "en-US" },
+    GBP: { sym: "£", loc: "en-GB" }, CHF: { sym: "CHF", loc: "de-CH" },
+    JPY: { sym: "¥", loc: "ja-JP" }
+  },
+  currency() {
+    try { var c = localStorage.getItem("xeext.currency"); if (this.CUR[c]) return c; } catch (e) {}
+    return "EUR";   // défaut : devise de référence
+  },
+  setCurrency(c) {
+    try { localStorage.setItem("xeext.currency", c); } catch (e) {}
+    location.reload();
+  },
+  // montant en EUR → formaté dans la devise active (taux dans _rates)
+  money(eur) {
+    var c = this.currency(), info = this.CUR[c] || this.CUR.EUR;
+    var rate = (this._rates && this._rates[c]) || 1;
+    return new Intl.NumberFormat(info.loc, { style: "currency", currency: c, maximumFractionDigits: 0 }).format(eur * rate);
+  },
+  // compat : euros() = montant déjà en EUR, formaté dans la devise active
+  euros(n) { return this.money(n); },
   loyerM2(b) { return Math.round(b.loyer / b.surface); },
   honoraires(b) { return Math.round(b.loyer * 0.05); },
+
+  /* ----- Unités de surface : m² ⇄ sq ft (les données sont toujours en m²) ----- */
+  SQFT_PER_M2: 10.7639,
+  unit() {
+    try { var u = localStorage.getItem("xeext.unit"); if (u === "m2" || u === "sqft") return u; } catch (e) {}
+    return (this.lang && this.lang() === "en") ? "sqft" : "m2";   // défaut selon la langue
+  },
+  setUnit(u) {
+    try { localStorage.setItem("xeext.unit", u); } catch (e) {}
+    location.reload();   // tout se re-rend dans la nouvelle unité
+  },
+  _nfSurf() {
+    var ln = (this.lang && this.lang()) || "fr";
+    return new Intl.NumberFormat(ln === "en" ? "en-US" : "fr-FR", { maximumFractionDigits: 0 });
+  },
+  // surface formatée dans l'unité active (entrée en m²)
+  surface(m2) {
+    return this.unit() === "sqft"
+      ? this._nfSurf().format(Math.round(m2 * this.SQFT_PER_M2)) + " sq ft"
+      : this._nfSurf().format(m2) + " m²";
+  },
+  // convertit les « N m² » présents dans une chaîne libre (caractéristiques)
+  convSurf(str) {
+    if (str == null || this.unit() !== "sqft") return str;
+    var self = this;
+    return String(str).replace(/(\d[\d.,   ]*)\s*m²/g, function (m, num) {
+      var n = parseFloat(num.replace(/[^\d.]/g, ""));
+      return isFinite(n) ? self._nfSurf().format(Math.round(n * self.SQFT_PER_M2)) + " sq ft" : m;
+    });
+  },
+  areaUnit() { return this.unit() === "sqft" ? "sq ft" : "m²"; },
+  // loyer annuel formaté « 75 600 €/an » (devise active + période traduite)
+  rent(b) {
+    return this.money(b.loyer) + (this.t ? this.t("cat.peran") : "/an");
+  },
+  // loyer rapporté à la surface « 180 €/m²/an » (devise + unité de surface actives)
+  rentPerArea(b) {
+    var area = this.unit() === "sqft" ? b.surface * this.SQFT_PER_M2 : b.surface;
+    return this.money(b.loyer / area) + "/" + this.areaUnit() + (this.t ? this.t("cat.peran") : "/an");
+  },
   bySegment(seg) {
     return seg === "Tous" ? window.XEEXT_BIENS
       : window.XEEXT_BIENS.filter(b => b.segment === seg);
@@ -355,4 +413,26 @@ window.XEEXT.biensReady = (function () {
       }
     })
     .catch(function () { /* réseau indisponible : on garde les biens par défaut */ });
+})();
+
+/* Taux de change (base EUR). Repli fixe garanti (hors-ligne), rafraîchi une fois
+   par jour depuis l'API Frankfurter (taux BCE, gratuite, sans clé) et mis en cache.
+   money() lit window.XEEXT._rates de façon synchrone (cache → repli). */
+window.XEEXT._rates = { EUR: 1, USD: 1.08, GBP: 0.85, CHF: 0.95, JPY: 170 };
+(function () {
+  var KEY = "xeext.rates";
+  var today = new Date().toISOString().slice(0, 10);
+  var cached = null;
+  try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+  if (cached && cached.rates) window.XEEXT._rates = cached.rates;   // dispo immédiatement
+  if (cached && cached.date === today) return;                      // déjà à jour aujourd'hui
+  fetch("https://api.frankfurter.app/latest?from=EUR&to=USD,GBP,CHF,JPY")
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || !d.rates) return;
+      var rr = { EUR: 1, USD: d.rates.USD, GBP: d.rates.GBP, CHF: d.rates.CHF, JPY: d.rates.JPY };
+      window.XEEXT._rates = rr;
+      try { localStorage.setItem(KEY, JSON.stringify({ date: today, rates: rr })); } catch (e) {}
+    })
+    .catch(function () { /* hors-ligne : on garde le repli / cache */ });
 })();

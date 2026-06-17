@@ -313,8 +313,8 @@
         '<h3 class="bien__title">' + b.titre + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
         '<dl class="bien__data">' +
-          '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + nb(b.surface) + ' m²</dd></div>' +
-          '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + nb(b.loyer) + ' ' + t("cat.peran") + '<span class="bien__m2"> · ' + m2 + ' ' + t("cat.perm2an") + '</span></dd></div>' +
+          '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.surface(b.surface) + '</dd></div>' +
+          '<div><dt>' + t("cat.loyer") + '</dt><dd class="tnum">' + X.rent(b) + '<span class="bien__m2"> · ' + X.rentPerArea(b) + '</span></dd></div>' +
           '<div><dt>' + t("cat.dispo") + '</dt><dd>' + b.dispo + '</dd></div>' +
         '</dl>' +
       '</div></a>';

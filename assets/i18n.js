@@ -186,7 +186,7 @@ window.XEEXT_I18N = {
     "cat.surface": "Area",
     "cat.loyer": "Rent",
     "cat.dispo": "Availability",
-    "cat.peran": "€/yr",
+    "cat.peran": "/yr",
     "cat.perm2an": "€/m²/yr",
     "cat.countSingular": "property available",
     "cat.countPlural": "properties available",
@@ -476,7 +476,7 @@ window.XEEXT_I18N = {
     "cat.surface": "Surface",
     "cat.loyer": "Loyer",
     "cat.dispo": "Disponibilité",
-    "cat.peran": "€/an",
+    "cat.peran": "/an",
     "cat.perm2an": "€/m²/an",
     "cat.countSingular": "bien disponible",
     "cat.countPlural": "biens disponibles",
@@ -705,20 +705,73 @@ window.XEEXT_I18N = {
     }
   }
 
+  // Menu de préférences : bouton « globe » → dropdown 3 colonnes
+  // (Langue / Unité / Devise). Unité + Devise n'apparaissent que là où les
+  // helpers de biens sont chargés (pages avec des prix/surfaces).
   function injectToggle() {
     var inner = document.querySelector(".nav__inner");
-    if (!inner || document.getElementById("lang-toggle")) return;
+    if (!inner || document.getElementById("prefs-toggle")) return;
     var host = inner.querySelector(".nav__menu") || inner;
-    var btn = document.createElement("button");
-    btn.id = "lang-toggle";
-    btn.type = "button";
-    btn.className = "lang-toggle";
-    btn.setAttribute("aria-label", lang === "fr" ? "Switch to English" : "Passer en français");
-    btn.innerHTML =
-      '<span' + (lang === "fr" ? ' class="is-active"' : "") + '>FR</span>' +
-      '<span' + (lang === "en" ? ' class="is-active"' : "") + '>EN</span>';
-    btn.addEventListener("click", function () { setLang(lang === "fr" ? "en" : "fr"); });
-    host.appendChild(btn);
+    var X = window.XEEXT;
+    var hasBiens = X && typeof X.money === "function";
+    var fr = lang === "fr";
+    var H = fr ? { lang: "Langue", unit: "Unité", cur: "Devise", aria: "Préférences" }
+               : { lang: "Language", unit: "Unit", cur: "Currency", aria: "Preferences" };
+
+    function col(title, opts) {
+      var h = '<div class="prefs-col"><h4>' + title + '</h4>';
+      opts.forEach(function (o) {
+        h += '<button type="button" class="prefs-opt' + (o.active ? " is-active" : "") +
+             '" data-k="' + o.k + '">' + o.label + '</button>';
+      });
+      return h + '</div>';
+    }
+
+    var cols = col(H.lang, [
+      { k: "lang:fr", label: "Français", active: lang === "fr" },
+      { k: "lang:en", label: "English", active: lang === "en" }
+    ]);
+    if (hasBiens) {
+      var u = X.unit(), cur = X.currency();
+      cols += col(H.unit, [
+        { k: "unit:m2", label: "m²", active: u === "m2" },
+        { k: "unit:sqft", label: "sq ft", active: u === "sqft" }
+      ]);
+      cols += col(H.cur, Object.keys(X.CUR).map(function (code) {
+        return { k: "cur:" + code, label: X.CUR[code].sym + "&nbsp;&nbsp;" + code, active: cur === code };
+      }));
+    }
+
+    var globe = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 0 1 5.08 16zm2.95-8H5.08a7.987 7.987 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>';
+
+    var wrap = document.createElement("div");
+    wrap.className = "prefs";
+    wrap.innerHTML =
+      '<button type="button" id="prefs-toggle" class="prefs-btn" aria-label="' + H.aria + '" aria-expanded="false">' + globe + '</button>' +
+      '<div class="prefs-menu" id="prefs-menu" role="menu">' + cols + '</div>';
+    // Inséré entre l'icône du compte et le bouton de thème (juste avant ce dernier)
+    var themeBtn = document.getElementById("theme-toggle");
+    if (themeBtn && themeBtn.parentNode === host) host.insertBefore(wrap, themeBtn);
+    else host.appendChild(wrap);
+
+    var btn = wrap.querySelector("#prefs-toggle");
+    var menu = wrap.querySelector("#prefs-menu");
+    function close() { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); document.removeEventListener("click", onDoc); }
+    function open() { menu.classList.add("open"); btn.setAttribute("aria-expanded", "true"); setTimeout(function () { document.addEventListener("click", onDoc); }, 0); }
+    function onDoc(e) { if (!wrap.contains(e.target)) close(); }
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (menu.classList.contains("open")) close(); else open();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    menu.addEventListener("click", function (e) {
+      var o = e.target.closest && e.target.closest(".prefs-opt");
+      if (!o) return;
+      var kv = o.getAttribute("data-k").split(":"), kind = kv[0], val = kv[1];
+      if (kind === "lang") { if (val !== lang) setLang(val); else close(); }
+      else if (kind === "unit" && hasBiens) { if (X.unit() !== val) X.setUnit(val); else close(); }
+      else if (kind === "cur" && hasBiens) { if (X.currency() !== val) X.setCurrency(val); else close(); }
+    });
   }
 
   function init() {

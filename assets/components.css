@@ -528,18 +528,40 @@ input[type="range"].sim-range::-moz-range-thumb {
 .theme-toggle svg { width: 18px; height: 18px; }
 @media (max-width: 1024px) { .theme-toggle { margin-top: 14px; } }
 
-/* Bouton de langue FR / EN (assorti au bouton de thème) */
-.lang-toggle {
-  flex: 0 0 auto; height: 34px; border: none; cursor: pointer;
-  background: var(--fill); border-radius: var(--r-pill); padding: 0 11px;
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: .02em;
-  transition: background .2s ease;
+/* Menu de préférences : bouton « globe » + dropdown (Langue / Unité / Devise) */
+.prefs { position: relative; flex: 0 0 auto; }
+.prefs-btn {
+  height: 34px; width: 34px; padding: 0; border: none; cursor: pointer;
+  background: var(--fill); border-radius: var(--r-pill); color: var(--text-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s ease, color .2s ease;
 }
-.lang-toggle:hover { background: var(--fill-hover); }
-.lang-toggle span { color: var(--text-3); transition: color .2s ease; }
-.lang-toggle span.is-active { color: var(--text); }
-@media (max-width: 1024px) { .lang-toggle { margin-top: 14px; align-self: flex-start; } }
+.prefs-btn:hover { background: var(--fill-hover); color: var(--text); }
+.prefs-btn svg { display: block; }
+.prefs-menu {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 1100;
+  display: none; grid-auto-flow: column; grid-auto-columns: max-content; gap: 2px 26px;
+  background: var(--white); border: 1px solid var(--hairline);
+  border-radius: var(--r-md); box-shadow: var(--shadow-lg); padding: 16px 18px;
+}
+.prefs-menu.open { display: grid; }
+.prefs-col h4 {
+  margin: 0 0 8px; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--text-3);
+}
+.prefs-opt {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; font-family: inherit; font-size: 14px;
+  color: var(--text-2); padding: 7px 12px; border-radius: 9px; white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.prefs-opt:hover { background: var(--fill); color: var(--text); }
+.prefs-opt.is-active { background: var(--fill); color: var(--text); font-weight: 600; }
+@media (max-width: 1024px) {
+  .prefs { margin-top: 14px; align-self: flex-start; }
+  .prefs-menu { right: auto; left: 0; }
+}
+@media (max-width: 560px) { .prefs-menu { grid-auto-flow: row; } }
 
 /* compatibilité affichée sur les cards de résultats */
 .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
