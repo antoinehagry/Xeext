@@ -526,10 +526,9 @@ input[type="range"].sim-range::-moz-range-thumb {
 }
 .theme-toggle:hover { background: var(--fill-hover); }
 .theme-toggle svg { width: 18px; height: 18px; }
-@media (max-width: 1024px) { .theme-toggle { margin-top: 14px; } }
 
-/* Menu de préférences : bouton « globe » + dropdown (Langue / Unité / Devise) */
-.prefs { position: relative; flex: 0 0 auto; }
+/* Groupe « globe + thème » + menu de préférences (Langue / Unité / Devise) */
+.nav__controls { position: relative; display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; }
 .prefs-btn {
   height: 34px; width: 34px; padding: 0; border: none; cursor: pointer;
   background: var(--fill); border-radius: var(--r-pill); color: var(--text-2);
@@ -558,10 +557,22 @@ input[type="range"].sim-range::-moz-range-thumb {
 .prefs-opt:hover { background: var(--fill); color: var(--text); }
 .prefs-opt.is-active { background: var(--fill); color: var(--text); font-weight: 600; }
 @media (max-width: 1024px) {
-  .prefs { margin-top: 14px; align-self: stretch; width: 100%; }
-  /* Mobile : dropdown pleine largeur, intégré au flux du panneau du menu */
+  /* Mobile : profil + globe + thème alignés sur une ligne et 1,5x plus gros */
+  .nav__controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    width: 100%; margin-top: 14px;
+  }
+  .prefs-btn, .nav__controls .theme-toggle, .nav__controls .avatar { width: 51px; height: 51px; }
+  .prefs-btn svg { width: 30px; height: 30px; }
+  .nav__controls .theme-toggle svg { width: 27px; height: 27px; }
+  /* le compte rejoint la ligne (au lieu d'occuper toute la largeur) */
+  .nav__controls .nav__account { width: auto; margin-top: 0; }
+  .nav__controls .btn-signin {
+    display: inline-flex; align-items: center; width: auto; height: 51px; padding: 0 18px;
+  }
+  /* Dropdown des préférences en pleine largeur, sous les boutons (dans le flux) */
   .prefs-menu {
-    position: static; width: 100%; margin-top: 10px;
+    position: static; order: 4; flex-basis: 100%; width: 100%; margin-top: 4px;
     grid-auto-flow: row; grid-template-columns: repeat(3, 1fr);
     gap: 4px 14px; box-shadow: none;
   }
