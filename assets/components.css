@@ -558,10 +558,15 @@ input[type="range"].sim-range::-moz-range-thumb {
 .prefs-opt:hover { background: var(--fill); color: var(--text); }
 .prefs-opt.is-active { background: var(--fill); color: var(--text); font-weight: 600; }
 @media (max-width: 1024px) {
-  .prefs { margin-top: 14px; align-self: flex-start; }
-  .prefs-menu { right: auto; left: 0; }
+  .prefs { margin-top: 14px; align-self: stretch; width: 100%; }
+  /* Mobile : dropdown pleine largeur, intégré au flux du panneau du menu */
+  .prefs-menu {
+    position: static; width: 100%; margin-top: 10px;
+    grid-auto-flow: row; grid-template-columns: repeat(3, 1fr);
+    gap: 4px 14px; box-shadow: none;
+  }
 }
-@media (max-width: 560px) { .prefs-menu { grid-auto-flow: row; } }
+@media (max-width: 560px) { .prefs-menu { grid-template-columns: 1fr; } }
 
 /* compatibilité affichée sur les cards de résultats */
 .match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
