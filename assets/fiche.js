@@ -58,7 +58,7 @@
     // Caractéristiques détaillées
     var specs = document.getElementById("f-specs");
     specs.innerHTML = Object.keys(b.specs).map(function (k) {
-      return '<div><dt>' + k + '</dt><dd>' + X.convSurf(b.specs[k]) + '</dd></div>';
+      return '<div><dt>' + X.specKey(k) + '</dt><dd>' + X.convSurf(X.specVal(b.specs[k])) + '</dd></div>';
     }).join("");
 
     // Localisation : carte OpenStreetMap (sans clé) centrée sur la ville

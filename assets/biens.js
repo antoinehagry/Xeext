@@ -378,6 +378,104 @@ window.XEEXT = {
     return b.resume || "";
   },
 
+  /* ----- Caractéristiques : clés (liste connue) + valeurs (phrases) FR→EN ----- */
+  _specKeys: {
+    "Configuration": "Layout", "Étage": "Floor", "Hauteur sous plafond": "Ceiling height",
+    "Stationnement": "Parking", "DPE": "EPC", "État": "Condition", "Chauffage": "Heating",
+    "Climatisation": "Air conditioning", "Fibre": "Fibre", "Restauration": "Dining",
+    "Sécurité": "Security", "Certification": "Certification", "Surface utile": "Usable area",
+    "Disponibilité": "Availability", "Linéaire de vitrine": "Frontage width", "Réserve": "Storage",
+    "Emplacement": "Location", "Devanture": "Storefront", "Activités": "Permitted uses",
+    "Classe": "Class", "Hauteur libre": "Clear height", "Quais": "Loading docks",
+    "Résistance au sol": "Floor loading", "Sprinklage": "Sprinklers",
+    "Bureaux / mezzanine": "Offices / mezzanine", "Site": "Site", "Zonage PLU": "Zoning",
+    "Viabilisation": "Utilities", "Constructibilité": "Buildable area",
+    "Nature du terrain": "Ground type", "Accès poids lourds": "HGV access",
+    "Disposition": "Type", "Pollution": "Contamination", "Surface commerciale": "Retail area",
+    "Surface entrepôt": "Warehouse area", "Surface totale": "Total area",
+    "Dont bureaux": "Of which offices", "Surface du terrain": "Plot area", "Bureaux": "Offices",
+    "Accès": "Access", "Espaces verts": "Green spaces", "Façade": "Facade",
+    "Flux": "Footfall", "Parc": "Grounds", "Verrière": "Glazed roof"
+  },
+  specKey(k) {
+    if (!(this.lang && this.lang() === "en")) return k;
+    return this._specKeys[k] || this._gloss(String(k));   // clé connue, sinon traduction mot à mot
+  },
+  _specVals: [
+    // phrases (les plus spécifiques d'abord)
+    [/Mixte open space \/ cloisonné/gi, "Mixed open-plan / partitioned"],
+    [/Plateaux divisibles/gi, "Divisible floors"], [/Plateau ouvert/gi, "Open floor"], [/Plateau unique/gi, "Single floor"],
+    [/Bureaux cloisonnés/gi, "Partitioned offices"],
+    [/Pompe à chaleur réversible/gi, "Reversible heat pump"], [/Réseau de chaleur urbain/gi, "District heating"],
+    [/GTB centralisée/gi, "Centralised BMS"], [/Plafond rayonnant/gi, "Radiant ceiling"],
+    [/Très haut débit raccordé/gi, "High-speed connected"], [/Éligible fibre/gi, "Fibre-ready"],
+    [/RIE sur place/gi, "On-site staff canteen"], [/RIE à proximité/gi, "Staff canteen nearby"],
+    [/RIE à (\d+)\s*m\b/gi, "Staff canteen $1 m away"], [/\bRIE\b/g, "Staff canteen"],
+    [/Gardiennage 24\/7/gi, "24/7 security"], [/Contrôle d'accès/gi, "Access control"], [/Vidéosurveillance/gi, "CCTV"],
+    [/Parc d'activité/gi, "Business park"], [/Accès libre/gi, "Open access"],
+    [/Zone piétonne/gi, "Pedestrian area"], [/Centre commercial/gi, "Shopping centre"], [/Axe passant/gi, "Busy street"],
+    [/Voirie poids lourds existante/gi, "Existing HGV road"], [/Voirie PL existante/gi, "Existing HGV road"],
+    [/portes? sectionnelles?/gi, "sectional doors"],
+    [/Tous commerces hors nuisances/gi, "All retail uses except nuisance trades"], [/Tous commerces/gi, "All retail uses"], [/hors nuisances/gi, "except nuisance trades"],
+    [/Prêt[- ]?à[- ]?porter/gi, "ready-to-wear"],
+    [/Classée,? à conserver/gi, "Listed, to preserve"],
+    [/ESFR conforme ICPE/gi, "ESFR (ICPE-compliant)"], [/Sprinklage standard/gi, "Standard sprinklers"], [/Non sprinklé/gi, "No sprinklers"],
+    [/Bail à construction/gi, "Building lease"],
+    [/Aucune connue/gi, "None known"], [/Étude en cours/gi, "Survey underway"], [/À dépolluer/gi, "Requires remediation"],
+    [/Quote[- ]part de services/gi, "Service charge"], [/Quote[- ]part/gi, "Share"],
+    [/Prestations? immeuble/gi, "Building services"], [/Prestations? surfaces?/gi, "Floor services"],
+    [/zone d'activité économique/gi, "economic activity zone"], [/zone d'activité/gi, "business zone"], [/zone industrielle/gi, "industrial zone"], [/à urbaniser/gi, "to be urbanised"],
+    [/Brut \/ à aménager/gi, "Shell & core"], [/À rafraîchir/gi, "Needs refreshing"],
+    [/Partiellement viabilisé/gi, "Partially serviced"], [/Non viabilisé/gi, "Not serviced"],
+    [/Jardin partagé/gi, "Shared garden"], [/Brique flamande/gi, "Flemish brick"],
+    [/Terrain plan/gi, "Flat ground"], [/sans pollution connue/gi, "no known contamination"],
+    [/fort passage/gi, "high footfall"],
+    [/Emprise jusqu'à/gi, "Footprint up to"], [/jusqu'à/gi, "up to"],
+    [/abri vélos/gi, "bike shelter"], [/Clôturé et gardienné/gi, "Fenced & guarded"],
+    [/Rez[- ]de[- ]chaussée/gi, "ground floor"],
+    // connecteurs « … en/à/de/par … » (avant les mots simples)
+    [/avec terrasse/gi, "with terrace"], [/par étage/gi, "per floor"],
+    [/en sous[- ]sol/gi, "underground"], [/en aérien/gi, "above ground"], [/en angle/gi, "corner"], [/en limite/gi, "at boundary"],
+    [/de mezzanine/gi, "of mezzanine"],
+    [/Non soumis/gi, "Not assessed"], [/à proximité/gi, "nearby"], [/sur place/gi, "on site"],
+    [/à niveau/gi, "dock-level"], [/plain[- ]pied/gi, "ground-level"], [/à créer/gi, "to be created"],
+    [/à conserver/gi, "to preserve"], [/à rénover/gi, "to renovate"],
+    [/\bsous[- ]sol/gi, "basement"], [/Périphérie/gi, "Outskirts"], [/Immédiate/gi, "Immediate"], [/restructurée?s?/gi, "restructured"],
+    // mots simples (en minuscule : la casse suit la source)
+    [/réversible/gi, "reversible"], [/électrique/gi, "electric"], [/\bgaz\b/gi, "gas"],
+    [/viabilisé/gi, "serviced"], [/rénové/gi, "renovated"], [/restaurée?/gi, "restored"], [/\bneuf\b/gi, "new"], [/bon état/gi, "good condition"],
+    [/moderne/gi, "modern"], [/clôturé/gi, "fenced"], [/gardienné/gi, "guarded"], [/en pente/gi, "sloped"], [/\bplat\b/gi, "flat"], [/\bmixte\b/gi, "mixed"],
+    [/\bétat\b/gi, "condition"], [/\betat\b/gi, "condition"], [/capacitaire/gi, "capacity"], [/personnes?/gi, "people"],
+    [/prestations?/gi, "services"], [/immeuble/gi, "building"],
+    [/location/gi, "rental"], [/\bvente\b/gi, "sale"], [/vierge/gi, "blank"], [/\bclasse\b/gi, "class"],
+    [/toiture/gi, "roof"], [/ouvrante/gi, "opening"], [/\bnord\b/gi, "north"], [/attenant/gi, "adjoining"], [/clientèle/gi, "clientele"],
+    [/poids lourds/gi, "HGV"], [/voirie/gi, "road"], [/existante?s?/gi, "existing"], [/privatives?/gi, "private"],
+    [/\beau\b/gi, "water"], [/télécom/gi, "telecom"], [/beauté/gi, "beauty"], [/hauteur/gi, "height"],
+    [/économique/gi, "economic"], [/\bautre\b/gi, "other"],
+    [/\bquais\b/gi, "docks"], [/\bquai\b/gi, "dock"], [/places/gi, "spaces"], [/\bdont\b/gi, "incl."], [/trimestre/gi, "quarter"],
+    [/\bet\b/gi, "and"], [/\bavec\b/gi, "with"], [/\bpar\b/gi, "per"], [/\boui\b/gi, "yes"], [/\bnon\b/gi, "no"], [/aucune?/gi, "none"],
+    [/étage/gi, "floor"], [/\ben\b/gi, "in"],
+    [/(\d+)\s*(?:ᵉ|èmes?|emes?)/gi, function (_, n) { n = +n; var v = n % 100; return n + (v >= 11 && v <= 13 ? "th" : (["th", "st", "nd", "rd"][n % 10] || "th")); }],
+    [/(\d+)\s*er\b/gi, "$1st"]
+  ],
+  // applique le glossaire en suivant la casse de la source : un remplacement écrit
+  // en minuscule prend la majuscule si le terme source l'avait ; un remplacement
+  // en Majuscule/acronyme (ou avec $1) est utilisé tel quel.
+  _gloss(s) {
+    function cased(rep) { return function (m) { return /^[A-ZÀ-Ý]/.test(m) ? rep.charAt(0).toUpperCase() + rep.slice(1) : rep; }; }
+    var g = this._specVals;
+    for (var i = 0; i < g.length; i++) {
+      var rep = g[i][1];
+      s = s.replace(g[i][0], typeof rep === "function" ? rep : (/^[a-zà-ÿ]/.test(rep) ? cased(rep) : rep));
+    }
+    return s;
+  },
+  specVal(s) {
+    if (!s || !(this.lang && this.lang() === "en")) return s;
+    s = this._gloss(String(s));
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  },
+
   bySegment(seg) {
     return seg === "Tous" ? window.XEEXT_BIENS
       : window.XEEXT_BIENS.filter(b => b.segment === seg);
