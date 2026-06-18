@@ -143,7 +143,7 @@ input[type="range"].sim-range::-moz-range-thumb {
   line-height: 1em;
   overflow: hidden;
   vertical-align: top;
-  padding-right: 0.04em;   /* marge du seul côté rogné (droite) : chiffres au plus serré */
+  padding-right: 1px;   /* marge minimale (côté rogné) : l'arrondi sous-pixel ≤1px, constant quelle que soit la taille → écart le plus serré sans rognage, à toute résolution */
 }
 .dgt__col {
   display: block;
