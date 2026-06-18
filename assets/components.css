@@ -518,15 +518,24 @@ input[type="range"].sim-range::-moz-range-thumb {
 /* Placeholder rayé adapté au thème sombre (si une image ne charge pas) */
 [data-theme="dark"] .ph { background: repeating-linear-gradient(-45deg, #242427 0 14px, #1a1a1c 14px 28px); }
 
-/* Bouton bascule clair / sombre dans la nav */
-.theme-toggle {
-  width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto;
-  border: none; background: var(--fill); color: var(--text);
-  display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: background .2s ease;
+/* Sélecteur de thème segmenté (Clair / Sombre / Auto) en bas à droite du footer */
+.footer .wrap { position: relative; }
+.theme-seg {
+  position: absolute; right: 0; bottom: 0;
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--accent); border-radius: var(--r-pill); padding: 1px;
 }
-.theme-toggle:hover { background: var(--fill-hover); }
-.theme-toggle svg { width: 18px; height: 18px; }
+.theme-seg button {
+  border: 0; background: none; cursor: pointer; font-family: inherit;
+  font-size: 13px; font-weight: 500; color: var(--accent);
+  padding: 5px 10px; border-radius: var(--r-pill);
+  transition: background .2s ease, color .2s ease;
+}
+.theme-seg button.is-active { background: var(--accent); color: #fff; }
+@media (max-width: 760px) {
+  /* sous le bloc légal, plutôt qu'en absolu (évite le chevauchement) */
+  .theme-seg { position: static; margin-top: 24px; }
+}
 
 /* Groupe « globe + thème » + menu de préférences (Langue / Unité / Devise) */
 .nav__controls { position: relative; display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; }
