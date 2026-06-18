@@ -328,6 +328,46 @@ window.XEEXT = {
     var area = this.unit() === "sqft" ? b.surface * this.SQFT_PER_M2 : b.surface;
     return this.money(b.loyer / area) + "/" + this.areaUnit() + (this.t ? this.t("cat.peran") : "/an");
   },
+  /* ----- Traduction des titres de biens (glossaire métier FR→EN) -----
+     Appliqué uniquement en anglais. Les expressions les plus spécifiques
+     d'abord, puis des termes génériques en repli ; le reste (noms de villes,
+     quartiers…) est laissé tel quel. */
+  _titleGloss: [
+    [/Local commercial pied d'immeuble/gi, "Ground-floor retail unit"],
+    [/Terrain d'activité viabilisé/gi, "Serviced business land"],
+    [/Plateau de bureaux/gi, "Office floor"],
+    [/Immeuble indépendant/gi, "Standalone building"],
+    [/Open space lumineux/gi, "Bright open space"],
+    [/Boutique d'angle/gi, "Corner shop"],
+    [/Entrepôt classe A/gi, "Class A warehouse"],
+    [/Local d'activité/gi, "Light-industrial unit"],
+    [/Plateau premium/gi, "Premium floor"],
+    [/Local commercial/gi, "Retail unit"],
+    // termes génériques (replis pour de nouveaux titres)
+    [/Plateau/gi, "Floor"], [/Bureaux/gi, "Offices"], [/Bureau/gi, "Office"],
+    [/Entrepôt/gi, "Warehouse"], [/Boutique/gi, "Shop"], [/Terrain/gi, "Land"],
+    [/Immeuble/gi, "Building"], [/lumineux/gi, "bright"], [/indépendant/gi, "standalone"],
+    [/viabilisé/gi, "serviced"], [/rénové/gi, "renovated"], [/périphérie de/gi, "outskirts of"],
+    // transaction & termes courants (phrases avant mots simples)
+    [/à la vente/gi, "for sale"], [/en vente/gi, "for sale"], [/à vendre/gi, "for sale"], [/à l'achat/gi, "for sale"],
+    [/en location/gi, "to let"], [/à louer/gi, "to let"],
+    [/rez-de-chaussée/gi, "ground floor"], [/centre-ville/gi, "city centre"],
+    [/location/gi, "rental"], [/achat/gi, "purchase"], [/vente/gi, "sale"],
+    [/meublé(?:e|s|es)?/gi, "furnished"], [/spacieu(?:x|se)/gi, "spacious"],
+    [/disponible/gi, "available"], [/neu(?:f|ve|ves|fs)/gi, "new"],
+    [/étage/gi, "floor"], [/proche/gi, "near"],
+    // ordinaux : 1er→1st, 2ᵉ→2nd, 3ᵉ→3rd, 9ᵉ→9th, 11ᵉ→11th…
+    [/(\d+)\s*ᵉ/g, function (_, n) { n = +n; var v = n % 100; return n + (v >= 11 && v <= 13 ? "th" : (["th", "st", "nd", "rd"][n % 10] || "th")); }],
+    [/(\d+)\s*er\b/gi, "$1st"],
+    [/ Sud\b/g, " South"], [/ Nord\b/g, " North"], [/ Ouest\b/g, " West"], [/ Est\b/g, " East"]
+  ],
+  transTitle(s) {
+    if (!s || !(this.lang && this.lang() === "en")) return s;
+    var g = this._titleGloss;
+    for (var i = 0; i < g.length; i++) s = s.replace(g[i][0], g[i][1]);
+    return s.charAt(0).toUpperCase() + s.slice(1);   // majuscule en tête (casse de phrase)
+  },
+
   bySegment(seg) {
     return seg === "Tous" ? window.XEEXT_BIENS
       : window.XEEXT_BIENS.filter(b => b.segment === seg);
