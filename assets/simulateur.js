@@ -8,7 +8,12 @@
     var slider = document.getElementById("sim-slider");
     if (!slider) return;
 
-    var euros = window.XEEXT.euros;
+    // Montants adaptés à la devise choisie dans la navbar (XEEXT.money convertit
+    // depuis l'EUR). Appel via window.XEEXT pour garder le bon `this`. Repli EUR
+    // si les helpers ne sont pas chargés.
+    var money = (window.XEEXT && window.XEEXT.money)
+      ? function (n) { return window.XEEXT.money(n); }
+      : function (n) { return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n); };
     var loyerOut = document.getElementById("sim-loyer");
     var classiqueOut = document.getElementById("sim-classique");
     var xeextOut = document.getElementById("sim-xeext");
@@ -62,6 +67,10 @@
 
     // mapping logarithmique pour un slider plus naturel
     var MIN = 20000, MAX = 2000000;
+    // bornes affichées sous le slider, dans la devise active
+    var bounds = document.querySelectorAll(".sim__bounds span");
+    if (bounds[0]) bounds[0].textContent = money(MIN);
+    if (bounds[1]) bounds[1].textContent = money(MAX);
     function fromSlider(v) {
       var t = v / 1000;
       var val = MIN * Math.pow(MAX / MIN, t);
@@ -76,16 +85,16 @@
       var xeext = Math.round(loyer * 0.05);
       var economie = classique - xeext;
 
-      roll(loyerOut, "loyer", loyer, euros(loyer));
-      roll(classiqueOut, "classique", classique, euros(classique));
-      roll(xeextOut, "xeext", xeext, euros(xeext));
-      roll(economieOut, "economie", economie, euros(economie));
+      roll(loyerOut, "loyer", loyer, money(loyer));
+      roll(classiqueOut, "classique", classique, money(classique));
+      roll(xeextOut, "xeext", xeext, money(xeext));
+      roll(economieOut, "economie", economie, money(economie));
 
       // remplissage visuel de la piste
       var pct = (+slider.value) / 10;
       slider.style.background =
         "linear-gradient(90deg, var(--accent) 0%, var(--accent) " + pct + "%, rgba(0,0,0,0.10) " + pct + "%, rgba(0,0,0,0.10) 100%)";
-      slider.setAttribute("aria-valuetext", euros(loyer) + " de loyer annuel");
+      slider.setAttribute("aria-valuetext", money(loyer) + " de loyer annuel");
     }
 
     slider.addEventListener("input", update);

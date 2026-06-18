@@ -142,7 +142,8 @@ input[type="range"].sim-range::-moz-range-thumb {
   height: 1em;
   line-height: 1em;
   overflow: hidden;
-  vertical-align: baseline;
+  vertical-align: top;
+  padding-right: 0.04em;   /* marge du seul côté rogné (droite) : chiffres au plus serré */
 }
 .dgt__col {
   display: block;
@@ -150,8 +151,8 @@ input[type="range"].sim-range::-moz-range-thumb {
   will-change: transform;
 }
 .dgt__col.no-trans { transition: none; }
-.dgt__col span { display: block; height: 1em; line-height: 1em; text-align: center; }
-.sep { display: inline-block; height: 1em; line-height: 1em; vertical-align: baseline; }
+.dgt__col span { display: block; height: 1em; line-height: 1em; text-align: left; }
+.sep { display: inline-block; height: 1em; line-height: 1em; vertical-align: top; }
 @media (prefers-reduced-motion: reduce) {
   .dgt__col { transition: none; }
 }
