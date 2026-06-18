@@ -243,11 +243,13 @@
       '<h1 class="h-section" style="margin:6px 0 26px">' + (isNew ? "Nouveau bien" : "Modifier le bien") + '</h1>' +
       '<form id="bf" class="admin-form" novalidate>' +
         fld("Titre", "f-titre", b.titre) +
+        fld("Titre (EN) — optionnel", "f-titre-en", b.titre_en) +
         selSeg(b.segment || "Bureaux") +
         row2(fld("Ville", "f-ville", b.ville), fld("Département", "f-dept", b.dept)) +
         row2(fld("Surface (m²)", "f-surface", b.surface, "number"), fld("Loyer €/an", "f-loyer", b.loyer, "number")) +
         selDispo(b.dispo) +
         area("Description du bien", "f-resume", b.resume) +
+        area("Description (EN) — optionnel", "f-resume-en", b.resume_en) +
         '<div class="field"><label>Caractéristiques</label><div id="f-specs-fields"></div></div>' +
         area("Autres caractéristiques (optionnel — une par ligne « Clé : Valeur »)", "f-specs-extra", specsExtras(b.segment || "Bureaux", b.specs)) +
         area("Légendes des photos — une par ligne", "f-photos", (b.photos || []).join("\n")) +
@@ -293,6 +295,7 @@
         id: b.id || slugify(titre) || ("bien-" + Date.now()),
         segment: v(r, "#f-seg") || "Bureaux",
         titre: titre,
+        titre_en: v(r, "#f-titre-en") || null,
         ville: ville,
         dept: v(r, "#f-dept") || null,
         surface: int(v(r, "#f-surface")),
@@ -300,6 +303,7 @@
         dispo: v(r, "#f-dispo") || null,
         dispo_rank: rankFor(v(r, "#f-dispo"), b.dispo_rank),
         resume: v(r, "#f-resume") || null,
+        resume_en: v(r, "#f-resume-en") || null,
         specs: collectSpecs(r),
         photos: linesToArr(v(r, "#f-photos")),
         images: linesToArr(v(r, "#f-images")),

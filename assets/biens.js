@@ -367,6 +367,16 @@ window.XEEXT = {
     for (var i = 0; i < g.length; i++) s = s.replace(g[i][0], g[i][1]);
     return s.charAt(0).toUpperCase() + s.slice(1);   // majuscule en tête (casse de phrase)
   },
+  // Titre/résumé dans la langue active : priorité au champ EN saisi au back-office,
+  // sinon repli (glossaire auto pour le titre, FR pour le résumé).
+  bienTitle(b) {
+    if (this.lang && this.lang() === "en") return (b.titre_en && b.titre_en.trim()) || this.transTitle(b.titre);
+    return b.titre;
+  },
+  bienResume(b) {
+    if (this.lang && this.lang() === "en" && b.resume_en && b.resume_en.trim()) return b.resume_en;
+    return b.resume || "";
+  },
 
   bySegment(seg) {
     return seg === "Tous" ? window.XEEXT_BIENS
@@ -437,7 +447,8 @@ window.XEEXT.biensReady = (function () {
     return {
       id: r.id, segment: r.segment, titre: r.titre, ville: r.ville, dept: r.dept,
       surface: r.surface, loyer: r.loyer, dispo: r.dispo, dispoRank: r.dispo_rank || 0,
-      resume: r.resume || "", specs: r.specs || {}, photos: r.photos || [], images: r.images || [],
+      resume: r.resume || "", titre_en: r.titre_en || "", resume_en: r.resume_en || "",
+      specs: r.specs || {}, photos: r.photos || [], images: r.images || [],
       created_at: r.created_at
     };
   }

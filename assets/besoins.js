@@ -301,7 +301,7 @@
 
   function resultCard(b, pct) {
     var m2 = X.loyerM2(b);
-    return '<a class="bien reveal" href="fiche.html?id=' + b.id + '" aria-label="' + X.transTitle(b.titre) + '">' +
+    return '<a class="bien reveal" href="fiche.html?id=' + b.id + '" aria-label="' + X.bienTitle(b) + '">' +
       '<div class="bien__media"><span class="badge">' + t("seg." + b.segment) + '</span>' +
         (X.fav ? X.fav.favBtnHTML(b.id, "card") : "") +
         '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) +
@@ -310,7 +310,7 @@
       '<div class="bien__body">' +
         '<div class="match-row"><span class="match-pct">' + pct + t("b.matchSuffix") + '</span>' +
           '<span class="match-track"><i style="width:' + pct + '%"></i></span></div>' +
-        '<h3 class="bien__title">' + X.transTitle(b.titre) + '</h3>' +
+        '<h3 class="bien__title">' + X.bienTitle(b) + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
         '<dl class="bien__data">' +
           '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.surface(b.surface) + '</dd></div>' +

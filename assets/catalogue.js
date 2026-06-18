@@ -13,7 +13,7 @@
     var a = document.createElement("a");
     a.className = "bien reveal";
     a.href = "fiche.html?id=" + b.id;
-    a.setAttribute("aria-label", X.transTitle(b.titre));
+    a.setAttribute("aria-label", X.bienTitle(b));
     a.innerHTML =
       '<div class="bien__media">' +
         '<span class="badge">' + t("seg." + b.segment) + '</span>' +
@@ -21,7 +21,7 @@
         '<div class="ph ph--4x3">' + X.imgTag(X.cover(b), b.titre) + '<span class="ph__label">PHOTO — ' + b.photos[0] + '</span></div>' +
       '</div>' +
       '<div class="bien__body">' +
-        '<h3 class="bien__title">' + X.transTitle(b.titre) + '</h3>' +
+        '<h3 class="bien__title">' + X.bienTitle(b) + '</h3>' +
         '<p class="bien__ville">' + b.ville + ' (' + b.dept + ')</p>' +
         '<dl class="bien__data">' +
           '<div><dt>' + t("cat.surface") + '</dt><dd class="tnum">' + X.surface(b.surface) + '</dd></div>' +

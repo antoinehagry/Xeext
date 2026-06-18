@@ -117,3 +117,10 @@ create policy "biens : admin écrit"
   on public.biens for all
   using ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com')
   with check ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
+
+-- ---------- Biens bilingues (optionnel) ----------
+-- Titre et description en anglais, saisis depuis le back-office (/admin.html).
+-- Si vides, le site retombe sur la traduction automatique (titre) ou le
+-- français (description). À exécuter une fois si la table `biens` existe déjà.
+alter table public.biens add column if not exists titre_en  text;
+alter table public.biens add column if not exists resume_en text;
