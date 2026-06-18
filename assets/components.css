@@ -537,6 +537,22 @@ input[type="range"].sim-range::-moz-range-thumb {
   .theme-seg { position: static; margin-top: 24px; }
 }
 
+/* Fil d'Ariane du pied de page (logo › section › page) */
+.footer-breadcrumb {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: 14px; color: var(--text-2);
+  padding-bottom: 22px; margin-bottom: 28px;
+  border-bottom: 1px solid var(--hairline);
+}
+.footer-breadcrumb a { color: var(--text-2); }
+.footer-breadcrumb a:not(.fb-home):hover { text-decoration: underline; }
+.footer-breadcrumb [aria-current="page"] { color: var(--text-2); }
+.footer-breadcrumb .fb-home { display: inline-flex; align-items: center; }
+/* logo un peu plus petit, dans le même gris que les liens */
+.footer-breadcrumb .fb-home .brand-logo { height: 13px; background-color: var(--text-2); }
+.footer-breadcrumb .fb-sep { display: inline-flex; align-items: center; color: var(--text-2); flex: 0 0 auto; }
+.footer-breadcrumb .fb-sep svg { height: 13px; width: auto; display: block; }   /* flèche = hauteur du logo */
+
 /* Groupe « globe + thème » + menu de préférences (Langue / Unité / Devise) */
 .nav__controls { position: relative; display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; }
 .prefs-btn {

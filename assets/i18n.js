@@ -20,6 +20,9 @@ window.XEEXT_I18N = {
     "nav.voirbiens": "View properties",
     // Thème (sélecteur du footer)
     "theme.label": "Theme", "theme.light": "Light", "theme.dark": "Dark", "theme.auto": "Auto",
+    // Fil d'Ariane (pied de page)
+    "bc.home": "Home", "bc.aria": "Breadcrumb", "bc.account": "My account",
+    "bc.signup": "Create account", "bc.reset": "Reset password", "bc.admin": "Administration",
     // Hero
     "hero.h1": "Corporate real estate advisory.<br><span class=\"grad-loop\">Reinvented at&nbsp;5%.</span>",
     "hero.lead": "Offices, retail, logistics, land. The same support as a major network — for fees divided by three.",
