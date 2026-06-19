@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://iajadtbvumnhvedlxubs.supabase.co">
+<script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var pref=p||localStorage.getItem('xeext.theme')||'auto';var t=pref==='auto'?(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):pref;document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title data-i18n="err404.title">Page introuvable — Xeext</title>
+<meta name="robots" content="noindex" />
+<!-- Chemins absolus : la page 404 peut être servie sur n'importe quelle URL. -->
+<link rel="stylesheet" href="/Xeext/assets/xeext.css" />
+<link rel="stylesheet" href="/Xeext/assets/components.css" />
+<link rel="stylesheet" href="/Xeext/assets/account.css" />
+<link rel="icon" type="image/svg+xml" href="/Xeext/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/Xeext/assets/apple-touch-icon.png" />
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Aller au contenu</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <nav class="nav__inner" aria-label="Navigation principale">
+    <a class="brand" href="/Xeext/index.html"><span class="brand-logo" aria-hidden="true"></span><span class="sr-only">Xeext</span></a>
+    <ul class="nav__links">
+      <li><a href="/Xeext/biens.html" data-i18n="nav.biens">Biens</a></li>
+      <li><a href="/Xeext/besoins.html" data-i18n="nav.besoins">Trouver mon bien</a></li>
+      <li><a href="/Xeext/index.html#simulateur" data-i18n="nav.honoraires">Honoraires</a></li>
+      <li><a href="/Xeext/apropos.html" data-i18n="nav.apropos">À propos</a></li>
+      <li><a href="/Xeext/index.html#contact" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <a class="nav__est" data-estimation href="/Xeext/index.html#proprietaires" data-i18n="nav.estimer">Estimer mon bien</a>
+    <a class="nav__cta" href="/Xeext/biens.html" data-i18n="nav.voirbiens">Voir les biens</a>
+    <button class="nav__burger" aria-label="Menu">
+      <span class="burger-ico" aria-hidden="true"></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="bg-white section-pad" data-screen-label="404">
+  <div class="wrap wrap--narrow center" style="min-height: 52vh; display: flex; flex-direction: column; justify-content: center;">
+    <p class="eyebrow reveal" data-i18n="err404.eyebrow">Erreur 404</p>
+    <h1 class="h-section reveal" data-delay="1" data-i18n="err404.h">Cette page n'existe pas.</h1>
+    <p class="lead mt-16 mx-auto reveal" data-delay="1" style="max-width: 34ch" data-i18n="err404.lead">Le lien est peut-être erroné, ou la page a été déplacée.</p>
+    <div class="mt-40 reveal" data-delay="2" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+      <a class="btn btn--primary" href="/Xeext/index.html" data-i18n="err404.home">Retour à l'accueil</a>
+      <a class="link-chevron" href="/Xeext/biens.html" data-i18n-html="err404.biens">Voir les biens <span class="chev">›</span></a>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <p style="margin:10px 0 0; max-width: 32ch" data-i18n="footer.tagline">Conseil en immobilier d'entreprise. Bureaux, commerces, logistique, terrains.</p>
+      </div>
+      <nav aria-label="Pied de page" style="display:flex; gap:48px; flex-wrap:wrap">
+        <div style="display:grid; gap:10px">
+          <a href="/Xeext/biens.html" data-i18n="nav.biens">Biens</a>
+          <a href="/Xeext/besoins.html" data-i18n="nav.besoins">Trouver mon bien</a>
+          <a href="/Xeext/apropos.html" data-i18n="nav.apropos">À propos</a>
+        </div>
+        <div style="display:grid; gap:10px">
+          <a href="/Xeext/index.html#contact" data-i18n="nav.contact">Contact</a>
+          <a href="mailto:contact@xeext.fr">contact@xeext.fr</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__legal">
+      <p style="margin-top:14px"><a href="/Xeext/mentions-legales.html" data-i18n="footer.legalLink">Mentions légales</a> · <a href="/Xeext/confidentialite.html" data-i18n="footer.privacy">Politique de confidentialité</a></p>
+      <p style="margin-top:14px" data-i18n="footer.rights">© 2026 Xeext. Tous droits réservés.</p>
+      <p style="margin-top:6px" data-i18n="footer.brainup">Une Startup de Brain Up</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/Xeext/assets/config.js"></script>
+<script src="/Xeext/assets/biens.js"></script>
+<script src="/Xeext/assets/i18n.js"></script>
+<script src="/Xeext/assets/store.js"></script>
+<script src="/Xeext/assets/account.js"></script>
+<script src="/Xeext/assets/app.js"></script>
+<script src="/Xeext/assets/nav.js"></script>
+<script src="/Xeext/assets/theme.js"></script>
+<script src="/Xeext/assets/social.js"></script>
+</body>
+</html>

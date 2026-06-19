@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://iajadtbvumnhvedlxubs.supabase.co">
+<link rel="dns-prefetch" href="https://api.frankfurter.app">
+<link rel="dns-prefetch" href="https://api.mapbox.com">
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var pref=p||localStorage.getItem('xeext.theme')||'auto';var t=pref==='auto'?(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):pref;document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script>(function(){try{if(sessionStorage.getItem('xeext.intro')||matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('intro-done');}catch(e){document.documentElement.classList.add('intro-done');}})();</script>
 <title data-i18n="meta.title">Xeext — Le conseil immobilier d'entreprise, repensé à 5%</title>
@@ -22,6 +27,7 @@
 <link rel="stylesheet" href="assets/account.css" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="preload" as="image" href="assets/hero.webp" fetchpriority="high" />
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true">
@@ -62,7 +68,7 @@
     </div>
     <div class="wrap mt-64 reveal" data-delay="2">
       <div class="ph ph--wide">
-        <img class="ph__img" src="assets/hero.webp" alt="Partenaires d'affaires en costume observant un immeuble de bureaux — immobilier d'entreprise" data-i18n-attr="alt:hero.imgalt" loading="eager" onerror="this.remove()" />
+        <img class="ph__img" src="assets/hero.webp" alt="Partenaires d'affaires en costume observant un immeuble de bureaux — immobilier d'entreprise" data-i18n-attr="alt:hero.imgalt" loading="eager" decoding="async" fetchpriority="high" onerror="this.remove()" />
         <span class="ph__label">Visuel large — partenaires d'affaires observant un immeuble de bureaux, immobilier d'entreprise</span>
       </div>
     </div>

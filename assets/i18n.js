@@ -23,6 +23,10 @@ window.XEEXT_I18N = {
     // Fil d'Ariane (pied de page)
     "bc.home": "Home", "bc.aria": "Breadcrumb", "bc.account": "My account",
     "bc.signup": "Create account", "bc.reset": "Reset password", "bc.admin": "Administration",
+    // Page 404
+    "err404.title": "Page not found — Xeext", "err404.eyebrow": "Error 404",
+    "err404.h": "This page doesn't exist.", "err404.lead": "The link may be wrong, or the page has moved.",
+    "err404.home": "Back to home", "err404.biens": "View properties <span class=\"chev\">›</span>",
     // Hero
     "hero.h1": "Corporate real estate advisory.<br><span class=\"grad-loop\">Reinvented at&nbsp;5%.</span>",
     "hero.lead": "Offices, retail, logistics, land. The same support as a major network — for fees divided by three.",

@@ -531,7 +531,7 @@ window.XEEXT.imgTag = function (url, alt, eager) {
   if (!url) return "";
   alt = (alt || "").replace(/"/g, "&quot;");
   return '<img class="ph__img" src="' + url + '" alt="' + alt + '" ' +
-    'loading="' + (eager ? "eager" : "lazy") + '" onerror="this.remove()">';
+    'loading="' + (eager ? "eager" : "lazy") + '" decoding="async" onerror="this.remove()">';
 };
 
 /* Chargement dynamique des biens depuis Supabase (back-office).
@@ -574,6 +574,8 @@ window.XEEXT._rates = { EUR: 1, USD: 1.08, GBP: 0.85, CHF: 0.95, JPY: 170 };
   var cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
   if (cached && cached.rates) window.XEEXT._rates = cached.rates;   // dispo immédiatement
+  // en EUR (devise par défaut), aucune conversion : on évite la requête réseau
+  if (window.XEEXT.currency && window.XEEXT.currency() === "EUR") return;
   if (cached && cached.date === today) return;                      // déjà à jour aujourd'hui
   fetch("https://api.frankfurter.app/latest?from=EUR&to=USD,GBP,CHF,JPY")
     .then(function (r) { return r.ok ? r.json() : null; })
