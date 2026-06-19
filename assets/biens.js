@@ -511,6 +511,15 @@ window.XEEXT_VILLES_COORDS = {
   "Rennes": [48.1119, -1.6800]
 };
 
+/* Coordonnées d'un bien : adresse exacte (lat/lon renseignés au back-office) si
+   disponibles, sinon repli sur le centre-ville. Renvoie [lat, lon] ou null. */
+window.XEEXT.bienCoords = function (b) {
+  if (b && b.lat != null && b.lon != null && isFinite(b.lat) && isFinite(b.lon)) {
+    return [+b.lat, +b.lon];
+  }
+  return (b && window.XEEXT_VILLES_COORDS[b.ville]) || null;
+};
+
 window.XEEXT.imgUrl = function (id, w) {
   if (!id) return "";
   if (/^https?:\/\//.test(id)) return id; // URL complète fournie telle quelle
@@ -546,6 +555,7 @@ window.XEEXT.biensReady = (function () {
       id: r.id, segment: r.segment, titre: r.titre, ville: r.ville, dept: r.dept,
       surface: r.surface, loyer: r.loyer, dispo: r.dispo, dispoRank: r.dispo_rank || 0,
       resume: r.resume || "", titre_en: r.titre_en || "", resume_en: r.resume_en || "",
+      adresse: r.adresse || "", lat: r.lat != null ? +r.lat : null, lon: r.lon != null ? +r.lon : null,
       specs: r.specs || {}, photos: r.photos || [], images: r.images || [],
       created_at: r.created_at
     };

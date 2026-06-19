@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="dns-prefetch" href="https://iajadtbvumnhvedlxubs.supabase.co">
 <link rel="dns-prefetch" href="https://api.frankfurter.app">
-<link rel="dns-prefetch" href="https://api.mapbox.com">
+<link rel="preconnect" href="https://api.mapbox.com">
 <script>(function(){try{var p=new URLSearchParams(location.search).get('theme');var pref=p||localStorage.getItem('xeext.theme')||'auto';var t=pref==='auto'?(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):pref;document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <title data-i18n="fiche.meta.title">Fiche bien — Xeext</title>
 <meta name="description" data-i18n-attr="content:fiche.meta.desc" content="Bien d'entreprise à louer. Honoraires Xeext : 5% du loyer annuel, annoncés avant le mandat." />
@@ -95,10 +95,11 @@
   <section class="bg-white section-pad">
     <div class="wrap">
       <h2 class="h-section reveal" style="margin-bottom: 12px" data-i18n="fiche.loc">Localisation</h2>
-      <p class="lead reveal" data-delay="1" data-i18n-html="fiche.locLead">Au cœur de <span id="f-map-ville">—</span>. Adresse exacte communiquée sur demande.</p>
+      <p class="lead reveal" data-delay="1" data-i18n-html="fiche.locLead">Au cœur de <span id="f-map-ville">—</span>. <span id="f-loc-exact">Adresse exacte communiquée sur demande.</span></p>
       <div class="map-ph reveal" data-delay="1">
         <div class="ph ph--wide"><span class="ph__label" data-i18n="fiche.mapLabel">Carte — plan de situation et points d'intérêt (transports, axes, services)</span></div>
       </div>
+      <div class="poi reveal" id="f-poi" data-delay="1" hidden></div>
     </div>
   </section>
 

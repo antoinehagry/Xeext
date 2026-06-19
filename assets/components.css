@@ -406,6 +406,20 @@ input[type="range"].sim-range::-moz-range-thumb {
 .map-ph { margin-top: 24px; }
 .map-ph iframe { display: block; width: 100%; aspect-ratio: 21 / 9; border: 0; border-radius: var(--r-lg); }
 .map-gl { width: 100%; aspect-ratio: 21 / 9; border-radius: var(--r-lg); overflow: hidden; }
+
+/* Services à proximité (rayon 5 km) sous la carte */
+.poi { margin-top: 28px; }
+.poi__title { font-size: 16px; font-weight: 600; color: var(--text); margin: 0 0 16px; }
+.poi__radius { color: var(--text-3); font-weight: 400; font-size: 14px; }
+.poi__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.poi__item {
+  background: var(--gray-bg); border-radius: var(--r-md);
+  padding: 16px 14px; display: flex; flex-direction: column; gap: 4px;
+}
+.poi__ico { font-size: 20px; line-height: 1; }
+.poi__n { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; color: var(--accent); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.poi__lbl { font-size: 13px; color: var(--text-2); }
+@media (max-width: 680px) { .poi__grid { grid-template-columns: repeat(2, 1fr); } }
 .reminder-band {
   background: var(--gray-bg);
   border-radius: var(--r-lg);

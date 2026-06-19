@@ -246,6 +246,10 @@
         fld("Titre (EN) — optionnel", "f-titre-en", b.titre_en) +
         selSeg(b.segment || "Bureaux") +
         row2(fld("Ville", "f-ville", b.ville), fld("Département", "f-dept", b.dept)) +
+        '<div class="field"><label for="f-adresse">Adresse exacte (optionnel) <span style="color:var(--text-3);font-weight:400">— centre la carte et les services sur le bien</span></label>' +
+          '<input id="f-adresse" type="text" value="' + esc(b.adresse) + '" placeholder="12 rue de la République, Lyon">' +
+          '<input id="f-lat" type="hidden" value="' + (b.lat != null ? b.lat : "") + '">' +
+          '<input id="f-lon" type="hidden" value="' + (b.lon != null ? b.lon : "") + '"></div>' +
         row2(fld("Surface (m²)", "f-surface", b.surface, "number"), fld("Loyer €/an", "f-loyer", b.loyer, "number")) +
         selDispo(b.dispo) +
         area("Description du bien", "f-resume", b.resume) +
@@ -265,6 +269,7 @@
     var r = root;
     window.scrollTo({ top: 0, behavior: "auto" });
     if (X.autocompleteVille) X.autocompleteVille(r.querySelector("#f-ville"), { deptInput: r.querySelector("#f-dept") });
+    if (X.autocompleteAdresse) X.autocompleteAdresse(r.querySelector("#f-adresse"), { latInput: r.querySelector("#f-lat"), lonInput: r.querySelector("#f-lon") });
     r.querySelector("#f-back").addEventListener("click", function (e) { e.preventDefault(); renderList(); });
     r.querySelector("#f-cancel").addEventListener("click", function () { renderList(); });
     var err = r.querySelector("#bf-err");
@@ -291,6 +296,10 @@
       var ville = v(r, "#f-ville");
       if (!ville) return fail(err, "La ville est requise.");
 
+      var adresse = v(r, "#f-adresse") || null;
+      var lat = adresse && v(r, "#f-lat") ? parseFloat(v(r, "#f-lat")) : null;
+      var lon = adresse && v(r, "#f-lon") ? parseFloat(v(r, "#f-lon")) : null;
+
       var row = {
         id: b.id || slugify(titre) || ("bien-" + Date.now()),
         segment: v(r, "#f-seg") || "Bureaux",
@@ -298,6 +307,9 @@
         titre_en: v(r, "#f-titre-en") || null,
         ville: ville,
         dept: v(r, "#f-dept") || null,
+        adresse: adresse,
+        lat: isFinite(lat) ? lat : null,
+        lon: isFinite(lon) ? lon : null,
         surface: int(v(r, "#f-surface")),
         loyer: int(v(r, "#f-loyer")),
         dispo: v(r, "#f-dispo") || null,

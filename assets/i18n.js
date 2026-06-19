@@ -27,6 +27,11 @@ window.XEEXT_I18N = {
     "err404.title": "Page not found — Xeext", "err404.eyebrow": "Error 404",
     "err404.h": "This page doesn't exist.", "err404.lead": "The link may be wrong, or the page has moved.",
     "err404.home": "Back to home", "err404.biens": "View properties <span class=\"chev\">›</span>",
+    // À proximité (carte fiche)
+    "poi.title": "What's nearby", "poi.radius": "· 5 km radius",
+    "poi.restaurant": "Restaurants", "poi.cafe": "Cafés", "poi.doctors": "Doctors",
+    "poi.pharmacy": "Pharmacies", "poi.hospital": "Hospitals", "poi.bank": "Banks",
+    "poi.parking": "Parking", "poi.transport": "Stations",
     // Hero
     "hero.h1": "Corporate real estate advisory.<br><span class=\"grad-loop\">Reinvented at&nbsp;5%.</span>",
     "hero.lead": "Offices, retail, logistics, land. The same support as a major network — for fees divided by three.",
@@ -217,7 +222,7 @@ window.XEEXT_I18N = {
     "fiche.saveSuf": "saved versus a 20% advisor",
     "fiche.specs": "Features",
     "fiche.loc": "Location",
-    "fiche.locLead": "In the heart of <span id=\"f-map-ville\">—</span>. Exact address provided on request.",
+    "fiche.locLead": "In the heart of <span id=\"f-map-ville\">—</span>. <span id=\"f-loc-exact\">Exact address provided on request.</span>",
     "fiche.mapLabel": "Map — location plan and points of interest (transport, roads, services)",
     "fiche.reminderEyebrow": "Xeext fees",
     "fiche.reminderH": "5% of the annual rent, i.e. <span class=\"num\" id=\"f-reminder-num\">—</span>.",
@@ -476,6 +481,10 @@ window.XEEXT_I18N = {
   // ---- Français : seulement les clés utilisées par le JS (le reste vient du HTML) ----
   fr: {
     "theme.label": "Thème", "theme.light": "Clair", "theme.dark": "Sombre", "theme.auto": "Auto",
+    "poi.title": "Services à proximité", "poi.radius": "· rayon 5 km",
+    "poi.restaurant": "Restaurants", "poi.cafe": "Cafés", "poi.doctors": "Médecins",
+    "poi.pharmacy": "Pharmacies", "poi.hospital": "Hôpitaux", "poi.bank": "Banques",
+    "poi.parking": "Parkings", "poi.transport": "Gares",
     "acct.signin": "Se connecter",
     "acct.favoris": "Mes favoris",
     "acct.rdv": "Mes rendez-vous",

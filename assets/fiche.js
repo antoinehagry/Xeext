@@ -61,9 +61,12 @@
       return '<div><dt>' + X.specKey(k) + '</dt><dd>' + X.convSurf(X.specVal(b.specs[k])) + '</dd></div>';
     }).join("");
 
-    // Localisation : carte OpenStreetMap (sans clé) centrée sur la ville
+    // Localisation : carte + services centrés sur l'adresse exacte si elle est
+    // renseignée (back-office), sinon sur le centre-ville.
     setText("f-map-ville", b.ville);
+    if (b.adresse) setText("f-loc-exact", b.adresse);
     renderMap(b);
+    renderPOI(b);
 
     // Rappel honoraires (bandeau bas)
     document.getElementById("f-reminder-num").textContent = X.euros(hono);
@@ -214,16 +217,84 @@
   function setMeta(sel, content) { var el = document.head.querySelector(sel); if (el) el.setAttribute("content", content); }
 
   // Carte de localisation : Mapbox GL (interactif) si un token est configuré dans
-  // assets/config.js, sinon repli OpenStreetMap (sans clé). Centrée sur la ville
-  // (adresse exacte communiquée sur demande). Pas de coordonnées → pas de carte.
+  // assets/config.js, sinon repli OpenStreetMap (sans clé). Centrée sur l'adresse
+  // exacte si renseignée (back-office), sinon sur le centre-ville. Pas de
+  // coordonnées → pas de carte.
   function renderMap(b) {
     var holder = document.querySelector(".map-ph");
-    var c = window.XEEXT_VILLES_COORDS && window.XEEXT_VILLES_COORDS[b.ville];
+    var c = window.XEEXT.bienCoords ? window.XEEXT.bienCoords(b)
+      : (window.XEEXT_VILLES_COORDS && window.XEEXT_VILLES_COORDS[b.ville]);
     if (!holder || !c) return;
     var lat = c[0], lon = c[1];
     var token = (window.XEEXT_CONFIG || {}).MAPBOX_TOKEN;
     if (token) mapbox(holder, lon, lat, b.ville, token);
     else osm(holder, lon, lat, b.ville);
+  }
+
+  // Services à proximité (~5 km) via l'API Mapbox Search (Category Search, ton token).
+  // Un appel par catégorie, plafonné à 25 résultats (limite Mapbox) → on affiche
+  // « 25+ » au plafond, le compte réel sinon. Mis en cache (~30 j), asynchrone et
+  // silencieux en cas d'échec (le panneau reste masqué).
+  var POI_LIMIT = 25;
+  var POI_CATS = [
+    { k: "restaurant", id: "restaurant",    ico: "🍽️" },
+    { k: "cafe",       id: "cafe",          ico: "☕" },
+    { k: "doctors",    id: "doctor",        ico: "🩺" },
+    { k: "pharmacy",   id: "pharmacy",      ico: "💊" },
+    { k: "hospital",   id: "hospital",      ico: "🏥" },
+    { k: "bank",       id: "bank",          ico: "🏦" },
+    { k: "parking",    id: "parking",       ico: "🅿️" },
+    { k: "transport",  id: "train_station", ico: "🚉" }
+  ];
+  function renderPOI(b) {
+    var host = document.getElementById("f-poi");
+    var c = window.XEEXT.bienCoords ? window.XEEXT.bienCoords(b)
+      : (window.XEEXT_VILLES_COORDS && window.XEEXT_VILLES_COORDS[b.ville]);
+    var token = (window.XEEXT_CONFIG || {}).MAPBOX_TOKEN;
+    if (!host || !c || !token) return;
+    var lat = c[0], lon = c[1];
+    var lang = (window.XEEXT && window.XEEXT.lang) ? window.XEEXT.lang() : "fr";
+    var nb = (window.XEEXT && window.XEEXT.nombre) ? window.XEEXT.nombre : function (n) { return n; };
+    var dLat = 5 / 111, dLon = 5 / (111 * Math.cos(lat * Math.PI / 180));
+    var bbox = [lon - dLon, lat - dLat, lon + dLon, lat + dLat].join(",");
+    var CKEY = "xeext.poi2." + lat.toFixed(3) + "," + lon.toFixed(3);
+
+    function paint(counts) {
+      var items = POI_CATS.map(function (cat) {
+        var n = counts[cat.k] || 0;
+        var disp = n >= POI_LIMIT ? (POI_LIMIT + "+") : nb(n);
+        return '<div class="poi__item"><span class="poi__ico" aria-hidden="true">' + cat.ico + '</span>' +
+          '<span class="poi__n">' + disp + '</span>' +
+          '<span class="poi__lbl">' + t("poi." + cat.k) + '</span></div>';
+      }).join("");
+      host.innerHTML = '<h3 class="poi__title">' + t("poi.title") +
+        ' <span class="poi__radius">' + t("poi.radius") + '</span></h3>' +
+        '<div class="poi__grid">' + items + '</div>';
+      host.hidden = false;
+      if (typeof window.__xeextReveal === "function") requestAnimationFrame(window.__xeextReveal);
+    }
+
+    try {
+      var cached = JSON.parse(localStorage.getItem(CKEY) || "null");
+      if (cached && cached.counts && (Date.now() - cached.t) < 30 * 864e5) { paint(cached.counts); return; }
+    } catch (e) {}
+
+    var base = "https://api.mapbox.com/search/searchbox/v1/category/";
+    var reqs = POI_CATS.map(function (cat) {
+      var u = base + cat.id + "?access_token=" + encodeURIComponent(token) +
+        "&proximity=" + lon + "," + lat + "&bbox=" + bbox + "&limit=" + POI_LIMIT + "&language=" + lang;
+      return fetch(u)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { return (d && d.features) ? d.features.length : -1; })
+        .catch(function () { return -1; });
+    });
+    Promise.all(reqs).then(function (arr) {
+      if (arr.every(function (n) { return n < 0; })) return; // tout en échec → on n'affiche rien
+      var counts = {};
+      POI_CATS.forEach(function (cat, i) { counts[cat.k] = arr[i] < 0 ? 0 : arr[i]; });
+      try { localStorage.setItem(CKEY, JSON.stringify({ t: Date.now(), counts: counts })); } catch (e) {}
+      paint(counts);
+    });
   }
 
   function osm(holder, lon, lat, ville) {
