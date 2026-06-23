@@ -14,6 +14,17 @@
   function esc(s) { return (s || "").replace(/"/g, "&quot;"); }
   function val(root, id) { var el = root.querySelector(id); return el ? el.value.trim() : ""; }
 
+  // Contrôles côté client des pièces jointes (la taille/type sont aussi bornés
+  // côté bucket Supabase). Renvoie un message d'erreur ou null si tout est bon.
+  function validateFiles(files) {
+    if (!files || !files.length) return null;
+    if (files.length > 6) return t("lead.docsTooMany");
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].size > 10 * 1024 * 1024) return t("lead.docsTooBig");
+    }
+    return null;
+  }
+
   function done(root, titre, sousTitre) {
     var modal = root.querySelector(".modal");
     modal.innerHTML =
@@ -48,6 +59,9 @@
         '<div class="field"><label for="e-mail">' + t("auth.mail") + '</label><input id="e-mail" type="email" value="' + esc(u && u.email) + '" placeholder="' + t("contact.ph.mail") + '"></div>' +
         '<div class="field"><label for="e-tel">' + t("rdv.tel") + '</label><input id="e-tel" type="tel" placeholder="06 12 34 56 78"></div>' +
         '<div class="field"><label for="e-msg">' + t("lead.msg") + '</label><textarea id="e-msg" placeholder="' + t("lead.msgPh") + '"></textarea></div>' +
+        '<div class="field"><label for="e-docs">' + t("lead.docs") + '</label>' +
+          '<input id="e-docs" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx,application/pdf,image/*">' +
+          '<p class="upload-hint">' + t("lead.docsHint") + '</p></div>' +
         '<div class="form-error" id="est-err"></div>' +
         '<button type="submit" class="btn btn--primary btn-block">' + t("lead.estBtn") + '</button>' +
         '<p class="modal__note">' + t("lead.estNote") + '</p>' +
@@ -64,23 +78,34 @@
     root.querySelector("#est-form").addEventListener("submit", function (e) {
       e.preventDefault();
       err.classList.remove("show");
+      var files = (root.querySelector("#e-docs") || {}).files || null;
+      var fErr = validateFiles(files);
+      if (fErr) { err.textContent = fErr; err.classList.add("show"); return; }
       btn.disabled = true;
+      var label = btn.textContent;
+      if (files && files.length) btn.textContent = t("lead.sending");
       var surface = parseInt(val(root, "#e-surface"), 10);
       var loyer = parseInt(val(root, "#e-loyer"), 10);
-      store.submitLead({
-        type: "estimation",
-        segment: val(root, "#e-seg"),
-        ville: val(root, "#e-ville") || null,
-        surface: isNaN(surface) ? null : surface,
-        loyer: isNaN(loyer) ? null : loyer,
-        nom: val(root, "#e-nom"),
-        email: val(root, "#e-mail"),
-        telephone: val(root, "#e-tel"),
-        message: val(root, "#e-msg")
-      }).then(function (res) {
-        if (!res.ok) { btn.disabled = false; err.textContent = res.error; err.classList.add("show"); return; }
-        done(root, t("lead.estDoneH"), t("lead.estDoneP"));
-        ui.toast(t("lead.estToast"));
+      function fail(msg) { btn.disabled = false; btn.textContent = label; err.textContent = msg; err.classList.add("show"); }
+      // 1) envoi des pièces, puis 2) enregistrement du lead avec leurs chemins
+      store.uploadDocs(files).then(function (up) {
+        if (!up.ok) return fail(up.error || t("lead.docsErr"));
+        store.submitLead({
+          type: "estimation",
+          segment: val(root, "#e-seg"),
+          ville: val(root, "#e-ville") || null,
+          surface: isNaN(surface) ? null : surface,
+          loyer: isNaN(loyer) ? null : loyer,
+          nom: val(root, "#e-nom"),
+          email: val(root, "#e-mail"),
+          telephone: val(root, "#e-tel"),
+          message: val(root, "#e-msg"),
+          documents: up.paths
+        }).then(function (res) {
+          if (!res.ok) return fail(res.error);
+          done(root, t("lead.estDoneH"), t("lead.estDoneP"));
+          ui.toast(t("lead.estToast"));
+        });
       });
     });
   }

@@ -217,6 +217,7 @@
         surface: data.surface != null ? data.surface : null,
         loyer: data.loyer != null ? data.loyer : null,
         criteres: data.criteres || null,
+        documents: (data.documents && data.documents.length) ? data.documents : null,
         user_id: cachedUser ? cachedUser.id : null
       };
       return sb.from("leads").insert(row)
@@ -225,6 +226,27 @@
           return { ok: true };
         })
         .catch(function () { return OFFLINE; });
+    },
+
+    /* Envoi des pièces d'un dossier vers le bucket privé `dossiers` (Supabase
+       Storage). Renvoie { ok, paths } ; les chemins sont ensuite rattachés au
+       lead via submitLead({ documents: paths }). Bucket privé : lecture admin
+       uniquement (taille/type limités côté bucket). */
+    uploadDocs: function (files) {
+      if (!files || !files.length) return Promise.resolve({ ok: true, paths: [] });
+      if (!sb) return Promise.resolve({ ok: false, paths: [], error: t("err.offline") });
+      var folder = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+      var ups = Array.prototype.map.call(files, function (f) {
+        var safe = (f.name || "fichier").replace(/[^\w.\-]+/g, "_").slice(-80);
+        var path = folder + "/" + safe;
+        return sb.storage.from("dossiers").upload(path, f, { upsert: false, contentType: f.type || undefined })
+          .then(function (res) { return (res && res.error) ? null : (res.data && res.data.path) || path; })
+          .catch(function () { return null; });
+      });
+      return Promise.all(ups).then(function (paths) {
+        var ok = paths.filter(Boolean);
+        return { ok: ok.length === paths.length, paths: ok, error: ok.length === paths.length ? null : t("lead.docsErr") };
+      });
     },
 
     /* ----- Mot de passe oublié ----- */

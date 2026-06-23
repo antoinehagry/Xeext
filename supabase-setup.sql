@@ -59,9 +59,10 @@ create policy "rdv : annuler les siens"
   using (auth.uid() = user_id);
 
 -- ---------- Leads (estimations, contacts, alertes) ----------
--- Captés depuis les formulaires publics : tout le monde peut SOUMETTRE,
--- mais PERSONNE ne peut lire via l'API (aucune policy SELECT).
--- Le propriétaire consulte les leads dans Supabase → Table editor → leads.
+-- Captés depuis les formulaires publics : tout le monde peut SOUMETTRE ; la
+-- lecture est réservée à l'administrateur (par e-mail). Les pièces jointes
+-- éventuelles sont stockées dans le bucket privé `dossiers` (voir plus bas), et
+-- la colonne `documents` en conserve les chemins.
 create table public.leads (
   id          uuid primary key default gen_random_uuid(),
   type        text not null,            -- 'estimation' | 'contact' | 'alerte'
@@ -74,16 +75,22 @@ create table public.leads (
   surface     integer,
   loyer       integer,
   criteres    jsonb,                    -- critères du questionnaire (alerte)
+  documents   text[] default '{}',      -- pièces jointes (chemins bucket `dossiers`)
   user_id     uuid references auth.users (id) on delete set null,
   created_at  timestamptz not null default now()
 );
 
 alter table public.leads enable row level security;
 
--- Soumission ouverte (visiteur anonyme ou connecté), sans lecture possible.
+-- Soumission ouverte (visiteur anonyme ou connecté).
 create policy "leads : soumettre"
   on public.leads for insert
   with check (true);
+
+-- Lecture / gestion réservée à l'administrateur (par e-mail).
+create policy "leads : admin lit"
+  on public.leads for select
+  using ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
 
 -- ---------- Biens (catalogue géré depuis le back-office /admin.html) ----------
 -- Lecture publique (le catalogue est visible par tous) ; écriture réservée à
@@ -100,6 +107,9 @@ create table public.biens (
   dispo       text,
   dispo_rank  integer default 0,
   resume      text,
+  adresse     text,                     -- adresse exacte (facultative)
+  lat         double precision,         -- coordonnées exactes du bien (carte + POI)
+  lon         double precision,
   specs       jsonb default '{}'::jsonb,
   photos      text[] default '{}',
   images      text[] default '{}',
@@ -118,9 +128,40 @@ create policy "biens : admin écrit"
   using ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com')
   with check ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
 
--- ---------- Biens bilingues (optionnel) ----------
--- Titre et description en anglais, saisis depuis le back-office (/admin.html).
--- Si vides, le site retombe sur la traduction automatique (titre) ou le
--- français (description). À exécuter une fois si la table `biens` existe déjà.
+-- ---------- Mises à jour de colonnes (tables déjà existantes) ----------
+-- À exécuter si les tables existaient déjà avant l'ajout de ces fonctionnalités.
+-- Biens bilingues : titre/description en anglais (back-office). Si vides, le site
+-- retombe sur la traduction automatique (titre) ou le français (description).
 alter table public.biens add column if not exists titre_en  text;
 alter table public.biens add column if not exists resume_en text;
+-- Adresse exacte + coordonnées : carte et services à proximité centrés sur le bien.
+alter table public.biens add column if not exists adresse text;
+alter table public.biens add column if not exists lat double precision;
+alter table public.biens add column if not exists lon double precision;
+-- Pièces jointes des demandes.
+alter table public.leads add column if not exists documents text[] default '{}';
+
+-- ---------- Dossiers : stockage des pièces jointes (Supabase Storage) ----------
+-- Bucket PRIVÉ « dossiers » : 10 Mo/fichier, types autorisés (bornés côté serveur).
+-- Dépôt ouvert (prospects sans compte) ; lecture/téléchargement réservés à l'admin.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'dossiers', 'dossiers', false, 10485760,
+  array['application/pdf','image/jpeg','image/png','image/heic',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+)
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+create policy "dossiers : depot"
+  on storage.objects for insert
+  to anon, authenticated
+  with check (bucket_id = 'dossiers');
+
+create policy "dossiers : lecture admin"
+  on storage.objects for select
+  to authenticated
+  using (bucket_id = 'dossiers' and (auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
