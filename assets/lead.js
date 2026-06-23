@@ -112,7 +112,7 @@
 
   /* ---------- Modale « Déposer mon dossier » (locataire) ---------- */
   // Un champ d'upload dédié par pièce (dossier structuré).
-  var CAND_DOCS = ["kbis", "bilans", "identite", "rib", "autre"];
+  var CAND_DOCS = ["kbis", "bilans", "fiscal", "assurance", "identite", "rib", "autre"];
   var DOC_ACCEPT = ".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx,application/pdf,image/*";
 
   // bien : facultatif — si fourni, le dossier est rattaché à ce bien.

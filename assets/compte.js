@@ -132,7 +132,7 @@
   }
 
   /* ---------- Mon dossier (pièces enregistrées, réutilisables) ---------- */
-  var DOC_TYPES = ["kbis", "bilans", "identite", "rib", "autre"];
+  var DOC_TYPES = ["kbis", "bilans", "fiscal", "assurance", "identite", "rib", "autre"];
   var DOC_ACCEPT = ".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx,application/pdf,image/*";
   function esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
 

@@ -236,7 +236,7 @@
     var parts = (path || "").split("/");
     var file = parts.pop();
     var key = parts.length >= 2 ? parts[parts.length - 1] : "";
-    var map = { kbis: "K-bis", bilans: "Bilans", identite: "Pièce d'identité", rib: "RIB", autre: "Autre" };
+    var map = { kbis: "K-bis", bilans: "Bilans", fiscal: "Attest. fiscale & sociale", assurance: "Attest. assurance", identite: "Pièce d'identité", rib: "RIB", autre: "Autre" };
     return (map[key] ? map[key] + " — " : "") + file;
   }
   function leadItem(l) {
