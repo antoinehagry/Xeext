@@ -167,9 +167,25 @@
     return '<div class="empty-state" style="padding:90px 0"><h3>' + title + '</h3><p>' + msg + '</p>' + (action || "") + '</div>';
   }
 
-  /* ---------- liste ---------- */
+  /* ---------- navigation (Biens / Dossiers) ---------- */
+  function tabs(active) {
+    return '<div class="admin-tabs">' +
+      '<button class="admin-tab' + (active === "biens" ? " is-active" : "") + '" data-tab="biens">Biens</button>' +
+      '<button class="admin-tab' + (active === "dossiers" ? " is-active" : "") + '" data-tab="dossiers">Dossiers</button>' +
+      '</div>';
+  }
+  function wireTabs() {
+    root.querySelectorAll("[data-tab]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.getAttribute("data-tab") === "dossiers") renderLeads(); else renderList();
+      });
+    });
+  }
+
+  /* ---------- liste des biens ---------- */
   function renderList() {
     root.innerHTML =
+      tabs("biens") +
       '<div style="margin-bottom:22px"><h1 class="h-section">Gestion des biens</h1>' +
       '<p class="lead" style="margin-top:8px">Ajoutez, modifiez ou retirez les biens du catalogue.</p></div>' +
       '<div class="admin-bar">' +
@@ -178,6 +194,7 @@
       '</div>' +
       '<div id="a-list"><p class="muted">Chargement…</p></div>';
 
+    wireTabs();
     root.querySelector("#a-add").addEventListener("click", function () { renderForm(null); });
     root.querySelector("#a-import").addEventListener("click", importDefaults);
 
@@ -208,6 +225,60 @@
         '<button class="btn-link" data-edit="' + esc(b.id) + '">Modifier</button>' +
         '<button class="btn-link danger" data-del="' + esc(b.id) + '" data-titre="' + esc(b.titre) + '">Supprimer</button>' +
       '</div></div>';
+  }
+
+  /* ---------- demandes / dossiers ---------- */
+  function leadType(t) {
+    return ({ estimation: "Estimation", contact: "Contact", alerte: "Alerte" })[t] || (t || "Demande");
+  }
+  function leadItem(l) {
+    var when = l.created_at ? new Date(l.created_at).toLocaleString("fr-FR") : "";
+    var bits = [];
+    if (l.telephone) bits.push(esc(l.telephone));
+    if (l.ville) bits.push(esc(l.ville));
+    if (l.segment) bits.push(esc(l.segment));
+    if (l.surface) bits.push(esc(String(l.surface)) + " m²");
+    if (l.loyer) bits.push(X.nombre(l.loyer) + " €");
+    var meta = [when].concat(bits).filter(Boolean).join(" · ");
+    var docs = l.documents || [];
+    var docHtml = docs.length
+      ? '<div class="lead-docs">' + docs.map(function (p) {
+          return '<button class="btn-link" data-doc="' + esc(p) + '">⬇ ' + esc(p.split("/").pop()) + '</button>';
+        }).join("") + '</div>'
+      : '';
+    return '<div class="admin-row admin-row--lead">' +
+      '<div class="admin-row__info">' +
+        '<div class="admin-row__t"><span class="lead-badge lead-badge--' + esc(l.type) + '">' + leadType(l.type) + '</span> ' +
+          esc(l.nom || "—") + ' · <a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></div>' +
+        (meta ? '<div class="admin-row__m">' + meta + '</div>' : '') +
+        (l.message ? '<p class="lead-msg">' + esc(l.message) + '</p>' : '') +
+        docHtml +
+      '</div></div>';
+  }
+  function renderLeads() {
+    root.innerHTML =
+      tabs("dossiers") +
+      '<div style="margin-bottom:22px"><h1 class="h-section">Demandes &amp; dossiers</h1>' +
+      '<p class="lead" style="margin-top:8px">Estimations, contacts et alertes reçus, avec les pièces jointes.</p></div>' +
+      '<div id="a-leads"><p class="muted">Chargement…</p></div>';
+
+    wireTabs();
+    store.adminListLeads().then(function (list) {
+      var host = root.querySelector("#a-leads");
+      if (!list || !list.length) { host.innerHTML = '<p class="muted">Aucune demande pour le moment.</p>'; return; }
+      host.innerHTML = '<div class="admin-list">' + list.map(leadItem).join("") + '</div>';
+      host.querySelectorAll("[data-doc]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var label = b.textContent;
+          b.disabled = true; b.textContent = "…";
+          store.docSignedUrl(b.getAttribute("data-doc")).then(function (res) {
+            b.disabled = false; b.textContent = label;
+            if (res && res.url) window.open(res.url, "_blank", "noopener");
+            else ui.toast("Lien indisponible.");
+          });
+        });
+      });
+    });
   }
 
   /* ---------- formulaire ---------- */

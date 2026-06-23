@@ -294,6 +294,22 @@
       return sb.from("biens").delete().eq("id", id)
         .then(function (r) { return r.error ? { ok: false, error: r.error.message } : { ok: true }; })
         .catch(function () { return OFFLINE; });
+    },
+
+    /* ----- Demandes / dossiers (admin) ----- */
+    // Lecture réservée à l'admin par la policy RLS « leads : admin ».
+    adminListLeads: function () {
+      if (!sb) return Promise.resolve([]);
+      return sb.from("leads").select("*").order("created_at", { ascending: false })
+        .then(function (r) { return r.data || []; })
+        .catch(function () { return []; });
+    },
+    // URL signée temporaire pour télécharger une pièce du bucket privé `dossiers`.
+    docSignedUrl: function (path, secs) {
+      if (!sb) return Promise.resolve({ url: null });
+      return sb.storage.from("dossiers").createSignedUrl(path, secs || 120)
+        .then(function (r) { return { url: (r.data && r.data.signedUrl) || null }; })
+        .catch(function () { return { url: null }; });
     }
   };
 
