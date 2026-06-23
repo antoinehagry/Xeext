@@ -110,6 +110,96 @@
     });
   }
 
+  /* ---------- Modale « Déposer mon dossier » (locataire) ---------- */
+  // Un champ d'upload dédié par pièce (dossier structuré).
+  var CAND_DOCS = ["kbis", "bilans", "identite", "rib", "autre"];
+  var DOC_ACCEPT = ".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx,application/pdf,image/*";
+
+  // bien : facultatif — si fourni, le dossier est rattaché à ce bien.
+  // Si l'utilisateur est connecté, on précharge son dossier enregistré pour le
+  // joindre automatiquement (il n'a pas à renvoyer ses pièces).
+  function openCandidature(bien) {
+    if (store.currentUser() && store.listMyDocs) {
+      store.listMyDocs().then(function (docs) {
+        var byType = {}; (docs || []).forEach(function (d) { byType[d.type] = d; });
+        buildCandidature(bien, byType);
+      });
+    } else {
+      buildCandidature(bien, {});
+    }
+  }
+
+  function buildCandidature(bien, savedDocs) {
+    var u = store.currentUser();
+    var hasSaved = Object.keys(savedDocs).length > 0;
+    var bienLine = bien
+      ? '<div class="field"><label>' + t("cand.bien") + '</label><input type="text" value="' +
+          esc(bien.titre + (bien.ville ? " — " + bien.ville : "")) + '" readonly></div>'
+      : '';
+    var docSlots = CAND_DOCS.map(function (k) {
+      var saved = savedDocs[k] ? ' <span class="doc-saved">' + t("cand.inFile") + '</span>' : '';
+      return '<div class="field"><label for="d-doc-' + k + '">' + t("cand.doc." + k) + saved + '</label>' +
+        '<input id="d-doc-' + k + '" type="file" accept="' + DOC_ACCEPT + '"></div>';
+    }).join("");
+    var html =
+      '<h2 class="modal__title">' + t("cand.title") + '</h2>' +
+      '<p class="modal__sub">' + t("cand.sub") + '</p>' +
+      '<form id="cand-form" novalidate>' +
+        bienLine +
+        '<div class="field"><label for="d-nom">' + t("lead.nom") + '</label><input id="d-nom" type="text" value="' + esc(u && u.name) + '"></div>' +
+        '<div class="field"><label for="d-mail">' + t("auth.mail") + '</label><input id="d-mail" type="email" value="' + esc(u && u.email) + '" placeholder="' + t("contact.ph.mail") + '"></div>' +
+        '<div class="field"><label for="d-tel">' + t("rdv.tel") + '</label><input id="d-tel" type="tel" placeholder="06 12 34 56 78"></div>' +
+        '<div class="field"><label for="d-msg">' + t("lead.msg") + '</label><textarea id="d-msg" placeholder="' + t("lead.msgPh") + '"></textarea></div>' +
+        '<p class="form-section">' + t("cand.docsLabel") + '</p>' +
+        (hasSaved ? '<p class="upload-hint">' + t("cand.reuseNote") + '</p>' : '') +
+        docSlots +
+        '<p class="upload-hint">' + t("cand.docsNote") + '</p>' +
+        '<div class="form-error" id="cand-err"></div>' +
+        '<button type="submit" class="btn btn--primary btn-block">' + t("cand.btn") + '</button>' +
+        '<p class="modal__note">' + t("cand.note") + '</p>' +
+      '</form>';
+
+    var m = ui.openModal(html, { wide: true });
+    var root = m.root;
+    var err = root.querySelector("#cand-err");
+    var btn = root.querySelector('button[type="submit"]');
+
+    root.querySelector("#cand-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      err.classList.remove("show");
+      var items = [], reused = [];
+      CAND_DOCS.forEach(function (k) {
+        var inp = root.querySelector("#d-doc-" + k);
+        if (inp && inp.files && inp.files[0]) items.push({ key: k, file: inp.files[0] });
+        else if (savedDocs[k]) reused.push(savedDocs[k].path); // pièce déjà enregistrée → réutilisée
+      });
+      var fErr = validateFiles(items.map(function (i) { return i.file; }));
+      if (fErr) { err.textContent = fErr; err.classList.add("show"); return; }
+      btn.disabled = true;
+      var label = btn.textContent;
+      if (items.length) btn.textContent = t("lead.sending");
+      function fail(msg) { btn.disabled = false; btn.textContent = label; err.textContent = msg; err.classList.add("show"); }
+      store.uploadDocs(items).then(function (up) {
+        if (!up.ok) return fail(up.error || t("lead.docsErr"));
+        store.submitLead({
+          type: "candidature",
+          segment: bien ? bien.segment : null,
+          ville: bien ? bien.ville : null,
+          nom: val(root, "#d-nom"),
+          email: val(root, "#d-mail"),
+          telephone: val(root, "#d-tel"),
+          message: val(root, "#d-msg"),
+          criteres: bien ? { bien: bien.titre, bienId: bien.id, ville: bien.ville } : null,
+          documents: up.paths.concat(reused)
+        }).then(function (res) {
+          if (!res.ok) return fail(res.error);
+          done(root, t("cand.doneH"), t("cand.doneP"));
+          ui.toast(t("cand.toast"));
+        });
+      });
+    });
+  }
+
   /* ---------- Formulaire de contact inline ---------- */
   function initContactForm() {
     var form = document.getElementById("contact-form");
@@ -145,7 +235,7 @@
     initContactForm();
   }
 
-  window.XEEXT.lead = { openEstimation: openEstimation };
+  window.XEEXT.lead = { openEstimation: openEstimation, openCandidature: openCandidature };
 
   if (document.readyState !== "loading") init();
   else document.addEventListener("DOMContentLoaded", init);

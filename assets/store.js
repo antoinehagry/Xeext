@@ -229,16 +229,19 @@
     },
 
     /* Envoi des pièces d'un dossier vers le bucket privé `dossiers` (Supabase
-       Storage). Renvoie { ok, paths } ; les chemins sont ensuite rattachés au
-       lead via submitLead({ documents: paths }). Bucket privé : lecture admin
-       uniquement (taille/type limités côté bucket). */
-    uploadDocs: function (files) {
-      if (!files || !files.length) return Promise.resolve({ ok: true, paths: [] });
+       Storage). Accepte une FileList (multi-fichiers) ou une liste d'éléments
+       nommés { key, file } : la clé devient un sous-dossier (ex. `kbis/…`) pour
+       identifier la pièce côté admin. Renvoie { ok, paths } ; les chemins sont
+       ensuite rattachés au lead via submitLead({ documents: paths }). */
+    uploadDocs: function (items) {
+      if (!items || !items.length) return Promise.resolve({ ok: true, paths: [] });
       if (!sb) return Promise.resolve({ ok: false, paths: [], error: t("err.offline") });
       var folder = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
-      var ups = Array.prototype.map.call(files, function (f) {
+      var ups = Array.prototype.map.call(items, function (it) {
+        var f = it.file || it;                    // { key, file } ou File
+        var key = (it.key || "").replace(/[^\w\-]+/g, "");
         var safe = (f.name || "fichier").replace(/[^\w.\-]+/g, "_").slice(-80);
-        var path = folder + "/" + safe;
+        var path = folder + "/" + (key ? key + "/" : "") + safe;
         return sb.storage.from("dossiers").upload(path, f, { upsert: false, contentType: f.type || undefined })
           .then(function (res) { return (res && res.error) ? null : (res.data && res.data.path) || path; })
           .catch(function () { return null; });
@@ -305,11 +308,46 @@
         .catch(function () { return []; });
     },
     // URL signée temporaire pour télécharger une pièce du bucket privé `dossiers`.
-    docSignedUrl: function (path, secs) {
+    // downloadName (optionnel) impose le nom du fichier au téléchargement.
+    docSignedUrl: function (path, secs, downloadName) {
       if (!sb) return Promise.resolve({ url: null });
-      return sb.storage.from("dossiers").createSignedUrl(path, secs || 120)
+      var opts = downloadName ? { download: downloadName } : undefined;
+      return sb.storage.from("dossiers").createSignedUrl(path, secs || 120, opts)
         .then(function (r) { return { url: (r.data && r.data.signedUrl) || null }; })
         .catch(function () { return { url: null }; });
+    },
+
+    /* ----- Mon dossier : pièces enregistrées du membre, réutilisables ----- */
+    // Stockées dans `dossiers/<uid>/<type>` (une pièce par type) + table
+    // `documents_membre` (RLS : chacun les siennes, lecture admin).
+    listMyDocs: function () {
+      if (!sb || !cachedUser) return Promise.resolve([]);
+      return sb.from("documents_membre").select("*").eq("user_id", cachedUser.id)
+        .then(function (r) { return r.data || []; })
+        .catch(function () { return []; });
+    },
+    uploadMyDoc: function (type, file) {
+      if (!sb || !cachedUser) return Promise.resolve(NO_CONFIG);
+      if (!file) return Promise.resolve({ ok: false, error: t("lead.docsErr") });
+      if (file.size > 10 * 1024 * 1024) return Promise.resolve({ ok: false, error: t("lead.docsTooBig") });
+      var path = cachedUser.id + "/" + type;
+      return sb.storage.from("dossiers").upload(path, file, { upsert: true, contentType: file.type || undefined })
+        .then(function (res) {
+          if (res && res.error) return { ok: false, error: t("lead.docsErr") };
+          return sb.from("documents_membre").upsert(
+            { user_id: cachedUser.id, type: type, path: path, nom: file.name || null },
+            { onConflict: "user_id,type" }
+          ).then(function (r2) { return r2.error ? { ok: false, error: r2.error.message } : { ok: true, path: path, nom: file.name || null }; });
+        })
+        .catch(function () { return OFFLINE; });
+    },
+    deleteMyDoc: function (type) {
+      if (!sb || !cachedUser) return Promise.resolve(NO_CONFIG);
+      var path = cachedUser.id + "/" + type;
+      return sb.storage.from("dossiers").remove([path])
+        .then(function () { return sb.from("documents_membre").delete().eq("user_id", cachedUser.id).eq("type", type); })
+        .then(function (r) { return (r && r.error) ? { ok: false, error: r.error.message } : { ok: true }; })
+        .catch(function () { return OFFLINE; });
     }
   };
 

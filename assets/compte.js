@@ -66,10 +66,12 @@
       '<div class="tabs" role="tablist">' +
         '<button class="tab" data-tab="favoris" role="tab">' + t("compte.tab.favoris") + '<span class="badge-n">' + favs.length + '</span></button>' +
         '<button class="tab" data-tab="rdv" role="tab">' + t("compte.tab.rdv") + '<span class="badge-n">' + rdvs.length + '</span></button>' +
+        '<button class="tab" data-tab="dossier" role="tab">' + t("compte.tab.dossier") + '</button>' +
         '<button class="tab" data-tab="profil" role="tab">' + t("compte.tab.profil") + '</button>' +
       '</div>' +
       '<section class="tabpane" id="tab-favoris" role="tabpanel">' + favPane(favs) + '</section>' +
       '<section class="tabpane" id="tab-rdv" role="tabpanel">' + rdvPane(rdvs) + '</section>' +
+      '<section class="tabpane" id="tab-dossier" role="tabpanel">' + dossierPane() + '</section>' +
       '<section class="tabpane" id="tab-profil" role="tabpanel">' + profilPane(u, favs.length, rdvs.length) + '</section>';
 
     // onglets
@@ -81,7 +83,10 @@
     }
     tabs.forEach(function (tb) { tb.addEventListener("click", function () { activate(tb.getAttribute("data-tab")); }); });
     var hash = (location.hash || "#favoris").slice(1);
-    activate(["favoris", "rdv", "profil"].indexOf(hash) !== -1 ? hash : "favoris");
+    activate(["favoris", "rdv", "dossier", "profil"].indexOf(hash) !== -1 ? hash : "favoris");
+
+    // chargement du dossier (pièces enregistrées)
+    reloadDossier();
 
     // annulation de rendez-vous
     root.querySelectorAll("[data-cancel]").forEach(function (btn) {
@@ -124,6 +129,78 @@
       '<div class="row"><span class="k">' + t("compte.tab.rdv") + '</span><span class="v tnum">' + nRdv + '</span></div>' +
       '<button class="btn btn--ghost" id="ce-logout" style="margin-top:24px">' + t("acct.logout") + '</button>' +
       '</div>';
+  }
+
+  /* ---------- Mon dossier (pièces enregistrées, réutilisables) ---------- */
+  var DOC_TYPES = ["kbis", "bilans", "identite", "rib", "autre"];
+  var DOC_ACCEPT = ".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx,application/pdf,image/*";
+  function esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
+
+  function dossierPane() {
+    return '<p class="dossier-intro">' + t("compte.dossier.intro") + '</p>' +
+      '<div id="dossier-list"><p class="muted">' + t("compte.loading") + '</p></div>';
+  }
+  function reloadDossier() {
+    if (!store.listMyDocs) return;
+    store.listMyDocs().then(function (docs) {
+      var byType = {};
+      (docs || []).forEach(function (d) { byType[d.type] = d; });
+      fillDossier(byType);
+    });
+  }
+  function fillDossier(byType) {
+    var host = root.querySelector("#dossier-list");
+    if (!host) return;
+    host.innerHTML = DOC_TYPES.map(function (k) {
+      var d = byType[k];
+      var actions = d
+        ? '<span class="doc-file" title="' + esc(d.nom) + '">' + esc(d.nom || t("cand.doc." + k)) + '</span>' +
+          '<button class="btn-link" data-dl="' + k + '">' + t("compte.dossier.view") + '</button>' +
+          '<label class="btn-link doc-up">' + t("compte.dossier.replace") + '<input type="file" data-up="' + k + '" accept="' + DOC_ACCEPT + '" hidden></label>' +
+          '<button class="btn-link danger" data-del="' + k + '">' + t("compte.dossier.del") + '</button>'
+        : '<label class="btn-link doc-up">' + t("compte.dossier.add") + '<input type="file" data-up="' + k + '" accept="' + DOC_ACCEPT + '" hidden></label>';
+      return '<div class="doc-row' + (d ? " is-filled" : "") + '">' +
+        '<div class="doc-name">' + t("cand.doc." + k) + '</div>' +
+        '<div class="doc-actions">' + actions + '</div></div>';
+    }).join("");
+    wireDossier(host, byType);
+  }
+  function wireDossier(host, byType) {
+    host.querySelectorAll("[data-up]").forEach(function (inp) {
+      inp.addEventListener("change", function () {
+        var k = inp.getAttribute("data-up");
+        var f = inp.files && inp.files[0];
+        if (!f) return;
+        ui.toast(t("lead.sending"));
+        store.uploadMyDoc(k, f).then(function (res) {
+          if (!res || !res.ok) { ui.toast((res && res.error) || t("lead.docsErr")); return; }
+          ui.toast(t("compte.dossier.saved"));
+          reloadDossier();
+        });
+      });
+    });
+    host.querySelectorAll("[data-dl]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var d = byType[b.getAttribute("data-dl")];
+        if (!d) return;
+        b.disabled = true;
+        store.docSignedUrl(d.path, 120, d.nom).then(function (res) {
+          b.disabled = false;
+          if (res && res.url) window.open(res.url, "_blank", "noopener");
+          else ui.toast("Lien indisponible.");
+        });
+      });
+    });
+    host.querySelectorAll("[data-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var k = b.getAttribute("data-del");
+        if (!window.confirm(t("compte.dossier.delConfirm"))) return;
+        store.deleteMyDoc(k).then(function (res) {
+          if (res && res.ok) { ui.toast(t("compte.dossier.removed")); reloadDossier(); }
+          else ui.toast((res && res.error) || t("lead.docsErr"));
+        });
+      });
+    });
   }
 
   function render() { if (store.currentUser()) loggedIn(); else loggedOut(); }

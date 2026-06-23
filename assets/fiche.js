@@ -79,6 +79,10 @@
     var cta = document.getElementById("f-cta");
     if (cta) cta.addEventListener("click", function () { window.XEEXT.rdv.open(b); });
 
+    // CTA secondaire : déposer un dossier locataire (rattaché à ce bien)
+    var apply = document.getElementById("f-apply");
+    if (apply && window.XEEXT.lead) apply.addEventListener("click", function () { window.XEEXT.lead.openCandidature(b); });
+
     // Autres biens (même segment de préférence)
     renderSuggestions(b);
 

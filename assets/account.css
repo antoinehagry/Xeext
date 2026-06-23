@@ -133,6 +133,17 @@
 }
 .field input[type="file"]::file-selector-button:hover { border-color: var(--accent); color: var(--accent-hover); }
 .upload-hint { font-size: 12px; color: var(--text-3); margin: 8px 2px 0; line-height: 1.45; }
+.form-section { font-size: 14px; font-weight: 600; color: var(--text); margin: 20px 0 6px; }
+.doc-saved { font-size: 12px; font-weight: 500; color: #1a7f4b; white-space: nowrap; }
+
+/* Mon dossier (compte) */
+.dossier-intro { color: var(--text-2); font-size: 15px; line-height: 1.5; margin: 0 0 22px; max-width: 62ch; }
+.doc-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 15px 0; border-bottom: 1px solid var(--hairline); }
+.doc-row:last-child { border-bottom: none; }
+.doc-name { font-weight: 500; }
+.doc-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.doc-file { font-size: 13px; color: var(--text-2); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-up { cursor: pointer; }
 
 .form-error {
   font-size: 14px; color: #c4342b;
@@ -220,6 +231,7 @@
 .lead-badge--estimation { background: rgba(31,61,240,.1); color: var(--accent); }
 .lead-badge--contact { background: rgba(26,127,75,.1); color: #1a7f4b; }
 .lead-badge--alerte { background: rgba(196,52,43,.1); color: #c4342b; }
+.lead-badge--candidature { background: rgba(120,80,200,.12); color: #6b3fc0; }
 .lead-msg { font-size: 14px; color: var(--text); margin: 10px 0 0; line-height: 1.5; white-space: pre-wrap; }
 .lead-docs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .lead-docs .btn-link { background: var(--gray-bg); border-radius: 10px; padding: 6px 12px; }

@@ -229,11 +229,20 @@
 
   /* ---------- demandes / dossiers ---------- */
   function leadType(t) {
-    return ({ estimation: "Estimation", contact: "Contact", alerte: "Alerte" })[t] || (t || "Demande");
+    return ({ estimation: "Estimation", contact: "Contact", alerte: "Alerte", candidature: "Candidature" })[t] || (t || "Demande");
+  }
+  // Libellé lisible d'une pièce : `dossier/<clé>/<fichier>` → « K-bis — fichier ».
+  function docLabel(path) {
+    var parts = (path || "").split("/");
+    var file = parts.pop();
+    var key = parts.length >= 2 ? parts[parts.length - 1] : "";
+    var map = { kbis: "K-bis", bilans: "Bilans", identite: "Pièce d'identité", rib: "RIB", autre: "Autre" };
+    return (map[key] ? map[key] + " — " : "") + file;
   }
   function leadItem(l) {
     var when = l.created_at ? new Date(l.created_at).toLocaleString("fr-FR") : "";
     var bits = [];
+    if (l.criteres && l.criteres.bien) bits.push("Bien : " + esc(l.criteres.bien));
     if (l.telephone) bits.push(esc(l.telephone));
     if (l.ville) bits.push(esc(l.ville));
     if (l.segment) bits.push(esc(l.segment));
@@ -243,7 +252,7 @@
     var docs = l.documents || [];
     var docHtml = docs.length
       ? '<div class="lead-docs">' + docs.map(function (p) {
-          return '<button class="btn-link" data-doc="' + esc(p) + '">⬇ ' + esc(p.split("/").pop()) + '</button>';
+          return '<button class="btn-link" data-doc="' + esc(p) + '">⬇ ' + esc(docLabel(p)) + '</button>';
         }).join("") + '</div>'
       : '';
     return '<div class="admin-row admin-row--lead">' +

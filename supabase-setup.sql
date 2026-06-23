@@ -165,3 +165,39 @@ create policy "dossiers : lecture admin"
   on storage.objects for select
   to authenticated
   using (bucket_id = 'dossiers' and (auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
+
+-- Chaque membre gère ses propres fichiers sous `dossiers/<uid>/...`
+-- (lire / remplacer / supprimer). Le dépôt anonyme reste couvert par
+-- « dossiers : depot » ; l'admin lit tout via « dossiers : lecture admin ».
+create policy "dossiers : membre gère les siens"
+  on storage.objects for all
+  to authenticated
+  using (bucket_id = 'dossiers' and (storage.foldername(name))[1] = auth.uid()::text)
+  with check (bucket_id = 'dossiers' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ---------- Mon dossier : pièces enregistrées du membre (réutilisables) ----------
+-- Une pièce par type (kbis, bilans, identite, rib, autre). Le fichier vit dans le
+-- bucket `dossiers/<uid>/<type>` ; cette table en garde le chemin et le nom.
+create table if not exists public.documents_membre (
+  user_id    uuid not null references auth.users (id) on delete cascade,
+  type       text not null,            -- kbis | bilans | identite | rib | autre
+  path       text not null,            -- chemin dans le bucket `dossiers`
+  nom        text,                     -- nom de fichier d'origine
+  created_at timestamptz not null default now(),
+  primary key (user_id, type)
+);
+
+alter table public.documents_membre enable row level security;
+
+drop policy if exists "docs membre : les siens" on public.documents_membre;
+create policy "docs membre : les siens"
+  on public.documents_membre for all
+  to authenticated
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid());
+
+drop policy if exists "docs membre : lecture admin" on public.documents_membre;
+create policy "docs membre : lecture admin"
+  on public.documents_membre for select
+  to authenticated
+  using ((auth.jwt() ->> 'email') = 'ahagry54@gmail.com');
