@@ -32,25 +32,10 @@
   gap: clamp(32px, 6vw, 88px);
   align-items: center;
 }
-.xdraw { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
-.xdraw .tile {
-  fill: none;
-  stroke: rgba(255,255,255,0.14);
-  stroke-width: 2;
-}
-.xdraw .stroke {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-dasharray: var(--len, 200);
-  stroke-dashoffset: var(--len, 200);
-  transition: stroke-dashoffset 1.1s cubic-bezier(.65,0,.35,1);
-}
-.xdraw .stroke.s2 { transition-delay: .28s; }
-.manifesto.in .xdraw .stroke { stroke-dashoffset: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .xdraw .stroke { stroke-dashoffset: 0; transition: none; }
+.manifesto__logo {
+  width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto;
+  border-radius: 22.8%;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
 }
 .manifesto__body p { font-size: clamp(19px, 2.1vw, 26px); line-height: 1.42; color: #e6e6ea; text-wrap: pretty; margin: 0; }
 .manifesto__body p + p { margin-top: 22px; }
@@ -144,7 +129,7 @@
 /* ---------- Responsive ---------- */
 @media (max-width: 920px) {
   .manifesto__grid { grid-template-columns: 1fr; gap: 40px; }
-  .xdraw { max-width: 220px; }
+  .manifesto__logo { max-width: 220px; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
   .values-grid { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
